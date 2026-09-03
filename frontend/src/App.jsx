@@ -360,6 +360,22 @@ export default function App() {
               )}
             </button>
 
+            {/* Desktop Local Station AQI Pill */}
+            <button
+              type="button"
+              onClick={() => handleSelectAndScrollStation(currSt.station_id)}
+              className="px-2.5 py-1.5 rounded-xl border flex items-center gap-1.5 text-xs font-bold font-mono transition cursor-pointer active:scale-95 shadow-sm"
+              style={{
+                backgroundColor: (currSt?.category_color || snapshot.category_color) + '22',
+                color: currSt?.category_color || snapshot.category_color,
+                borderColor: (currSt?.category_color || snapshot.category_color) + '66'
+              }}
+              title={`Selected Station: ${currSt?.name} • AQI ${currSt?.aqi}`}
+            >
+              <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ backgroundColor: currSt?.category_color || snapshot.category_color }}></span>
+              <span>{currSt?.name?.split(' ')[0]}: AQI {currSt?.aqi ?? snapshot.delhi_ncr_avg_aqi}</span>
+            </button>
+
             {/* Settings Trigger Button */}
             <button
               type="button"
@@ -412,13 +428,19 @@ export default function App() {
               )}
             </button>
 
-            <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold border ${
-              snapshot.delhi_ncr_avg_aqi > 400 ? 'bg-red-950/80 text-red-300 border-red-700/80' :
-              snapshot.delhi_ncr_avg_aqi > 300 ? 'bg-orange-950/80 text-orange-300 border-orange-700/80' :
-              'bg-amber-950/80 text-amber-300 border-amber-700/80'
-            }`}>
-              AQI {snapshot.delhi_ncr_avg_aqi}
-            </span>
+            <button 
+              type="button"
+              onClick={() => handleSelectAndScrollStation(currSt.station_id)}
+              className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold border active:scale-95 transition cursor-pointer"
+              style={{
+                backgroundColor: (currSt?.category_color || snapshot.category_color) + '2a',
+                color: currSt?.category_color || snapshot.category_color,
+                borderColor: (currSt?.category_color || snapshot.category_color) + '70'
+              }}
+              title={`Local Station: ${currSt?.name} • AQI ${currSt?.aqi}`}
+            >
+              AQI {currSt?.aqi ?? snapshot.delhi_ncr_avg_aqi}
+            </button>
 
             <button 
               onClick={() => setIsSettingsOpen(true)}
@@ -575,27 +597,47 @@ export default function App() {
 
             {/* 6 Key Atmospheric Coupling Telemetry Cards */}
             <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
-              <div className="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-xl border-l-4" style={{ borderLeftColor: snapshot.category_color }}>
+              {/* Card 1: Local Station Hero AQI (Auto-Synced with GPS / Selected Station) */}
+              <div 
+                onClick={() => handleSelectAndScrollStation(currSt.station_id)}
+                className="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-xl border-l-4 cursor-pointer hover:border-cyan-500/50 transition shadow-sm group select-none" 
+                style={{ borderLeftColor: currSt?.category_color || snapshot.category_color }}
+                title={`Click to view 72h Coupled Forecast for ${currSt?.name}`}
+              >
                 <div className="text-[11px] sm:text-xs text-slate-400 font-semibold flex items-center justify-between">
-                  <span>{t('avg_aqi', language)}</span>
-                  {userLocation && (
-                    <span className="text-[9px] text-cyan-300 font-medium flex items-center gap-1 bg-cyan-950/80 px-1.5 py-0.5 rounded border border-cyan-800/60">
+                  <span className="flex items-center gap-1.5 text-cyan-300 font-bold truncate max-w-[140px]">
+                    <MapPin className="w-3.5 h-3.5 text-cyan-400 shrink-0 animate-pulse" />
+                    <span className="truncate">{currSt?.name?.toUpperCase()}</span>
+                  </span>
+                  {userLocation ? (
+                    <span className="text-[9px] text-cyan-300 font-medium flex items-center gap-1 bg-cyan-950/80 px-1.5 py-0.5 rounded border border-cyan-800/60 shrink-0">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                      {userLocation.closestStation.name.split(' ')[0]} ({userLocation.distanceKm}km)
+                      <span>{userLocation.distanceKm} km</span>
+                    </span>
+                  ) : (
+                    <span className="text-[9px] text-slate-400 font-mono">
+                      {t('local_aqi', language)}
                     </span>
                   )}
                 </div>
+
                 <div className="my-1 sm:my-1.5 flex items-baseline gap-2">
-                  <span className="text-2xl sm:text-3xl font-black font-mono">{snapshot.delhi_ncr_avg_aqi}</span>
-                  <span className="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: snapshot.category_color + '33', color: snapshot.category_color }}>
+                  <span className="text-2xl sm:text-3xl font-black font-mono tracking-tight" style={{ color: currSt?.category_color || '#FFFFFF' }}>
+                    {currSt?.aqi}
+                  </span>
+                  <span 
+                    className="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full" 
+                    style={{ backgroundColor: (currSt?.category_color || '#FBBF24') + '33', color: currSt?.category_color || '#FBBF24' }}
+                  >
                     {language === 'hi' 
-                      ? (snapshot.category === 'Severe' ? 'गंभीर' : snapshot.category === 'Very Poor' ? 'बहुत खराब' : snapshot.category === 'Poor' ? 'खराब' : 'मध्यम')
-                      : snapshot.category}
+                      ? (currSt?.category === 'Severe' ? 'गंभीर' : currSt?.category === 'Very Poor' ? 'बहुत खराब' : currSt?.category === 'Poor' ? 'खराब' : currSt?.category === 'Moderate' ? 'मध्यम' : currSt?.category === 'Satisfactory' ? 'संतोषजनक' : 'अच्छा')
+                      : currSt?.category}
                   </span>
                 </div>
-                <div className="text-[10px] sm:text-[11px] text-slate-400 flex items-center justify-between">
-                  <span>PM2.5: {currSt?.pm25} μg/m³</span>
-                  <span className="font-mono text-cyan-300 font-bold">{currSt?.name.split(' ')[0]}: {currSt?.aqi} AQI</span>
+
+                <div className="text-[10px] sm:text-[11px] text-slate-400 flex items-center justify-between font-mono">
+                  <span>PM2.5: <b className="text-slate-200">{currSt?.pm25}</b> μg/m³</span>
+                  <span className="text-slate-500 text-[10px]">{t('ncr_avg_short', language)}: <b className="text-slate-400 font-bold">{snapshot.delhi_ncr_avg_aqi}</b></span>
                 </div>
               </div>
 
@@ -638,8 +680,11 @@ export default function App() {
                 <div className="my-1 sm:my-1.5 text-xl sm:text-2xl font-black font-mono text-orange-400">
                   {fires.total_active_fires} <span className="text-xs text-slate-400">{language === 'hi' ? 'आग' : 'fires'}</span>
                 </div>
-                <div className="text-[10px] sm:text-[11px] text-orange-400 font-mono">
-                  {t('stubble_share_label', language)}: {snapshot.source_attribution.stubble_burning}%
+                <div className="text-[10px] sm:text-[11px] text-orange-400 font-mono flex items-center justify-between">
+                  <span>{t('stubble_share_label', language)}: {snapshot.source_attribution.stubble_burning}%</span>
+                  {currSt?.stubble_share_ugm3 !== undefined && (
+                    <span className="text-amber-300 font-mono text-[10px]">({currSt.name.split(' ')[0]}: {currSt.stubble_share_ugm3}μg)</span>
+                  )}
                 </div>
               </div>
             </section>

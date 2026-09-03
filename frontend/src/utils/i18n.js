@@ -39,6 +39,8 @@ export const TRANSLATIONS = {
 
     // Telemetry Cards
     avg_aqi: "DELHI NCR AVG AQI",
+    local_aqi: "LOCAL AQI",
+    ncr_avg_short: "NCR Avg",
     ventilation_idx: "VENTILATION INDEX",
     inversion_delta: "INVERSION STRENGTH (ΔT)",
     pblh_height: "BOUNDARY LAYER (PBLH)",
@@ -171,6 +173,8 @@ export const TRANSLATIONS = {
 
     // Telemetry Cards
     avg_aqi: "दिल्ली एनसीआर औसत AQI",
+    local_aqi: "स्थानीय AQI",
+    ncr_avg_short: "एनसीआर औसत",
     ventilation_idx: "वेंटिलेशन इंडेक्स (VI)",
     inversion_delta: "थर्मल इन्वर्जन शक्ति (ΔT)",
     pblh_height: "सीमा परत ऊंचाई (PBLH)",
@@ -303,6 +307,8 @@ export const TRANSLATIONS = {
 
     // Telemetry Cards
     avg_aqi: "DELHI NCR AVG AQI",
+    local_aqi: "LOCAL AQI",
+    ncr_avg_short: "NCR Avg",
     ventilation_idx: "VENTILATION INDEX",
     inversion_delta: "INVERSION STRENGTH (ΔT)",
     pblh_height: "BOUNDARY LAYER (PBLH)",
