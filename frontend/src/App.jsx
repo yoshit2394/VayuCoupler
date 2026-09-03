@@ -171,7 +171,12 @@ export default function App() {
   }, [currentStep, stubbleVal, truckVal, dustVal, industryVal]);
 
   // Map pan & drag handlers (Supports Mouse, Pointer, and Mobile Touch Events)
+  // Map pan & drag handlers (Supports Mouse, Pointer, and Mobile Touch Events)
   const handlePointerDown = (e) => {
+    // If tapping on a station marker or chip, never capture pointer on container!
+    if (e.target && (e.target.closest?.('[data-station]') || e.target.getAttribute?.('data-station'))) {
+      return;
+    }
     if (mapZoom <= 1) return;
     isDragging.current = true;
     dragStart.current = { x: e.clientX, y: e.clientY };
@@ -183,10 +188,14 @@ export default function App() {
 
   const handlePointerMove = (e) => {
     if (!isDragging.current) return;
-    setMapPan({
-      x: panStart.current.x + (e.clientX - dragStart.current.x),
-      y: panStart.current.y + (e.clientY - dragStart.current.y),
-    });
+    const dx = e.clientX - dragStart.current.x;
+    const dy = e.clientY - dragStart.current.y;
+    if (Math.hypot(dx, dy) > 2) {
+      setMapPan({
+        x: panStart.current.x + dx,
+        y: panStart.current.y + dy,
+      });
+    }
   };
 
   const handlePointerUp = (e) => {
@@ -197,6 +206,10 @@ export default function App() {
   };
 
   const handleTouchStart = (e) => {
+    // If tapping on a station marker, never intercept touch for drag!
+    if (e.target && (e.target.closest?.('[data-station]') || e.target.getAttribute?.('data-station'))) {
+      return;
+    }
     if (mapZoom <= 1 || e.touches.length !== 1) return;
     isDragging.current = true;
     dragStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -205,11 +218,15 @@ export default function App() {
 
   const handleTouchMove = (e) => {
     if (!isDragging.current || e.touches.length !== 1) return;
-    if (e.cancelable) e.preventDefault();
-    setMapPan({
-      x: panStart.current.x + (e.touches[0].clientX - dragStart.current.x),
-      y: panStart.current.y + (e.touches[0].clientY - dragStart.current.y),
-    });
+    const dx = e.touches[0].clientX - dragStart.current.x;
+    const dy = e.touches[0].clientY - dragStart.current.y;
+    if (Math.hypot(dx, dy) > 4) {
+      if (e.cancelable) e.preventDefault();
+      setMapPan({
+        x: panStart.current.x + dx,
+        y: panStart.current.y + dy,
+      });
+    }
   };
 
   const handleTouchEnd = () => {
@@ -754,6 +771,37 @@ export default function App() {
                 )}
               </div>
 
+              {/* Quick Station Selection Chips Bar for Instant 1-Tap Access */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-2 pt-0.5 no-scrollbar select-none">
+                <span className="text-[10px] font-bold text-slate-400 font-mono shrink-0 uppercase tracking-wider flex items-center gap-1">
+                  <MapPin className="w-3 h-3 text-cyan-400" /> {language === 'hi' ? 'स्टेशन:' : 'Stations:'}
+                </span>
+                {snapshot.stations.map((st) => {
+                  const isSelected = st.station_id === selectedStationId;
+                  return (
+                    <button
+                      key={st.station_id}
+                      type="button"
+                      data-station="true"
+                      onClick={() => handleStationClick(st)}
+                      className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-semibold whitespace-nowrap shrink-0 transition active:scale-95 cursor-pointer border ${
+                        isSelected
+                          ? 'bg-cyan-950 text-cyan-300 border-cyan-500 shadow-[0_0_12px_rgba(6,182,212,0.4)] ring-1 ring-cyan-400'
+                          : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 border-slate-800'
+                      }`}
+                      title={`Select ${st.name} (${st.aqi} AQI)`}
+                    >
+                      <span 
+                        className="w-2 h-2 rounded-full shrink-0" 
+                        style={{ backgroundColor: st.category_color }}
+                      />
+                      <span>{st.name.split(' ')[0]}</span>
+                      <span className="font-mono text-[10px] opacity-80">({st.aqi})</span>
+                    </button>
+                  );
+                })}
+              </div>
+
               <div
                 ref={mapContainerRef}
                 className="w-full aspect-[16/10] bg-[#070B11] rounded-xl border border-slate-800 relative overflow-hidden flex items-center justify-center select-none"
@@ -802,13 +850,72 @@ export default function App() {
                       const y = 180 + ((29.0 - s.lat) / 0.7) * 220;
                       const isSel = s.station_id === selectedStationId;
                       return (
-                        <g key={s.station_id} transform={`translate(${x}, ${y})`}
-                          onClick={() => handleStationClick(s)}
-                          style={{ cursor: 'pointer' }}>
-                          {isSel && <circle r="22" fill={s.category_color} opacity="0.2"/>}
-                          <circle r={isSel ? 16 : 11} fill={s.category_color} stroke="#FFFFFF" strokeWidth={isSel ? 2.5 : 1.5} opacity="0.95"/>
-                          <text x="0" y="3.5" textAnchor="middle" fill="#FFFFFF" fontSize={isSel ? 9 : 8} fontWeight="900" fontFamily="JetBrains Mono">{s.aqi}</text>
-                          <text x="0" y={isSel ? -20 : -15} textAnchor="middle" fill="#E2E8F0" fontSize="9" fontWeight="700">{s.name.split(' ')[0]}</text>
+                        <g 
+                          key={s.station_id} 
+                          data-station="true"
+                          transform={`translate(${x}, ${y})`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleStationClick(s);
+                          }}
+                          onPointerDown={(e) => {
+                            e.stopPropagation();
+                          }}
+                          onTouchEnd={(e) => {
+                            e.stopPropagation();
+                            handleStationClick(s);
+                          }}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          {/* Giant transparent touch target (r=32) so fingers can easily tap on mobile */}
+                          <circle r="32" fill="transparent" pointerEvents="all" data-station="true" />
+                          {isSel && (
+                            <>
+                              <circle r="26" fill={s.category_color} opacity="0.3" className="animate-ping" pointerEvents="none" />
+                              <circle r="22" fill={s.category_color} opacity="0.25" stroke="#FFFFFF" strokeWidth="1.5" pointerEvents="none" />
+                            </>
+                          )}
+                          <circle 
+                            r={isSel ? 16 : 11.5} 
+                            fill={s.category_color} 
+                            stroke="#FFFFFF" 
+                            strokeWidth={isSel ? 2.5 : 1.5} 
+                            opacity="0.95"
+                            pointerEvents="none"
+                          />
+                          <text 
+                            x="0" y="3.5" 
+                            textAnchor="middle" 
+                            fill="#FFFFFF" 
+                            fontSize={isSel ? 9.5 : 8} 
+                            fontWeight="900" 
+                            fontFamily="JetBrains Mono"
+                            pointerEvents="none"
+                          >
+                            {s.aqi}
+                          </text>
+                          <g transform={`translate(0, ${isSel ? -21 : -16})`} pointerEvents="none">
+                            <rect 
+                              x={-s.name.split(' ')[0].length * 3.4 - 4} 
+                              y="-7.5" 
+                              width={s.name.split(' ')[0].length * 6.8 + 8} 
+                              height="12" 
+                              rx="3" 
+                              fill="#070E18" 
+                              stroke={isSel ? '#22D3EE' : '#334155'} 
+                              strokeWidth={isSel ? 1.4 : 0.7}
+                              opacity="0.92"
+                            />
+                            <text 
+                              x="0" y="1.5" 
+                              textAnchor="middle" 
+                              fill={isSel ? '#38BDF8' : '#F1F5F9'} 
+                              fontSize="8" 
+                              fontWeight="800"
+                            >
+                              {s.name.split(' ')[0]}
+                            </text>
+                          </g>
                         </g>
                       );
                     })}
@@ -1317,8 +1424,14 @@ export default function App() {
 
             {/* Forecast button */}
             <button
-              onClick={() => { setSelectedStationId(stationModal.station_id); setStationModal(null); setActiveTab('overview'); }}
-              className="w-full py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-sm transition flex items-center justify-center gap-2">
+              type="button"
+              onClick={() => { 
+                const sid = stationModal.station_id;
+                setStationModal(null);
+                handleSelectAndScrollStation(sid);
+              }}
+              className="w-full py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-lg shadow-cyan-900/40"
+            >
               <TrendingUp className="w-4 h-4" /> View 72h Forecast for {stationModal.name}
             </button>
           </div>
