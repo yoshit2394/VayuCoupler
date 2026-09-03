@@ -1,6 +1,14 @@
 import offlineBundle from '../data/offline_bundle.json';
 
-const BASE_URL = import.meta.env.VITE_API_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:8000');
+const isNativeOrLocal = typeof window !== 'undefined' && 
+  (window.location.origin.includes('localhost') || window.location.protocol === 'capacitor:');
+
+const BASE_URL = import.meta.env.VITE_API_URL || 
+  (isNativeOrLocal ? 'https://vayu-coupler.vercel.app' : (typeof window !== 'undefined' ? window.location.origin : 'https://vayu-coupler.vercel.app'));
+
+function isOffline() {
+  return typeof navigator !== 'undefined' && !navigator.onLine;
+}
 
 function getClosestStepKey(stepHour) {
   const steps = [0, 24, 48, 72, 96, 120, 144, 168];
@@ -17,8 +25,9 @@ function getClosestStepKey(stepHour) {
 }
 
 export async function fetchStations() {
+  if (isOffline()) return offlineBundle.stations || [];
   try {
-    const res = await fetch(`${BASE_URL}/api/stations`, { signal: AbortSignal.timeout(3000) });
+    const res = await fetch(`${BASE_URL}/api/stations`, { signal: AbortSignal.timeout(1500) });
     if (res.ok) return await res.json();
   } catch (e) {
     console.warn('Using offline stations fallback:', e);
@@ -27,70 +36,81 @@ export async function fetchStations() {
 }
 
 export async function fetchSnapshot(stepHour = 72) {
+  const key = getClosestStepKey(stepHour);
+  const fallback = offlineBundle.steps[key]?.snapshot || offlineBundle.steps["72"].snapshot;
+  if (isOffline()) return fallback;
   try {
-    const res = await fetch(`${BASE_URL}/api/snapshot?step_hour=${stepHour}`, { signal: AbortSignal.timeout(3000) });
+    const res = await fetch(`${BASE_URL}/api/snapshot?step_hour=${stepHour}`, { signal: AbortSignal.timeout(1500) });
     if (res.ok) return await res.json();
   } catch (e) {
     console.warn('Using offline snapshot fallback:', e);
   }
-  const key = getClosestStepKey(stepHour);
-  return offlineBundle.steps[key]?.snapshot || offlineBundle.steps["72"].snapshot;
+  return fallback;
 }
 
 export async function fetchStationForecast(stationId, stepHour = 72) {
+  const key = getClosestStepKey(stepHour);
+  const fallback = offlineBundle.stations_forecast[`${stationId}_${key}`] || 
+                   offlineBundle.stations_forecast[`${stationId}_72`] || 
+                   offlineBundle.stations_forecast['DEL001_72'];
+  if (isOffline()) return fallback;
   try {
-    const res = await fetch(`${BASE_URL}/api/forecast/station/${stationId}?step_hour=${stepHour}`, { signal: AbortSignal.timeout(3000) });
+    const res = await fetch(`${BASE_URL}/api/forecast/station/${stationId}?step_hour=${stepHour}`, { signal: AbortSignal.timeout(1500) });
     if (res.ok) return await res.json();
   } catch (e) {
     console.warn('Using offline station forecast fallback:', e);
   }
-  const key = getClosestStepKey(stepHour);
-  return offlineBundle.stations_forecast[`${stationId}_${key}`] || 
-         offlineBundle.stations_forecast[`${stationId}_72`] || 
-         offlineBundle.stations_forecast['DEL001_72'];
+  return fallback;
 }
 
 export async function fetchRegionalForecast(stepHour = 72) {
+  if (isOffline()) return { status: "OFFLINE", step_hour: stepHour };
   try {
-    const res = await fetch(`${BASE_URL}/api/forecast/regional?step_hour=${stepHour}`, { signal: AbortSignal.timeout(3000) });
+    const res = await fetch(`${BASE_URL}/api/forecast/regional?step_hour=${stepHour}`, { signal: AbortSignal.timeout(1500) });
     if (res.ok) return await res.json();
   } catch (e) {
     console.warn('Using offline regional forecast fallback:', e);
   }
-  return { status: "ONLINE", step_hour: stepHour };
+  return { status: "OFFLINE", step_hour: stepHour };
 }
 
 export async function fetchGrapTriggers(stepHour = 72) {
+  const key = getClosestStepKey(stepHour);
+  const fallback = offlineBundle.steps[key]?.grap || offlineBundle.steps["72"].grap;
+  if (isOffline()) return fallback;
   try {
-    const res = await fetch(`${BASE_URL}/api/grap/triggers?step_hour=${stepHour}`, { signal: AbortSignal.timeout(3000) });
+    const res = await fetch(`${BASE_URL}/api/grap/triggers?step_hour=${stepHour}`, { signal: AbortSignal.timeout(1500) });
     if (res.ok) return await res.json();
   } catch (e) {
     console.warn('Using offline grap fallback:', e);
   }
-  const key = getClosestStepKey(stepHour);
-  return offlineBundle.steps[key]?.grap || offlineBundle.steps["72"].grap;
+  return fallback;
 }
 
 export async function fetchDispatches(stepHour = 72) {
+  const key = getClosestStepKey(stepHour);
+  const fallback = offlineBundle.steps[key]?.dispatches || offlineBundle.steps["72"].dispatches;
+  if (isOffline()) return fallback;
   try {
-    const res = await fetch(`${BASE_URL}/api/dispatches?step_hour=${stepHour}`, { signal: AbortSignal.timeout(3000) });
+    const res = await fetch(`${BASE_URL}/api/dispatches?step_hour=${stepHour}`, { signal: AbortSignal.timeout(1500) });
     if (res.ok) return await res.json();
   } catch (e) {
     console.warn('Using offline dispatches fallback:', e);
   }
-  const key = getClosestStepKey(stepHour);
-  return offlineBundle.steps[key]?.dispatches || offlineBundle.steps["72"].dispatches;
+  return fallback;
 }
 
 export async function fetchInterstateGrid(stepHour = 72) {
+  const key = getClosestStepKey(stepHour);
+  const fallback = offlineBundle.steps[key]?.interstate || offlineBundle.steps["72"].interstate;
+  if (isOffline()) return fallback;
   try {
-    const res = await fetch(`${BASE_URL}/api/interstate?step_hour=${stepHour}`, { signal: AbortSignal.timeout(3000) });
+    const res = await fetch(`${BASE_URL}/api/interstate?step_hour=${stepHour}`, { signal: AbortSignal.timeout(1500) });
     if (res.ok) return await res.json();
   } catch (e) {
     console.warn('Using offline interstate fallback:', e);
   }
-  const key = getClosestStepKey(stepHour);
-  return offlineBundle.steps[key]?.interstate || offlineBundle.steps["72"].interstate;
+  return fallback;
 }
 
 export async function runWhatIfSimulation(params) {
@@ -507,12 +527,23 @@ function getClientExpertResponse(question, lang = 'hinglish') {
 }
 
 export async function queryVayuAI(question, stepHour = 72, useGemini = true, signal = null, language = 'hinglish') {
+  if (isOffline() || !useGemini) {
+    const answer = getClientExpertResponse(question, language);
+    return {
+      answer,
+      mode: "offline",
+      model: "Offline AI Engine (Mobile Native)",
+      online: false,
+      language
+    };
+  }
+
   try {
     const res = await fetch(`${BASE_URL}/api/vayuai/query`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ question, step_hour: stepHour, use_gemini: useGemini, language }),
-      signal: signal || undefined
+      signal: signal || AbortSignal.timeout(4000)
     });
     if (res.ok) return await res.json();
   } catch (e) {
