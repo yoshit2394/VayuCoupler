@@ -9,8 +9,10 @@ import {
 } from 'lucide-react';
 import { 
   fetchStations, fetchSnapshot, fetchStationForecast, 
-  fetchGrapTriggers, fetchDispatches, fetchInterstateGrid, runWhatIfSimulation 
+  fetchGrapTriggers, fetchDispatches, fetchInterstateGrid, runWhatIfSimulation,
+  getInterpolatedSnapshot
 } from './services/api';
+import offlineBundle from './data/offline_bundle.json';
 import VayuAIChat from './components/VayuAIChat';
 import SettingsModal from './components/SettingsModal';
 import StationForecastCard from './components/StationForecastCard';
@@ -68,11 +70,11 @@ export default function App() {
   // Official Dispatch Order detail modal
   const [activeDispatchModal, setActiveDispatchModal] = useState(null);
 
-  const [snapshot, setSnapshot] = useState(null);
-  const [stationFc, setStationFc] = useState(null);
-  const [grapData, setGrapData] = useState(null);
-  const [dispatches, setDispatches] = useState(null);
-  const [interstate, setInterstate] = useState(null);
+  const [snapshot, setSnapshot] = useState(() => getInterpolatedSnapshot(72));
+  const [stationFc, setStationFc] = useState(() => offlineBundle?.stations_forecast?.['DEL001_72'] || null);
+  const [grapData, setGrapData] = useState(() => offlineBundle?.steps?.['72']?.grap || null);
+  const [dispatches, setDispatches] = useState(() => offlineBundle?.steps?.['72']?.dispatches || null);
+  const [interstate, setInterstate] = useState(() => offlineBundle?.steps?.['72']?.interstate || null);
   const [whatIfData, setWhatIfData] = useState(null);
 
   const [stubbleVal, setStubbleVal] = useState(50);
@@ -239,20 +241,17 @@ export default function App() {
 
   const resetZoom = () => { setMapZoom(1); setMapPan({ x: 0, y: 0 }); };
 
-  if (!snapshot) {
-    return (
-      <div className="min-h-screen bg-[#0B0F17] flex items-center justify-center text-cyan-400 font-mono">
-        <div className="flex items-center gap-3">
-          <div className="w-5 h-5 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
-          <span>Connecting to MoES Coupled Forecasting Engine...</span>
-        </div>
-      </div>
-    );
-  }
-
-  const met = snapshot.meteorology;
-  const fires = snapshot.stubble_burning;
-  const currSt = snapshot.stations.find(s => s.station_id === selectedStationId) || snapshot.stations[0];
+  const activeSnapshot = snapshot || safeSnapshot;
+  const met = activeSnapshot?.meteorology || {};
+  const fires = activeSnapshot?.stubble_burning || {};
+  const currSt = activeSnapshot?.stations?.find(s => s.station_id === selectedStationId) || activeSnapshot?.stations?.[0] || {
+    station_id: 'DEL001',
+    name: 'Mandir Marg',
+    aqi: 285,
+    category: 'Poor',
+    category_color: '#F97316',
+    pm25: 128
+  };
 
   // Station click handler
   const handleStationClick = (station) => {
