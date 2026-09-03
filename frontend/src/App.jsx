@@ -63,6 +63,8 @@ export default function App() {
 
   // Station detail modal
   const [stationModal, setStationModal] = useState(null);
+  // Official Dispatch Order detail modal
+  const [activeDispatchModal, setActiveDispatchModal] = useState(null);
 
   const [snapshot, setSnapshot] = useState(null);
   const [stationFc, setStationFc] = useState(null);
@@ -114,7 +116,7 @@ export default function App() {
         sound.playTap();
         setTimeout(() => {
           if (isMounted) setLocationBannerVisible(false);
-        }, 7000);
+        }, 3500);
       } else {
         setLocationStatus('denied');
       }
@@ -132,7 +134,7 @@ export default function App() {
       setLocationStatus('detected');
       setSelectedStationId(loc.closestStation.station_id);
       setLocationBannerVisible(true);
-      setTimeout(() => setLocationBannerVisible(false), 6000);
+      setTimeout(() => setLocationBannerVisible(false), 3500);
     } else {
       setLocationStatus('denied');
       alert(language === 'hi' 
@@ -470,28 +472,45 @@ export default function App() {
         </div>
       </header>
 
-      {/* Floating GPS Location Auto-Detection Banner */}
+      {/* Floating GPS Location Auto-Detection Banner (Auto-dismisses in 3.5s) */}
       {locationBannerVisible && userLocation && (
-        <div className="fixed top-14 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-cyan-950/95 via-slate-900/95 to-emerald-950/95 border border-cyan-500/60 rounded-2xl px-3.5 py-2.5 shadow-2xl flex items-center gap-3 backdrop-blur-2xl max-w-md w-[94%] animate-in fade-in slide-in-from-top-3 duration-300">
-          <div className="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/50 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.4)]">
-            <Navigation className="w-4 h-4 text-cyan-400 animate-pulse" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="text-xs font-bold text-white flex items-center gap-1.5 truncate">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-              <span>{language === 'hi' ? 'आपकी लाइव लोकेशन सेट हो गई है' : 'Local Air Quality Set to Your Location'}</span>
+        <div 
+          onClick={() => {
+            sound.playTap();
+            handleSelectAndScrollStation(userLocation.closestStation.station_id);
+            setLocationBannerVisible(false);
+          }}
+          className="fixed top-14 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-cyan-950/95 via-slate-900/95 to-emerald-950/95 border border-cyan-500/60 rounded-2xl p-3 shadow-2xl flex flex-col gap-2 backdrop-blur-2xl max-w-md w-[94%] cursor-pointer active:scale-95 transition-all duration-300 animate-in fade-in slide-in-from-top-3"
+          title="Click to view forecast for your local station"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/50 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.4)]">
+              <Navigation className="w-4 h-4 text-cyan-400 animate-pulse" />
             </div>
-            <div className="text-[11px] text-cyan-300 font-medium truncate mt-0.5">
-              {userLocation.closestStation.name} • {userLocation.distanceKm} km away • AQI {userLocation.closestStation.aqi}
+            <div className="flex-1 min-w-0">
+              <div className="text-xs font-bold text-white flex items-center gap-1.5 truncate">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>{language === 'hi' ? 'आपकी लाइव लोकेशन सेट हो गई है' : 'Local Air Quality Set to Your Location'}</span>
+              </div>
+              <div className="text-[11px] text-cyan-300 font-medium truncate mt-0.5">
+                {userLocation.closestStation.name} • {userLocation.distanceKm} km away • AQI {userLocation.closestStation.aqi}
+              </div>
             </div>
+            <button 
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setLocationBannerVisible(false);
+              }}
+              className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 shrink-0 cursor-pointer active:scale-95"
+              title="Close">
+              <X className="w-4 h-4" />
+            </button>
           </div>
-          <button 
-            type="button"
-            onClick={() => setLocationBannerVisible(false)}
-            className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 shrink-0 cursor-pointer active:scale-95"
-            title="Close">
-            <X className="w-4 h-4" />
-          </button>
+          {/* Subtle auto-dismiss timer bar */}
+          <div className="w-full bg-cyan-950/60 h-1 rounded-full overflow-hidden border border-cyan-800/40">
+            <div className="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 rounded-full animate-[shrinkWidth_3.5s_linear_forwards]" style={{ width: '100%' }} />
+          </div>
         </div>
       )}
 
@@ -1153,7 +1172,15 @@ export default function App() {
                 const urg = d.urgency || 'HIGH';
                 const clr = urgColors[urg] || urgColors['HIGH'];
                 return (
-                  <div key={i} className={`rounded-2xl border p-4 flex flex-col gap-3 transition-shadow ${clr.card}`}>
+                  <div 
+                    key={i} 
+                    onClick={() => {
+                      sound.playTap();
+                      setActiveDispatchModal(d);
+                    }}
+                    className={`rounded-2xl border p-4 flex flex-col gap-3 transition-all cursor-pointer hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] ${clr.card}`}
+                    title="Tap to open executive dispatch order"
+                  >
                     {/* Header */}
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-center gap-2.5">
@@ -1165,12 +1192,17 @@ export default function App() {
                           <div className="text-sm font-bold text-slate-900 dark:text-white">{d.role_label || d.agency}</div>
                         </div>
                       </div>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full ${clr.badge}`}>{urg}</span>
+                      <div className="flex flex-col items-end gap-1">
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full ${clr.badge}`}>{urg}</span>
+                        <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400 font-bold flex items-center gap-0.5">
+                          Open Order ↗
+                        </span>
+                      </div>
                     </div>
 
                     {/* Actions list */}
                     <div className="flex flex-col gap-1.5">
-                      {(d.actions || d.orders || [d.action]).filter(Boolean).map((action, j) => (
+                      {(d.action_items || d.actions || d.orders || [d.action]).filter(Boolean).map((action, j) => (
                         <div key={j} className="flex items-start gap-2 p-2 rounded-lg bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 text-xs text-slate-800 dark:text-slate-300">
                           <CheckCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                           <span>{action}</span>
@@ -1179,11 +1211,12 @@ export default function App() {
                     </div>
 
                     {/* Footer */}
-                    {d.deadline && (
-                      <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono border-t border-slate-200 dark:border-slate-800 pt-2">
-                        ⏰ Deadline: <span className="text-cyan-600 dark:text-cyan-400 font-bold">{d.deadline}</span>
-                      </div>
-                    )}
+                    <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 font-mono border-t border-slate-200 dark:border-slate-800 pt-2">
+                      <span>{d.deadline ? `⏰ Deadline: ${d.deadline}` : '⚡ 72h Pre-emptive Lead'}</span>
+                      <span className="text-cyan-600 dark:text-cyan-400 font-bold underline decoration-dotted">
+                        {language === 'hi' ? 'आदेश विवरण ↗' : 'View Protocol ↗'}
+                      </span>
+                    </div>
                   </div>
                 );
               })}
@@ -1450,6 +1483,147 @@ export default function App() {
             >
               <TrendingUp className="w-4 h-4" /> View 72h Forecast for {stationModal.name}
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* ==================== OFFICIAL DISPATCH TRANSMISSION MODAL ==================== */}
+      {activeDispatchModal && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200"
+          onClick={(e) => { if (e.target === e.currentTarget) setActiveDispatchModal(null); }}
+        >
+          <div className="bg-[#0B1320] border border-slate-700 dark:border-cyan-800/80 rounded-3xl p-5 sm:p-6 w-full max-w-xl shadow-2xl shadow-black/90 flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
+            
+            {/* Header */}
+            <div className="flex items-start justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-cyan-950/80 border border-cyan-700/60 flex items-center justify-center text-cyan-400 shadow-md shrink-0">
+                  <Send className="w-6 h-6" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono font-black text-cyan-400 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800">
+                      {activeDispatchModal.role_id}
+                    </span>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                      activeDispatchModal.urgency === 'EMERGENCY' ? 'bg-rose-900 text-rose-300 border border-rose-700' :
+                      activeDispatchModal.urgency === 'CRITICAL'  ? 'bg-orange-900 text-orange-300 border border-orange-700' :
+                      activeDispatchModal.urgency === 'HIGH'      ? 'bg-amber-900 text-amber-300 border border-amber-700' :
+                                                                   'bg-cyan-900 text-cyan-300 border border-cyan-700'
+                    }`}>
+                      {activeDispatchModal.urgency} PROTOCOL
+                    </span>
+                  </div>
+                  <h3 className="text-base sm:text-lg font-bold text-white mt-1">
+                    {activeDispatchModal.role_label || activeDispatchModal.agency}
+                  </h3>
+                  <div className="text-xs text-slate-400">
+                    {activeDispatchModal.role_name || activeDispatchModal.description}
+                  </div>
+                </div>
+              </div>
+              <button 
+                type="button"
+                onClick={() => setActiveDispatchModal(null)}
+                className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer active:scale-95"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Gov-to-Gov Transmission Channel */}
+            <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 flex flex-col gap-2 text-xs">
+              <div className="flex items-center justify-between font-mono">
+                <span className="text-slate-400">TRANSMISSION GATEWAY:</span>
+                <span className="text-cyan-400 font-bold">{activeDispatchModal.mock_payload?.channel || 'National Disaster Alert (Gov-to-Gov Gateway)'}</span>
+              </div>
+              <div className="flex items-center justify-between font-mono">
+                <span className="text-slate-400">RECIPIENT AUTHORITY:</span>
+                <span className="text-slate-200 font-semibold">{activeDispatchModal.mock_payload?.recipient || activeDispatchModal.agency}</span>
+              </div>
+              {activeDispatchModal.mock_payload?.subject && (
+                <div className="p-2 rounded-xl bg-slate-950 border border-slate-800/80 font-mono text-cyan-300 text-[11px] leading-relaxed">
+                  📌 {activeDispatchModal.mock_payload.subject}
+                </div>
+              )}
+            </div>
+
+            {/* Atmospheric Meteorological Evidence */}
+            {snapshot?.meteorology && (
+              <div className="p-3.5 rounded-2xl bg-cyan-950/40 border border-cyan-800/50 flex flex-col gap-2">
+                <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-wider">
+                  Coupled Atmospheric Forecast Evidence (72h Lead Time)
+                </span>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+                  <div className="p-2 rounded-xl bg-slate-900/90 border border-slate-800">
+                    <div className="text-[10px] text-slate-400 font-mono">Ventilation</div>
+                    <div className="text-sm font-bold text-cyan-300 font-mono">{snapshot.meteorology.ventilation_index_m2s || 1420} m²/s</div>
+                  </div>
+                  <div className="p-2 rounded-xl bg-slate-900/90 border border-slate-800">
+                    <div className="text-[10px] text-slate-400 font-mono">Inversion</div>
+                    <div className="text-sm font-bold text-amber-300 font-mono">{snapshot.meteorology.inversion_strength_c || 4.2} °C</div>
+                  </div>
+                  <div className="p-2 rounded-xl bg-slate-900/90 border border-slate-800">
+                    <div className="text-[10px] text-slate-400 font-mono">Wind Vector</div>
+                    <div className="text-sm font-bold text-blue-300 font-mono">{snapshot.meteorology.wind_speed_kmh || 8.3} km/h</div>
+                  </div>
+                  <div className="p-2 rounded-xl bg-slate-900/90 border border-slate-800">
+                    <div className="text-[10px] text-slate-400 font-mono">Active Fires</div>
+                    <div className="text-sm font-bold text-orange-400 font-mono">{snapshot.nasa_firms?.total_active_fires || 1457}</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Mandatory Action Items / Orders */}
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-200 uppercase font-mono">
+                  Mandatory Directives ({ (activeDispatchModal.action_items || activeDispatchModal.actions || []).length } Tasks)
+                </span>
+                <span className="text-[10px] text-emerald-400 font-mono">Pre-Emptive Protocol Active</span>
+              </div>
+              <div className="flex flex-col gap-2">
+                {(activeDispatchModal.action_items || activeDispatchModal.actions || activeDispatchModal.orders || [activeDispatchModal.action]).filter(Boolean).map((act, k) => (
+                  <div key={k} className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-start gap-2.5 text-xs text-slate-200 leading-relaxed shadow-sm">
+                    <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <span>{act}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Official Directive Body */}
+            {activeDispatchModal.mock_payload?.body && (
+              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 leading-relaxed font-mono">
+                <div className="text-[10px] text-slate-500 font-bold mb-1 uppercase">Official Dispatch Body:</div>
+                {activeDispatchModal.mock_payload.body}
+              </div>
+            )}
+
+            {/* Action Buttons */}
+            <div className="flex items-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  sound.playTap();
+                  alert(language === 'hi' ? 'आदेश सफलतापूर्वक ट्रांसमिट और अभिस्वीकृत हो गया!' : 'Dispatch Order Acknowledged & Transmitted to Agency Command Center!');
+                  setActiveDispatchModal(null);
+                }}
+                className="flex-1 py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-500 hover:to-teal-400 text-slate-950 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-lg shadow-cyan-900/40"
+              >
+                <Send className="w-4 h-4" /> {language === 'hi' ? 'आदेश ट्रांसमिट करें (Acknowledge)' : 'Acknowledge & Transmit Dispatch'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveDispatchModal(null)}
+                className="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs sm:text-sm transition cursor-pointer active:scale-95"
+              >
+                {language === 'hi' ? 'बंद करें' : 'Close'}
+              </button>
+            </div>
+
           </div>
         </div>
       )}
