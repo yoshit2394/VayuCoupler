@@ -1,0 +1,7 @@
+backend/
+venv/
+*.bat
+*.command
+scratch/
+docs/
+*.pdf
