@@ -45,9 +45,15 @@ if exist "venv\Scripts\activate.bat" (
     pip install -q fastapi uvicorn numpy pandas google-generativeai requests
 )
 
+if exist "venv\Scripts\python.exe" (
+    set "RUN_PY=%~dp0venv\Scripts\python.exe"
+) else (
+    set "RUN_PY=python"
+)
+
 echo.
 echo [*] Launching VayuCoupler High-Performance Backend Engine...
-start /b python run.py >nul 2>&1
+start /b "" "%RUN_PY%" run.py > "%~dp0server.log" 2>&1
 
 :: Wait 2 seconds for server startup
 timeout /t 2 >nul

@@ -89,7 +89,7 @@ export default function StationForecastCard({
   return (
     <div 
       id="station-forecast-panel" 
-      className="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl flex flex-col gap-4.5 transition-all duration-300 shadow-xl relative overflow-hidden"
+      className="bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 hover:border-slate-700/90 p-5 rounded-2xl flex flex-col gap-4.5 transition-all duration-300 shadow-xl relative overflow-hidden"
     >
       {/* 1. Header with Full Station Identity & Quick Switcher */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-slate-800">

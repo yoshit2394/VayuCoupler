@@ -317,29 +317,35 @@ export default function App() {
     <div className="min-h-screen bg-[#0B0F17] text-slate-100 flex flex-col font-sans">
       
       {/* ===== TOP NAVIGATION ===== */}
-      <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 px-4 md:px-6 py-2.5 md:py-3 safe-area-pt">
+      <header className="sticky top-0 z-50 bg-[#0B0F17]/90 backdrop-blur-xl border-b border-slate-800/80 px-4 md:px-6 py-2.5 md:py-3 safe-area-pt shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
         {/* Desktop Navbar */}
         <div className="hidden md:flex max-w-[1720px] mx-auto items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-cyan-600 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/25 border border-cyan-400/30">
               <Wind className="w-5 h-5 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-mono">SIH26082 • MoES</span>
-                <span className="text-xs text-slate-400">Delhi NCR Coupled Forecasting System</span>
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2 py-0.5 rounded-md bg-gradient-to-r from-cyan-950/90 to-blue-950/90 text-cyan-300 border border-cyan-700/60 font-mono shadow-[0_0_10px_rgba(6,182,212,0.15)]">
+                  SIH26082 • MoES
+                </span>
+                <span className="text-xs text-slate-400 font-medium tracking-wide">Delhi NCR Coupled Forecasting System</span>
               </div>
-              <h1 className="text-sm md:text-base font-bold text-white tracking-tight flex items-center gap-2">
+              <h1 className="text-sm md:text-base font-extrabold text-white tracking-tight flex items-center gap-2.5 mt-0.5">
                 Air Pollution–Weather Coupled Early Warning System
-                <span className="text-[11px] font-semibold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-800/50">
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-300 bg-emerald-950/70 px-2.5 py-0.5 rounded-full border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.25)] font-mono">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+                  </span>
                   PREDICTIVE GRAP ACTIVE
                 </span>
               </h1>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <nav className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-medium">
+          <div className="flex items-center gap-2.5">
+            <nav className="flex items-center bg-[#0F172A]/90 p-1 rounded-xl border border-slate-800 text-xs font-semibold shadow-inner">
               {[
                 { id: 'overview', icon: <LayoutDashboard className="w-4 h-4" />, label: t('tab_overview', language) },
                 { id: 'grap',     icon: <ShieldAlert className="w-4 h-4" />,    label: t('tab_grap', language) },
@@ -350,10 +356,10 @@ export default function App() {
                 <button
                   key={tab.id}
                   onClick={() => switchTab(tab.id)}
-                  className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 cursor-pointer ${
                     activeTab === tab.id
-                      ? 'text-cyan-400 bg-cyan-950 border border-cyan-800 font-bold'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'text-cyan-300 bg-cyan-950/90 border border-cyan-500/60 font-bold shadow-[0_0_12px_rgba(6,182,212,0.25)]'
+                      : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
                   }`}
                 >
                   {tab.icon} {tab.label}
@@ -361,22 +367,30 @@ export default function App() {
               ))}
             </nav>
 
-            {/* Live GPS Location Button */}
+            {/* Live GPS Location Button with Pulsating Beacon */}
             <button
               type="button"
               onClick={handleDetectLocation}
-              className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 text-xs font-semibold transition cursor-pointer active:scale-95 shadow-sm ${
+              className={`px-3 py-1.5 rounded-xl border flex items-center gap-2 text-xs font-semibold transition-all cursor-pointer active:scale-95 shadow-sm backdrop-blur-md ${
                 userLocation 
-                  ? 'bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 border-cyan-700/80 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
-                  : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border-slate-800'
+                  ? 'bg-cyan-950/80 hover:bg-cyan-900 text-cyan-200 border-cyan-500/60 shadow-[0_0_14px_rgba(6,182,212,0.25)]'
+                  : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 border-slate-800'
               }`}
               title={userLocation ? `Live Station: ${userLocation.closestStation.name} (${userLocation.distanceKm} km)` : "Detect My Location"}
             >
-              <Navigation className={`w-3.5 h-3.5 text-cyan-400 ${locationStatus === 'detecting' ? 'animate-spin' : ''}`} />
+              <div className="relative flex items-center justify-center">
+                <Navigation className={`w-3.5 h-3.5 text-cyan-400 ${locationStatus === 'detecting' ? 'animate-spin' : ''}`} />
+                {userLocation && (
+                  <span className="absolute -top-1 -right-1 flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400"></span>
+                  </span>
+                )}
+              </div>
               {userLocation ? (
-                <span className="flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span>{userLocation.closestStation.name.split(' ')[0]} ({userLocation.distanceKm}km)</span>
+                <span className="flex items-center gap-1.5 font-mono">
+                  <span className="font-sans font-bold text-white">{userLocation.closestStation.name.split(' ')[0]}</span>
+                  <span className="text-cyan-400/90 text-[11px]">({userLocation.distanceKm}km)</span>
                 </span>
               ) : (
                 <span>{locationStatus === 'detecting' ? 'Detecting...' : (language === 'hi' ? 'मेरी लोकेशन' : 'Detect Location')}</span>
@@ -387,15 +401,16 @@ export default function App() {
             <button
               type="button"
               onClick={() => handleSelectAndScrollStation(currSt.station_id)}
-              className="px-2.5 py-1.5 rounded-xl border flex items-center gap-1.5 text-xs font-bold font-mono transition cursor-pointer active:scale-95 shadow-sm"
+              className="px-3 py-1.5 rounded-xl border flex items-center gap-2 text-xs font-bold font-mono transition cursor-pointer active:scale-95 shadow-sm backdrop-blur-md"
               style={{
-                backgroundColor: (currSt?.category_color || snapshot.category_color) + '22',
+                backgroundColor: (currSt?.category_color || snapshot.category_color) + '1f',
                 color: currSt?.category_color || snapshot.category_color,
-                borderColor: (currSt?.category_color || snapshot.category_color) + '66'
+                borderColor: (currSt?.category_color || snapshot.category_color) + '55',
+                boxShadow: `0 0 12px ${(currSt?.category_color || snapshot.category_color)}20`
               }}
               title={`Selected Station: ${currSt?.name} • AQI ${currSt?.aqi}`}
             >
-              <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ backgroundColor: currSt?.category_color || snapshot.category_color }}></span>
+              <span className="w-2 h-2 rounded-full inline-block animate-pulse" style={{ backgroundColor: currSt?.category_color || snapshot.category_color }}></span>
               <span>{currSt?.name?.split(' ')[0]}: AQI {currSt?.aqi ?? snapshot.delhi_ncr_avg_aqi}</span>
             </button>
 
@@ -403,7 +418,7 @@ export default function App() {
             <button
               type="button"
               onClick={() => setIsSettingsOpen(true)}
-              className="px-3 py-1.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-300 hover:text-cyan-300 border border-slate-800 flex items-center gap-1.5 text-xs font-semibold transition cursor-pointer active:scale-95 shadow-sm"
+              className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-cyan-300 border border-slate-800 flex items-center gap-1.5 text-xs font-semibold transition cursor-pointer active:scale-95 shadow-sm"
               title="System Preferences (Theme & Language)"
             >
               <Settings className="w-3.5 h-3.5 text-cyan-400" />
@@ -415,15 +430,15 @@ export default function App() {
         {/* Mobile Native App Bar */}
         <div className="md:hidden flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center shadow-md shadow-cyan-500/20">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-md shadow-cyan-500/25 border border-cyan-400/30">
               <Wind className="w-4 h-4 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="text-sm font-black text-white tracking-tight">VayuCoupler</span>
-                <span className="text-[8px] font-bold px-1 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 font-mono">MoES</span>
+                <span className="text-[8px] font-bold px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 font-mono">MoES</span>
               </div>
-              <p className="text-[9px] text-slate-400">Delhi-NCR Coupled AQI</p>
+              <p className="text-[9px] text-slate-400 font-medium">Delhi-NCR Coupled AQI</p>
             </div>
           </div>
 
@@ -432,10 +447,10 @@ export default function App() {
             <button
               type="button"
               onClick={handleDetectLocation}
-              className={`flex items-center gap-1 px-2 py-0.5 rounded-full border text-[10px] font-semibold active:scale-95 transition ${
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[10px] font-semibold active:scale-95 transition backdrop-blur-md ${
                 userLocation 
-                  ? 'bg-cyan-950/90 text-cyan-300 border-cyan-600/70 shadow-[0_0_10px_rgba(6,182,212,0.25)]'
-                  : 'bg-slate-950 text-slate-300 border-slate-800'
+                  ? 'bg-cyan-950/90 text-cyan-200 border-cyan-500/70 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+                  : 'bg-slate-900/90 text-slate-300 border-slate-800'
               }`}
               title="Detect My Location"
             >
@@ -443,8 +458,8 @@ export default function App() {
               {userLocation ? (
                 <span className="flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span className="truncate max-w-[85px]">{userLocation.closestStation.name.split(' ')[0]}</span>
-                  <span className="text-[9px] text-cyan-400/80 font-mono">({userLocation.distanceKm}km)</span>
+                  <span className="truncate max-w-[85px] font-bold text-white">{userLocation.closestStation.name.split(' ')[0]}</span>
+                  <span className="text-[9px] text-cyan-300/80 font-mono">({userLocation.distanceKm}km)</span>
                 </span>
               ) : (
                 <span className="text-[9px]">{locationStatus === 'detecting' ? 'GPS...' : (language === 'hi' ? 'लोकेशन' : 'GPS')}</span>
@@ -454,11 +469,11 @@ export default function App() {
             <button 
               type="button"
               onClick={() => handleSelectAndScrollStation(currSt.station_id)}
-              className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold border active:scale-95 transition cursor-pointer"
+              className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border active:scale-95 transition cursor-pointer"
               style={{
-                backgroundColor: (currSt?.category_color || snapshot.category_color) + '2a',
+                backgroundColor: (currSt?.category_color || snapshot.category_color) + '22',
                 color: currSt?.category_color || snapshot.category_color,
-                borderColor: (currSt?.category_color || snapshot.category_color) + '70'
+                borderColor: (currSt?.category_color || snapshot.category_color) + '66'
               }}
               title={`Local Station: ${currSt?.name} • AQI ${currSt?.aqi}`}
             >
@@ -467,7 +482,7 @@ export default function App() {
 
             <button 
               onClick={() => setIsSettingsOpen(true)}
-              className="p-1.5 rounded-lg bg-slate-950 text-slate-300 border border-slate-800 active:scale-95"
+              className="p-1.5 rounded-lg bg-slate-900/90 text-slate-300 border border-slate-800 active:scale-95"
               title="Settings"
             >
               <Settings className="w-4 h-4 text-cyan-400" />
@@ -638,39 +653,43 @@ export default function App() {
         {activeTab === 'overview' && (
           <div className="flex flex-col gap-5 md:gap-6">
 
-            {/* 6 Key Atmospheric Coupling Telemetry Cards */}
-            <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
+            {/* 6 Key Atmospheric Coupling Telemetry HUD Cards */}
+            <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
               {/* Card 1: Local Station Hero AQI (Auto-Synced with GPS / Selected Station) */}
               <div 
                 onClick={() => handleSelectAndScrollStation(currSt.station_id)}
-                className="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-xl border-l-4 cursor-pointer hover:border-cyan-500/50 transition shadow-sm group select-none" 
+                className="bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 hover:border-cyan-500/60 p-4 rounded-2xl border-l-4 cursor-pointer transition-all duration-300 shadow-lg hover:shadow-[0_8px_25px_rgba(0,0,0,0.5)] group select-none relative overflow-hidden flex flex-col justify-between" 
                 style={{ borderLeftColor: currSt?.category_color || snapshot.category_color }}
                 title={`Click to view 72h Coupled Forecast for ${currSt?.name}`}
               >
-                <div className="text-[11px] sm:text-xs text-slate-400 font-semibold flex items-center justify-between">
+                <div className="text-xs text-slate-400 font-semibold flex items-center justify-between gap-1">
                   <span className="flex items-center gap-1.5 text-cyan-300 font-bold truncate max-w-[140px]">
                     <MapPin className="w-3.5 h-3.5 text-cyan-400 shrink-0 animate-pulse" />
-                    <span className="truncate">{currSt?.name?.toUpperCase()}</span>
+                    <span className="truncate tracking-wide">{currSt?.name?.toUpperCase()}</span>
                   </span>
                   {userLocation ? (
-                    <span className="text-[9px] text-cyan-300 font-medium flex items-center gap-1 bg-cyan-950/80 px-1.5 py-0.5 rounded border border-cyan-800/60 shrink-0">
+                    <span className="text-[10px] text-cyan-300 font-mono font-bold flex items-center gap-1 bg-cyan-950/90 px-2 py-0.5 rounded-full border border-cyan-700/60 shrink-0 shadow-sm">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                       <span>{userLocation.distanceKm} km</span>
                     </span>
                   ) : (
-                    <span className="text-[9px] text-slate-400 font-mono">
+                    <span className="text-[10px] text-slate-400 font-mono font-medium">
                       {t('local_aqi', language)}
                     </span>
                   )}
                 </div>
 
-                <div className="my-1 sm:my-1.5 flex items-baseline gap-2">
-                  <span className="text-2xl sm:text-3xl font-black font-mono tracking-tight" style={{ color: currSt?.category_color || '#FFFFFF' }}>
+                <div className="my-2 flex items-baseline gap-2">
+                  <span className="text-3xl sm:text-4xl font-black font-mono tracking-tight" style={{ color: currSt?.category_color || '#FFFFFF' }}>
                     {currSt?.aqi}
                   </span>
                   <span 
-                    className="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full" 
-                    style={{ backgroundColor: (currSt?.category_color || '#FBBF24') + '33', color: currSt?.category_color || '#FBBF24' }}
+                    className="text-[10px] font-bold px-2 py-0.5 rounded-full font-mono tracking-wide uppercase border" 
+                    style={{ 
+                      backgroundColor: (currSt?.category_color || '#FBBF24') + '22', 
+                      color: currSt?.category_color || '#FBBF24',
+                      borderColor: (currSt?.category_color || '#FBBF24') + '55'
+                    }}
                   >
                     {language === 'hi' 
                       ? (currSt?.category === 'Severe' ? 'गंभीर' : currSt?.category === 'Very Poor' ? 'बहुत खराब' : currSt?.category === 'Poor' ? 'खराब' : currSt?.category === 'Moderate' ? 'मध्यम' : currSt?.category === 'Satisfactory' ? 'संतोषजनक' : 'अच्छा')
@@ -678,55 +697,82 @@ export default function App() {
                   </span>
                 </div>
 
-                <div className="text-[10px] sm:text-[11px] text-slate-400 flex items-center justify-between font-mono">
-                  <span>PM2.5: <b className="text-slate-200">{currSt?.pm25}</b> μg/m³</span>
-                  <span className="text-slate-500 text-[10px]">{t('ncr_avg_short', language)}: <b className="text-slate-400 font-bold">{snapshot.delhi_ncr_avg_aqi}</b></span>
+                <div className="text-[11px] text-slate-400 flex items-center justify-between font-mono pt-1.5 border-t border-slate-800/80">
+                  <span>PM2.5: <b className="text-slate-100 font-bold">{currSt?.pm25}</b> <span className="text-[9px] text-slate-500">μg/m³</span></span>
+                  <span className="text-slate-400 text-[10px]">{t('ncr_avg_short', language)}: <b className="text-cyan-300 font-bold">{snapshot.delhi_ncr_avg_aqi}</b></span>
                 </div>
               </div>
 
-              <div className="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-xl border-l-4 border-cyan-500">
-                <div className="text-[11px] sm:text-xs text-cyan-400 font-semibold">{t('ventilation_idx', language)}</div>
-                <div className="my-1 sm:my-1.5 text-xl sm:text-2xl font-black font-mono text-cyan-300">
-                  {met.ventilation_index_m2s} <span className="text-xs text-slate-400">m²/s</span>
+              {/* Card 2: Ventilation Index */}
+              <div className="bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 hover:border-cyan-500/50 p-4 rounded-2xl border-l-4 border-l-cyan-500 shadow-lg transition-all duration-300 flex flex-col justify-between group">
+                <div className="text-xs text-cyan-400 font-semibold tracking-wide flex items-center justify-between">
+                  <span>{t('ventilation_idx', language)}</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400/80"></span>
                 </div>
-                <div className={`text-[10px] sm:text-[11px] font-medium ${met.ventilation_index_m2s < 2000 ? 'text-rose-400' : 'text-emerald-400'}`}>
-                  {language === 'hi' ? 'गंभीर ट्रैपिंग (<1200 m²/s)' : met.ventilation_status}
+                <div className="my-2 text-2xl sm:text-3xl font-black font-mono text-cyan-300 tracking-tight">
+                  {met.ventilation_index_m2s} <span className="text-xs text-slate-400 font-sans font-medium">m²/s</span>
+                </div>
+                <div className={`text-[11px] font-semibold font-mono pt-1.5 border-t border-slate-800/80 flex items-center gap-1 ${met.ventilation_index_m2s < 2000 ? 'text-rose-400' : 'text-emerald-400'}`}>
+                  <span>{met.ventilation_index_m2s < 2000 ? '⚠' : '✓'}</span>
+                  <span className="truncate">{language === 'hi' ? 'गंभीर ट्रैपिंग (<1200 m²/s)' : met.ventilation_status}</span>
                 </div>
               </div>
 
-              <div className="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-xl border-l-4 border-indigo-500">
-                <div className="text-[11px] sm:text-xs text-slate-400 font-semibold">{t('pblh_height', language)}</div>
-                <div className="my-1 sm:my-1.5 text-xl sm:text-2xl font-black font-mono text-indigo-200">
-                  {met.boundary_layer_height_m} <span className="text-xs text-slate-400">m</span>
+              {/* Card 3: Boundary Layer Height (PBLH) */}
+              <div className="bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 hover:border-indigo-500/50 p-4 rounded-2xl border-l-4 border-l-indigo-500 shadow-lg transition-all duration-300 flex flex-col justify-between group">
+                <div className="text-xs text-slate-400 font-semibold tracking-wide flex items-center justify-between">
+                  <span>{t('pblh_height', language)}</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400/80"></span>
                 </div>
-                <div className="text-[10px] sm:text-[11px] text-slate-400">
+                <div className="my-2 text-2xl sm:text-3xl font-black font-mono text-indigo-200 tracking-tight">
+                  {met.boundary_layer_height_m} <span className="text-xs text-slate-400 font-sans font-medium">m</span>
+                </div>
+                <div className="text-[11px] text-indigo-300/90 font-mono pt-1.5 border-t border-slate-800/80 truncate">
                   {met.boundary_layer_height_m < 500 ? t('severe_trapping', language) : t('normal_dispersion', language)}
                 </div>
               </div>
 
-              <div className="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-xl border-l-4 border-amber-500">
-                <div className="text-[11px] sm:text-xs text-slate-400 font-semibold">{t('inversion_delta', language)}</div>
-                <div className="my-1 sm:my-1.5 text-xl sm:text-2xl font-black font-mono text-amber-300">
-                  {met.inversion_strength_c} <span className="text-xs text-slate-400">°C</span>
+              {/* Card 4: Temperature Inversion */}
+              <div className="bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 hover:border-amber-500/50 p-4 rounded-2xl border-l-4 border-l-amber-500 shadow-lg transition-all duration-300 flex flex-col justify-between group">
+                <div className="text-xs text-slate-400 font-semibold tracking-wide flex items-center justify-between">
+                  <span>{t('inversion_delta', language)}</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400/80"></span>
                 </div>
-                <div className="text-[10px] sm:text-[11px] text-slate-400">{t('nocturnal_trapping', language)}</div>
+                <div className="my-2 text-2xl sm:text-3xl font-black font-mono text-amber-300 tracking-tight">
+                  {met.inversion_strength_c} <span className="text-xs text-slate-400 font-sans font-medium">°C</span>
+                </div>
+                <div className="text-[11px] text-amber-400/90 font-mono pt-1.5 border-t border-slate-800/80 truncate">
+                  {t('nocturnal_trapping', language)}
+                </div>
               </div>
 
-              <div className="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-xl border-l-4 border-blue-500">
-                <div className="text-[11px] sm:text-xs text-slate-400 font-semibold">{t('wind_vector', language)}</div>
-                <div className="my-1 sm:my-1.5 text-lg sm:text-xl font-bold font-mono text-blue-200">{met.wind_speed_kmh} km/h</div>
-                <div className="text-[10px] sm:text-[11px] text-slate-400">{met.wind_direction_cardinal} ({met.wind_direction_deg}°)</div>
+              {/* Card 5: Wind Vector */}
+              <div className="bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 hover:border-blue-500/50 p-4 rounded-2xl border-l-4 border-l-blue-500 shadow-lg transition-all duration-300 flex flex-col justify-between group">
+                <div className="text-xs text-slate-400 font-semibold tracking-wide flex items-center justify-between">
+                  <span>{t('wind_vector', language)}</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400/80"></span>
+                </div>
+                <div className="my-2 text-xl sm:text-2xl font-black font-mono text-blue-200 tracking-tight">
+                  {met.wind_speed_kmh} <span className="text-xs text-slate-400 font-sans font-medium">km/h</span>
+                </div>
+                <div className="text-[11px] text-blue-300/90 font-mono pt-1.5 border-t border-slate-800/80 truncate">
+                  {met.wind_direction_cardinal} ({met.wind_direction_deg}°)
+                </div>
               </div>
 
-              <div className="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-xl border-l-4 border-orange-500">
-                <div className="text-[11px] sm:text-xs text-slate-400 font-semibold">{t('active_fires', language)}</div>
-                <div className="my-1 sm:my-1.5 text-xl sm:text-2xl font-black font-mono text-orange-400">
-                  {fires.total_active_fires} <span className="text-xs text-slate-400">{language === 'hi' ? 'आग' : 'fires'}</span>
+              {/* Card 6: Stubble Fires */}
+              <div className="bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 hover:border-orange-500/50 p-4 rounded-2xl border-l-4 border-l-orange-500 shadow-lg transition-all duration-300 flex flex-col justify-between group">
+                <div className="text-xs text-slate-400 font-semibold tracking-wide flex items-center justify-between">
+                  <span>{t('active_fires', language)}</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse"></span>
                 </div>
-                <div className="text-[10px] sm:text-[11px] text-orange-400 font-mono flex items-center justify-between">
-                  <span>{t('stubble_share_label', language)}: {snapshot.source_attribution.stubble_burning}%</span>
+                <div className="my-2 text-2xl sm:text-3xl font-black font-mono text-orange-400 tracking-tight">
+                  {fires.total_active_fires} <span className="text-xs text-slate-400 font-sans font-medium">{language === 'hi' ? 'आग' : 'fires'}</span>
+                </div>
+                <div className="text-[11px] text-orange-300 font-mono flex items-center justify-between pt-1.5 border-t border-slate-800/80">
+                  <span>{t('stubble_share_label', language)}: <b>{snapshot.source_attribution.stubble_burning}%</b></span>
                   {currSt?.stubble_share_ugm3 !== undefined && (
-                    <span className="text-amber-300 font-mono text-[10px]">({currSt.name.split(' ')[0]}: {currSt.stubble_share_ugm3}μg)</span>
+                    <span className="text-amber-300 text-[10px]">({currSt.name.split(' ')[0]}: {currSt.stubble_share_ugm3}μg)</span>
                   )}
                 </div>
               </div>
@@ -1433,29 +1479,41 @@ export default function App() {
 
         {/* ==================== WHAT-IF SIM TAB ==================== */}
         {activeTab === 'whatif' && (
-          <div className="flex flex-col gap-5">
-            <div>
-              <span className="text-[10px] font-mono font-bold text-purple-700 dark:text-purple-400 bg-purple-100 dark:bg-purple-950 px-2 py-0.5 rounded border border-purple-300 dark:border-purple-800">COUNTERFACTUAL POLICY SIMULATOR</span>
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white mt-1 flex items-center gap-2">
-                <Sliders className="w-5 h-5 text-purple-600 dark:text-purple-400" /> What-If Policy Impact Simulator
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Adjust intervention sliders to see real-time AQI reduction projections.</p>
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
+              <div>
+                <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-purple-300 bg-purple-950/80 px-2.5 py-0.5 rounded-md border border-purple-700/60 shadow-[0_0_10px_rgba(168,85,247,0.2)]">
+                  COUNTERFACTUAL POLICY SIMULATOR
+                </span>
+                <h2 className="text-xl font-extrabold text-white mt-1.5 flex items-center gap-2.5 tracking-tight">
+                  <Sliders className="w-5 h-5 text-purple-400" /> What-If Policy Impact Simulator
+                </h2>
+                <p className="text-xs text-slate-400 mt-0.5 font-medium">Adjust intervention sliders to calculate real-time aerosol dispersion & AQI reduction projections.</p>
+              </div>
+              <div className="sm:text-right font-mono">
+                <span className="text-[11px] text-slate-400">Atmospheric Episode: <b>T+{currentStep}h</b></span>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
-              {/* Sliders */}
-              <div className="lg:col-span-2 bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex flex-col gap-5 shadow-sm">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Policy Intervention Controls</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+              {/* Sliders Card */}
+              <div className="lg:col-span-2 bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 rounded-2xl p-5 flex flex-col gap-5 shadow-xl hover:border-slate-700 transition-all duration-300">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
+                  <h3 className="text-sm font-bold text-white tracking-wide">Policy Intervention Controls</h3>
+                  <span className="text-[10px] font-mono text-purple-400 bg-purple-950/70 px-2 py-0.5 rounded border border-purple-800/50">4 Active Levers</span>
+                </div>
                 {[
-                  { label: 'Stubble Burning Reduction', val: stubbleVal, set: setStubbleVal, color: '#F97316', hint: 'Punjab/Haryana farm fire suppression' },
-                  { label: 'Truck & Heavy Vehicle Bypass', val: truckVal, set: setTruckVal, color: '#EF4444', hint: 'EPE/WPE rerouting enforcement' },
-                  { label: 'Dust Suppression (Misting)', val: dustVal, set: setDustVal, color: '#EAB308', hint: 'Anti-smog gun deployment' },
-                  { label: 'Industrial Stack Switchover', val: industryVal, set: setIndustryVal, color: '#8B5CF6', hint: 'Cleaner fuel mandate compliance' },
+                  { label: 'Stubble Burning Reduction', val: stubbleVal, set: setStubbleVal, color: '#F97316', hint: 'Punjab/Haryana farm fire suppression via ex-situ baling' },
+                  { label: 'Truck & Heavy Vehicle Bypass', val: truckVal, set: setTruckVal, color: '#EF4444', hint: 'Eastern/Western Peripheral Expressway rerouting' },
+                  { label: 'Dust Suppression (Misting)', val: dustVal, set: setDustVal, color: '#EAB308', hint: 'Anti-smog gun deployment & mechanized road washing' },
+                  { label: 'Industrial Stack Switchover', val: industryVal, set: setIndustryVal, color: '#8B5CF6', hint: 'PNG/cleaner fuel mandate compliance in industrial hubs' },
                 ].map(s => (
-                  <div key={s.label} className="flex flex-col gap-2">
+                  <div key={s.label} className="flex flex-col gap-2 p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/60 transition hover:border-slate-700">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-semibold text-slate-800 dark:text-slate-200">{s.label}</span>
-                      <span className="font-mono font-bold" style={{ color: s.color }}>{s.val}%</span>
+                      <span className="font-bold text-slate-200">{s.label}</span>
+                      <span className="font-mono font-extrabold px-2 py-0.5 rounded-md border text-xs" style={{ color: s.color, backgroundColor: `${s.color}15`, borderColor: `${s.color}40` }}>
+                        {s.val}%
+                      </span>
                     </div>
                     <input
                       type="range" min="0" max="100" value={s.val}
@@ -1463,37 +1521,43 @@ export default function App() {
                         sound.playSlider();
                         s.set(parseInt(e.target.value));
                       }}
-                      className="w-full cursor-pointer"
+                      className="w-full cursor-pointer h-2 bg-slate-800 rounded-lg appearance-none transition"
                       style={{ accentColor: s.color }}
                     />
-                    <div className="text-[10px] text-slate-500 dark:text-slate-400">{s.hint}</div>
+                    <div className="text-[10px] text-slate-400 leading-tight">{s.hint}</div>
                   </div>
                 ))}
               </div>
 
-              {/* Results */}
+              {/* Results Column */}
               <div className="lg:col-span-3 flex flex-col gap-4">
                 {whatIfData ? (
                   <>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="bg-rose-50/90 dark:bg-rose-950/40 border-2 border-rose-300 dark:border-rose-800 rounded-2xl p-4 text-center shadow-sm">
-                        <div className="text-xs text-rose-700 dark:text-rose-400 font-mono font-bold uppercase">Baseline AQI (No Action)</div>
-                        <div className="text-4xl font-black font-mono text-rose-600 dark:text-rose-300 my-2">{whatIfData.baseline_peak_aqi}</div>
-                        <div className="text-xs font-bold text-rose-800 dark:text-rose-300 bg-rose-100 dark:bg-rose-900/60 px-2.5 py-0.5 rounded-full border border-rose-300 dark:border-rose-700 inline-block">{whatIfData.baseline_category}</div>
+                    <div className="grid grid-cols-2 gap-3.5">
+                      <div className="bg-rose-500/5 border-2 border-rose-500/30 rounded-2xl p-5 text-center shadow-lg relative overflow-hidden backdrop-blur-md">
+                        <div className="text-xs text-rose-400 font-mono font-bold tracking-wider uppercase">Baseline AQI (No Action)</div>
+                        <div className="text-4xl sm:text-5xl font-black font-mono text-rose-400 my-2.5 tracking-tight">{whatIfData.baseline_peak_aqi}</div>
+                        <div className="text-xs font-bold text-rose-300 bg-rose-500/15 px-3 py-1 rounded-full border border-rose-500/30 inline-block font-mono">
+                          {whatIfData.baseline_category}
+                        </div>
                       </div>
-                      <div className="bg-emerald-50/90 dark:bg-emerald-950/40 border-2 border-emerald-300 dark:border-emerald-800 rounded-2xl p-4 text-center shadow-sm">
-                        <div className="text-xs text-emerald-700 dark:text-emerald-400 font-mono font-bold uppercase">Mitigated AQI (With Policy)</div>
-                        <div className="text-4xl font-black font-mono text-emerald-600 dark:text-emerald-300 my-2">{whatIfData.mitigated_peak_aqi}</div>
-                        <div className="text-xs font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/60 px-2.5 py-0.5 rounded-full border border-emerald-300 dark:border-emerald-700 inline-block">{whatIfData.mitigated_category}</div>
+                      <div className="bg-emerald-500/5 border-2 border-emerald-500/30 rounded-2xl p-5 text-center shadow-lg relative overflow-hidden backdrop-blur-md">
+                        <div className="text-xs text-emerald-400 font-mono font-bold tracking-wider uppercase">Mitigated AQI (With Policy)</div>
+                        <div className="text-4xl sm:text-5xl font-black font-mono text-emerald-400 my-2.5 tracking-tight">{whatIfData.mitigated_peak_aqi}</div>
+                        <div className="text-xs font-bold text-emerald-300 bg-emerald-500/15 px-3 py-1 rounded-full border border-emerald-500/30 inline-block font-mono">
+                          {whatIfData.mitigated_category}
+                        </div>
                       </div>
                     </div>
 
-                    <div className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-bold text-slate-900 dark:text-white">AQI Reduction Breakdown</span>
-                        <span className="text-lg font-black text-cyan-600 dark:text-cyan-400 font-mono">-{whatIfData.aqi_reduction} AQI</span>
+                    <div className="bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 rounded-2xl p-5 shadow-xl">
+                      <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800/80">
+                        <span className="text-sm font-bold text-white tracking-wide">AQI Reduction Breakdown</span>
+                        <span className="text-lg font-black text-cyan-400 font-mono bg-cyan-950/80 px-2.5 py-0.5 rounded-lg border border-cyan-800/60">
+                          -{whatIfData.aqi_reduction} AQI
+                        </span>
                       </div>
-                      <div className="flex flex-col gap-2">
+                      <div className="flex flex-col gap-3">
                         {[
                           { label: 'Stubble Reduction Impact', val: whatIfData.stubble_reduction_impact, color: '#F97316' },
                           { label: 'Truck Bypass Impact', val: whatIfData.truck_reduction_impact, color: '#EF4444' },
@@ -1501,12 +1565,12 @@ export default function App() {
                           { label: 'Industry Switchover Impact', val: whatIfData.industry_reduction_impact, color: '#8B5CF6' },
                         ].filter(x => x.val !== undefined).map(item => (
                           <div key={item.label} className="text-xs">
-                            <div className="flex justify-between mb-0.5">
-                              <span className="text-slate-700 dark:text-slate-400 font-medium">{item.label}</span>
+                            <div className="flex justify-between mb-1">
+                              <span className="text-slate-300 font-medium">{item.label}</span>
                               <span className="font-mono font-bold" style={{ color: item.color }}>-{item.val} AQI</span>
                             </div>
-                            <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
-                              <div className="h-full rounded-full transition-all duration-500" style={{ width: `${Math.min(item.val * 2, 100)}%`, backgroundColor: item.color }} />
+                            <div className="w-full bg-slate-950 h-2.5 rounded-full overflow-hidden border border-slate-800/60 p-0.5">
+                              <div className="h-full rounded-full transition-all duration-500 shadow-sm" style={{ width: `${Math.min(item.val * 2, 100)}%`, backgroundColor: item.color }} />
                             </div>
                           </div>
                         ))}
@@ -1514,9 +1578,11 @@ export default function App() {
                     </div>
 
                     {whatIfData.policy_verdict && (
-                      <div className="bg-emerald-50/80 dark:bg-slate-900/80 border border-emerald-300 dark:border-emerald-800/50 rounded-2xl p-4 shadow-sm">
-                        <div className="text-xs font-mono font-bold text-emerald-800 dark:text-emerald-400 mb-1">POLICY VERDICT</div>
-                        <p className="text-sm text-slate-800 dark:text-slate-200 font-semibold">{whatIfData.policy_verdict}</p>
+                      <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4.5 shadow-xl backdrop-blur-md">
+                        <div className="text-xs font-mono font-bold text-emerald-400 mb-1 flex items-center gap-1.5">
+                          <CheckCircle className="w-4 h-4 text-emerald-400" /> POLICY VERDICT
+                        </div>
+                        <p className="text-sm text-slate-100 font-semibold leading-relaxed">{whatIfData.policy_verdict}</p>
                       </div>
                     )}
                   </>
@@ -1984,108 +2050,110 @@ export default function App() {
         </div>
       )}
 
-      {/* ===== MOBILE & TABLET BOTTOM NAVIGATION DOCK (Animated Floating Dock) ===== */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#07121A]/95 border-t border-cyan-800/40 backdrop-blur-2xl px-1 py-1.5 shadow-[0_-8px_30px_rgba(0,0,0,0.8)] safe-area-pb">
-        <div className="grid grid-cols-5 items-center justify-items-center w-full max-w-md mx-auto">
-          
-          {/* Tab 1: Overview */}
-          <button
-            type="button"
-            onClick={() => switchTab('overview')}
-            className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-2xl transition-all duration-300 cursor-pointer active:scale-90 ${
-              activeTab === 'overview' && !isAiOpen 
-                ? 'text-cyan-300 font-bold bg-gradient-to-b from-cyan-950/80 to-slate-900/70 border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.35)]' 
-                : 'text-slate-400 hover:text-cyan-300 hover:bg-slate-900/80 border border-transparent hover:border-cyan-800/50 hover:shadow-[0_0_12px_rgba(6,182,212,0.2)]'
-            }`}
-          >
-            <div className="relative">
-              <LayoutDashboard className="w-5 h-5 mb-0.5 transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-1 text-cyan-400 group-hover:text-cyan-300" />
-              {activeTab === 'overview' && !isAiOpen && (
-                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee]"></span>
-              )}
-            </div>
-            <span className="text-[9px] font-semibold tracking-tight transition-all duration-200 group-hover:tracking-normal text-center truncate max-w-full px-1">{t('tab_overview', language)}</span>
-          </button>
-
-          {/* Tab 2: GRAP */}
-          <button
-            type="button"
-            onClick={() => switchTab('grap')}
-            className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-2xl transition-all duration-300 cursor-pointer active:scale-90 ${
-              activeTab === 'grap' && !isAiOpen 
-                ? 'text-cyan-300 font-bold bg-gradient-to-b from-cyan-950/80 to-slate-900/70 border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.35)]' 
-                : 'text-slate-400 hover:text-cyan-300 hover:bg-slate-900/80 border border-transparent hover:border-cyan-800/50 hover:shadow-[0_0_12px_rgba(6,182,212,0.2)]'
-            }`}
-          >
-            <div className="relative">
-              <ShieldAlert className="w-5 h-5 mb-0.5 transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-1 text-cyan-400 group-hover:text-cyan-300" />
-              {activeTab === 'grap' && !isAiOpen && (
-                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee]"></span>
-              )}
-            </div>
-            <span className="text-[9px] font-semibold tracking-tight transition-all duration-200 group-hover:tracking-normal text-center truncate max-w-full px-1">{t('tab_grap', language)}</span>
-          </button>
-
-          {/* Tab 3: CENTER PROMINENT VAYUAI COPILOT (MATHEMATICALLY CENTERED AT 50% WIDTH) */}
-          <div className="flex flex-col items-center justify-center w-full">
+      {/* ===== MOBILE & TABLET BOTTOM FLOATING AURORA DOCK ===== */}
+      <div className="md:hidden fixed bottom-3 inset-x-3 z-40 safe-area-pb pointer-events-none">
+        <nav className="bg-[#0F172A]/90 backdrop-blur-2xl border border-cyan-900/50 rounded-2xl px-2 py-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.85),0_0_25px_rgba(6,182,212,0.15)] pointer-events-auto max-w-md mx-auto">
+          <div className="grid grid-cols-5 items-center justify-items-center w-full">
+            
+            {/* Tab 1: Overview */}
             <button
               type="button"
-              onClick={openAi}
-              className="relative -top-4 flex flex-col items-center justify-center group active:scale-90 transition-all duration-300 cursor-pointer"
+              onClick={() => switchTab('overview')}
+              className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl transition-all duration-200 cursor-pointer active:scale-90 ${
+                activeTab === 'overview' && !isAiOpen 
+                  ? 'text-cyan-300 font-bold bg-cyan-950/70 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.25)]' 
+                  : 'text-slate-400 hover:text-cyan-300 hover:bg-slate-800/50'
+              }`}
             >
-              {/* Pulsing Ambient Aurora Glow */}
-              <div className="absolute -inset-1.5 bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-400 rounded-3xl blur-md opacity-75 group-hover:opacity-100 group-hover:scale-115 transition-all duration-300 animate-pulse -z-10"></div>
-              
-              <div className="relative w-13 h-13 rounded-2xl bg-gradient-to-tr from-cyan-500 via-teal-400 to-emerald-400 text-slate-950 flex items-center justify-center shadow-2xl shadow-cyan-500/50 border-2 border-white/95 group-hover:rotate-6 group-hover:scale-110 transition-all duration-300">
-                <Bot className="w-6 h-6 stroke-[2.5] transition-transform duration-300 group-hover:scale-115" />
-                <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-950 animate-pulse"></span>
+              <div className="relative">
+                <LayoutDashboard className="w-5 h-5 mb-0.5 text-cyan-400 transition-transform group-hover:scale-110" />
+                {activeTab === 'overview' && !isAiOpen && (
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee]"></span>
+                )}
               </div>
-              <span className="text-[10px] font-black text-cyan-300 mt-1 tracking-wider uppercase group-hover:text-white transition-colors flex items-center gap-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                VayuAI
-              </span>
+              <span className="text-[9px] font-semibold tracking-tight truncate max-w-full px-1">{t('tab_overview', language)}</span>
             </button>
+
+            {/* Tab 2: GRAP */}
+            <button
+              type="button"
+              onClick={() => switchTab('grap')}
+              className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl transition-all duration-200 cursor-pointer active:scale-90 ${
+                activeTab === 'grap' && !isAiOpen 
+                  ? 'text-cyan-300 font-bold bg-cyan-950/70 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.25)]' 
+                  : 'text-slate-400 hover:text-cyan-300 hover:bg-slate-800/50'
+              }`}
+            >
+              <div className="relative">
+                <ShieldAlert className="w-5 h-5 mb-0.5 text-cyan-400 transition-transform group-hover:scale-110" />
+                {activeTab === 'grap' && !isAiOpen && (
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee]"></span>
+                )}
+              </div>
+              <span className="text-[9px] font-semibold tracking-tight truncate max-w-full px-1">{t('tab_grap', language)}</span>
+            </button>
+
+            {/* Tab 3: CENTER HERO ELEVATED VAYUAI COPILOT */}
+            <div className="flex flex-col items-center justify-center w-full relative">
+              <button
+                type="button"
+                onClick={openAi}
+                className="relative -top-5 flex flex-col items-center justify-center group active:scale-95 transition-all duration-300 cursor-pointer"
+              >
+                {/* Pulsing Ambient Aurora Glow */}
+                <div className="absolute -inset-1.5 bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-400 rounded-3xl blur-md opacity-80 group-hover:opacity-100 transition-all duration-300 animate-pulse -z-10"></div>
+                
+                <div className="relative w-13 h-13 rounded-2xl bg-gradient-to-tr from-cyan-500 via-teal-400 to-emerald-400 text-slate-950 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.6)] border-2 border-white/95 group-hover:scale-105 transition-all duration-300">
+                  <Bot className="w-6 h-6 stroke-[2.5] transition-transform duration-300 group-hover:scale-110" />
+                  <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-950 animate-pulse"></span>
+                </div>
+                <span className="text-[10px] font-black text-cyan-300 mt-1 tracking-wider uppercase group-hover:text-white transition-colors flex items-center gap-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                  VayuAI
+                </span>
+              </button>
+            </div>
+
+            {/* Tab 4: What-If */}
+            <button
+              type="button"
+              onClick={() => switchTab('whatif')}
+              className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl transition-all duration-200 cursor-pointer active:scale-90 ${
+                activeTab === 'whatif' && !isAiOpen 
+                  ? 'text-indigo-300 font-bold bg-indigo-950/70 border border-indigo-500/40 shadow-[0_0_12px_rgba(99,102,241,0.25)]' 
+                  : 'text-slate-400 hover:text-indigo-300 hover:bg-slate-800/50'
+              }`}
+            >
+              <div className="relative">
+                <Sliders className="w-5 h-5 mb-0.5 text-indigo-400 transition-transform group-hover:scale-110" />
+                {activeTab === 'whatif' && !isAiOpen && (
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-indigo-400 rounded-full shadow-[0_0_8px_#818cf8]"></span>
+                )}
+              </div>
+              <span className="text-[9px] font-semibold tracking-tight truncate max-w-full px-1">{t('tab_whatif', language)}</span>
+            </button>
+
+            {/* Tab 5: Dispatches */}
+            <button
+              type="button"
+              onClick={() => switchTab('dispatches')}
+              className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl transition-all duration-200 cursor-pointer active:scale-90 ${
+                activeTab === 'dispatches' && !isAiOpen 
+                  ? 'text-amber-300 font-bold bg-amber-950/70 border border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.25)]' 
+                  : 'text-slate-400 hover:text-amber-300 hover:bg-slate-800/50'
+              }`}
+            >
+              <div className="relative">
+                <Send className="w-5 h-5 mb-0.5 text-amber-400 transition-transform group-hover:scale-110" />
+                {activeTab === 'dispatches' && !isAiOpen && (
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-amber-400 rounded-full shadow-[0_0_8px_#fbbf24]"></span>
+                )}
+              </div>
+              <span className="text-[9px] font-semibold tracking-tight truncate max-w-full px-1">{t('tab_dispatches', language)}</span>
+            </button>
+
           </div>
-
-          {/* Tab 4: What-If */}
-          <button
-            type="button"
-            onClick={() => switchTab('whatif')}
-            className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-2xl transition-all duration-300 cursor-pointer active:scale-90 ${
-              activeTab === 'whatif' && !isAiOpen 
-                ? 'text-indigo-300 font-bold bg-gradient-to-b from-indigo-950/80 to-slate-900/70 border border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.35)]' 
-                : 'text-slate-400 hover:text-indigo-300 hover:bg-slate-900/80 border border-transparent hover:border-indigo-800/50 hover:shadow-[0_0_12px_rgba(99,102,241,0.2)]'
-            }`}
-          >
-            <div className="relative">
-              <Sliders className="w-5 h-5 mb-0.5 transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-1 text-indigo-400 group-hover:text-indigo-300" />
-              {activeTab === 'whatif' && !isAiOpen && (
-                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-indigo-400 rounded-full shadow-[0_0_8px_#818cf8]"></span>
-              )}
-            </div>
-            <span className="text-[9px] font-semibold tracking-tight transition-all duration-200 group-hover:tracking-normal text-center truncate max-w-full px-1">{t('tab_whatif', language)}</span>
-          </button>
-
-          {/* Tab 5: Dispatches */}
-          <button
-            type="button"
-            onClick={() => switchTab('dispatches')}
-            className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-2xl transition-all duration-300 cursor-pointer active:scale-90 ${
-              activeTab === 'dispatches' && !isAiOpen 
-                ? 'text-amber-300 font-bold bg-gradient-to-b from-amber-950/80 to-slate-900/70 border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.35)]' 
-                : 'text-slate-400 hover:text-amber-300 hover:bg-slate-900/80 border border-transparent hover:border-amber-800/50 hover:shadow-[0_0_12px_rgba(245,158,11,0.2)]'
-            }`}
-          >
-            <div className="relative">
-              <Send className="w-5 h-5 mb-0.5 transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-1 text-amber-400 group-hover:text-amber-300" />
-              {activeTab === 'dispatches' && !isAiOpen && (
-                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-amber-400 rounded-full shadow-[0_0_8px_#fbbf24]"></span>
-              )}
-            </div>
-            <span className="text-[9px] font-semibold tracking-tight transition-all duration-200 group-hover:tracking-normal text-center truncate max-w-full px-1">{t('tab_dispatches', language)}</span>
-          </button>
-
-        </div>
-      </nav>
+        </nav>
+      </div>
 
       {/* Floating / Full-Screen VayuAI Copilot Assistant */}
       <VayuAIChat 
