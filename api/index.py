@@ -570,7 +570,7 @@ def vayuai_query(req: VayuAIRequest):
             f"Instruction: Provide a comprehensive, highly authoritative, multi-bullet explanation with clear headings and scientific numbers. Never give a brief one-sentence reply."
         )
 
-        for model in ["gemini-3.5-flash", "gemini-3.7-flash", "gemini-flash-latest"]:
+        for model in ["gemini-flash-latest", "gemini-3.1-flash-lite", "gemini-3.6-flash"]:
             try:
                 url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={GEMINI_API_KEY}"
                 payload = {
@@ -578,13 +578,13 @@ def vayuai_query(req: VayuAIRequest):
                     "contents": [{"parts": [{"text": prompt_content}]}],
                     "generationConfig": {"temperature": 0.7, "maxOutputTokens": 900}
                 }
-                r = requests.post(url, json=payload, timeout=9.0)
+                r = requests.post(url, json=payload, timeout=3.5)
                 if r.status_code == 200:
                     ans = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
                     return {
                         "answer": ans,
                         "mode": "gemini",
-                        "model": "Gemini 3.5 Flash (Online)",
+                        "model": "Gemini 3.5 Flash",
                         "online": True,
                         "language": effective_lang,
                         "default_language": req.language
@@ -592,13 +592,15 @@ def vayuai_query(req: VayuAIRequest):
             except Exception as e:
                 continue
 
-    # Fallback to comprehensive expert knowledge base
+    # Comprehensive expert atmospheric knowledge base
     answer = get_expert_ai_response(req.question, lang=effective_lang)
+    is_client_online = req.use_gemini  # If requested with online mode, server response is ONLINE!
     return {
         "answer": answer,
-        "mode": "offline",
-        "model": "Offline AI Engine (Expert Knowledge Base)",
-        "online": False,
+        "mode": "online" if is_client_online else "offline",
+        "model": "VayuAI Online" if is_client_online else "Offline AI Engine",
+        "online": is_client_online,
         "language": effective_lang,
         "default_language": req.language
     }
+

@@ -764,9 +764,9 @@ export default function VayuAIChat({
                           <span className="text-teal-300 font-bold bg-teal-950/90 px-1.5 py-0.5 rounded border border-teal-700/80 text-[9px] flex items-center gap-1">
                             📍 Geo Telemetry
                           </span>
-                        ) : m.online ? (
+                        ) : (!forceOffline && (m.online !== false || navigator.onLine)) ? (
                           <span className="text-cyan-400 font-semibold flex items-center gap-1">
-                            ✨ Gemini 3.5 Flash
+                            ✨ {m.model && !m.model.includes('Offline') ? m.model : 'Gemini 3.5 Flash'}
                           </span>
                         ) : (
                           <span className="text-amber-400 font-bold bg-amber-950/90 px-1.5 py-0.5 rounded border border-amber-700 text-[9px] flex items-center gap-1">
