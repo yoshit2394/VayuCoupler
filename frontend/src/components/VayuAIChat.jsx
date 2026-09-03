@@ -542,27 +542,35 @@ export default function VayuAIChat({
         </button>
       </div>
 
-      {/* ===== 2. EXPANDED POP-UP CHAT DRAWER / WINDOW (Full-Screen on Mobile, Floating on Desktop) ===== */}
+      {/* ===== 2. EXPANDED POP-UP CHAT MODAL (Distinct Popup Modal with Backdrop) ===== */}
       {isOpen && (
-        <div className="fixed inset-0 sm:inset-auto sm:bottom-20 sm:right-6 z-[120] w-full sm:w-[450px] max-w-full sm:max-w-[460px] h-full sm:h-[630px] sm:max-h-[85vh] bg-[#07121A] sm:bg-[#0A131F]/95 sm:border sm:border-cyan-500/40 rounded-none sm:rounded-3xl shadow-2xl shadow-cyan-950/80 backdrop-blur-2xl flex flex-col overflow-hidden animate-[slideUp_0.25s_cubic-bezier(0.16,1,0.3,1)]">
-          
-          {/* Header */}
-          <div className="bg-gradient-to-r from-slate-900 via-slate-900/90 to-cyan-950/70 border-b border-cyan-500/20 px-4 py-3.5 sm:p-3.5 flex items-center justify-between shrink-0 safe-area-pt">
-            <div className="flex items-center gap-2.5">
-              <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-slate-950 font-black shadow-md ${
-                !isAiOnline 
-                  ? 'bg-gradient-to-tr from-amber-500 to-orange-400 shadow-amber-500/20' 
-                  : 'bg-gradient-to-tr from-cyan-500 to-emerald-400 shadow-cyan-500/20'
-              }`}>
-                <Bot className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <h3 className="text-sm font-bold text-white tracking-tight">VayuAI Copilot</h3>
-                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-700/60 font-bold">
-                    MoES 2026
-                  </span>
+        <div 
+          className="fixed inset-0 z-[120] flex items-end sm:items-center justify-center bg-black/65 backdrop-blur-sm p-0 sm:p-4 select-none"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsOpen(false);
+          }}
+        >
+          <div className="w-full sm:w-[460px] max-w-full sm:max-w-[480px] h-[82vh] sm:h-[620px] max-h-[88vh] bg-[#0A131F] border-t sm:border border-cyan-500/40 rounded-t-3xl sm:rounded-3xl shadow-2xl shadow-cyan-950/90 backdrop-blur-2xl flex flex-col overflow-hidden animate-[slideUp_0.25s_cubic-bezier(0.16,1,0.3,1)]">
+            {/* Grab pill on mobile */}
+            <div className="sm:hidden w-12 h-1.5 bg-slate-700/80 rounded-full mx-auto mt-2.5 mb-1 shrink-0" />
+            
+            {/* Header */}
+            <div className="bg-gradient-to-r from-slate-900 via-slate-900/90 to-cyan-950/70 border-b border-cyan-500/20 px-4 py-3 sm:p-3.5 flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-2.5">
+                <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-slate-950 font-black shadow-md ${
+                  !isAiOnline 
+                    ? 'bg-gradient-to-tr from-amber-500 to-orange-400 shadow-amber-500/20' 
+                    : 'bg-gradient-to-tr from-cyan-500 to-emerald-400 shadow-cyan-500/20'
+                }`}>
+                  <Bot className="w-5 h-5" />
                 </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <h3 className="text-sm font-bold text-white tracking-tight">VayuAI Copilot</h3>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-700/60 font-bold">
+                      MoES 2026
+                    </span>
+                  </div>
                 {/* Mode Indicator & Interactive Toggle */}
                 <div className="flex items-center gap-1.5 text-[10px] text-slate-400 mt-0.5">
                   <button
@@ -600,10 +608,10 @@ export default function VayuAIChat({
               </button>
               <button 
                 onClick={() => setIsOpen(false)}
-                className="px-2.5 py-1.5 rounded-xl bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 border border-cyan-700/60 transition cursor-pointer flex items-center gap-1 text-xs font-bold active:scale-95"
-                title="Close VayuAI">
-                <ChevronDown className="w-4 h-4" />
-                <span className="sm:hidden">Close</span>
+                className="p-2 sm:px-2.5 sm:py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition cursor-pointer flex items-center gap-1 text-xs font-bold active:scale-95"
+                title="Close VayuAI Popup">
+                <X className="w-4 h-4" />
+                <span className="hidden sm:inline">Close</span>
               </button>
             </div>
           </div>
@@ -908,6 +916,7 @@ export default function VayuAIChat({
             </div>
           </div>
 
+          </div>
         </div>
       )}
     </>
