@@ -113,21 +113,51 @@ export default function App() {
     handleWhatIf();
   }, [currentStep, stubbleVal, truckVal, dustVal, industryVal]);
 
-  // Map drag handlers
-  const handleMouseDown = (e) => {
+  // Map pan & drag handlers (Supports Mouse, Pointer, and Mobile Touch Events)
+  const handlePointerDown = (e) => {
     if (mapZoom <= 1) return;
     isDragging.current = true;
     dragStart.current = { x: e.clientX, y: e.clientY };
     panStart.current = { ...mapPan };
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch (_) {}
   };
-  const handleMouseMove = (e) => {
+
+  const handlePointerMove = (e) => {
     if (!isDragging.current) return;
     setMapPan({
       x: panStart.current.x + (e.clientX - dragStart.current.x),
       y: panStart.current.y + (e.clientY - dragStart.current.y),
     });
   };
-  const handleMouseUp = () => { isDragging.current = false; };
+
+  const handlePointerUp = (e) => {
+    isDragging.current = false;
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch (_) {}
+  };
+
+  const handleTouchStart = (e) => {
+    if (mapZoom <= 1 || e.touches.length !== 1) return;
+    isDragging.current = true;
+    dragStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    panStart.current = { ...mapPan };
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging.current || e.touches.length !== 1) return;
+    if (e.cancelable) e.preventDefault();
+    setMapPan({
+      x: panStart.current.x + (e.touches[0].clientX - dragStart.current.x),
+      y: panStart.current.y + (e.touches[0].clientY - dragStart.current.y),
+    });
+  };
+
+  const handleTouchEnd = () => {
+    isDragging.current = false;
+  };
 
   const resetZoom = () => { setMapZoom(1); setMapPan({ x: 0, y: 0 }); };
 
@@ -488,20 +518,53 @@ export default function App() {
               </div>
 
               {/* Zoom Slider Controls */}
-              <div className="flex items-center gap-3 mb-3 p-2.5 bg-slate-950 rounded-xl border border-slate-800">
-                <ZoomOut className="w-4 h-4 text-slate-400 shrink-0" />
+              <div className="flex items-center gap-2 sm:gap-3 mb-3 p-2.5 bg-slate-950 rounded-xl border border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const nextZoom = Math.max(1, +(mapZoom - 0.25).toFixed(2));
+                    setMapZoom(nextZoom);
+                    if (nextZoom <= 1) setMapPan({ x: 0, y: 0 });
+                  }}
+                  className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 active:scale-95 shrink-0 cursor-pointer"
+                  title="Zoom Out (-)"
+                >
+                  <ZoomOut className="w-4 h-4 text-slate-300 shrink-0" />
+                </button>
+
                 <input
-                  type="range" min="1" max="3" step="0.1" value={mapZoom}
-                  onChange={(e) => { setMapZoom(parseFloat(e.target.value)); if (parseFloat(e.target.value) <= 1) setMapPan({ x: 0, y: 0 }); }}
-                  className="flex-1 accent-cyan-500 cursor-pointer h-1.5"
+                  type="range" min="1" max="3" step="0.05" value={mapZoom}
+                  onChange={(e) => {
+                    const z = parseFloat(e.target.value);
+                    setMapZoom(z);
+                    if (z <= 1) setMapPan({ x: 0, y: 0 });
+                  }}
+                  className="flex-1 accent-cyan-500 cursor-pointer h-2 py-1.5"
                   style={{ accentColor: '#06B6D4' }}
                 />
-                <ZoomIn className="w-4 h-4 text-slate-400 shrink-0" />
-                <span className="text-[11px] font-mono text-cyan-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-700 shrink-0">
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const nextZoom = Math.min(3, +(mapZoom + 0.25).toFixed(2));
+                    setMapZoom(nextZoom);
+                  }}
+                  className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 active:scale-95 shrink-0 cursor-pointer"
+                  title="Zoom In (+)"
+                >
+                  <ZoomIn className="w-4 h-4 text-slate-300 shrink-0" />
+                </button>
+
+                <span className="text-[11px] font-mono font-bold text-cyan-400 bg-slate-900 px-2 py-1 rounded border border-slate-700 shrink-0">
                   {Math.round(mapZoom * 100)}%
                 </span>
+
                 {mapZoom > 1 && (
-                  <button onClick={resetZoom} className="text-[11px] text-slate-400 hover:text-white px-2 py-0.5 rounded border border-slate-700 hover:border-slate-500 transition shrink-0">
+                  <button 
+                    type="button"
+                    onClick={resetZoom} 
+                    className="text-[11px] font-semibold text-cyan-300 bg-cyan-950/90 hover:bg-cyan-900 px-2.5 py-1 rounded-lg border border-cyan-800 active:scale-95 transition shrink-0 cursor-pointer"
+                  >
                     Reset
                   </button>
                 )}
@@ -509,18 +572,25 @@ export default function App() {
 
               <div
                 ref={mapContainerRef}
-                className="w-full aspect-[16/10] bg-[#070B11] rounded-xl border border-slate-800 relative overflow-hidden flex items-center justify-center"
-                style={{ cursor: mapZoom > 1 ? (isDragging.current ? 'grabbing' : 'grab') : 'default' }}
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
+                className="w-full aspect-[16/10] bg-[#070B11] rounded-xl border border-slate-800 relative overflow-hidden flex items-center justify-center select-none"
+                style={{ 
+                  cursor: mapZoom > 1 ? (isDragging.current ? 'grabbing' : 'grab') : 'default',
+                  touchAction: mapZoom > 1 ? 'none' : 'pan-y'
+                }}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerUp}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                onTouchCancel={handleTouchEnd}
               >
                 <div
                   style={{
                     transform: `translate(${mapPan.x}px, ${mapPan.y}px) scale(${mapZoom})`,
                     transformOrigin: 'center center',
-                    transition: isDragging.current ? 'none' : 'transform 0.2s ease',
+                    transition: isDragging.current ? 'none' : 'transform 0.15s ease-out',
                     width: '100%', height: '100%'
                   }}
                 >
@@ -561,10 +631,42 @@ export default function App() {
                   </svg>
                 </div>
 
-                {/* Zoom hint */}
+                {/* Floating On-Screen D-Pad Pan Buttons for effortless mobile sliding */}
                 {mapZoom > 1 && (
-                  <div className="absolute bottom-2 right-2 text-[10px] text-slate-400 bg-slate-950/80 px-2 py-1 rounded-lg border border-slate-700">
-                    Drag to pan
+                  <div className="absolute top-2 right-2 flex items-center gap-1 bg-slate-950/90 backdrop-blur-md p-1 rounded-xl border border-cyan-800/60 z-20 shadow-xl">
+                    <button 
+                      type="button" 
+                      onClick={(e) => { e.stopPropagation(); setMapPan(p => ({ ...p, x: p.x + 50 })); }} 
+                      className="w-7 h-7 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-300 flex items-center justify-center text-xs font-bold active:scale-90 border border-slate-800 cursor-pointer"
+                      title="Slide Left">◀</button>
+                    <button 
+                      type="button" 
+                      onClick={(e) => { e.stopPropagation(); setMapPan(p => ({ ...p, y: p.y + 50 })); }} 
+                      className="w-7 h-7 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-300 flex items-center justify-center text-xs font-bold active:scale-90 border border-slate-800 cursor-pointer"
+                      title="Slide Up">▲</button>
+                    <button 
+                      type="button" 
+                      onClick={(e) => { e.stopPropagation(); setMapPan(p => ({ ...p, y: p.y - 50 })); }} 
+                      className="w-7 h-7 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-300 flex items-center justify-center text-xs font-bold active:scale-90 border border-slate-800 cursor-pointer"
+                      title="Slide Down">▼</button>
+                    <button 
+                      type="button" 
+                      onClick={(e) => { e.stopPropagation(); setMapPan(p => ({ ...p, x: p.x - 50 })); }} 
+                      className="w-7 h-7 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-300 flex items-center justify-center text-xs font-bold active:scale-90 border border-slate-800 cursor-pointer"
+                      title="Slide Right">▶</button>
+                    <button 
+                      type="button" 
+                      onClick={(e) => { e.stopPropagation(); resetZoom(); }} 
+                      className="px-2 h-7 rounded-lg bg-cyan-950 text-cyan-300 border border-cyan-700 text-[11px] font-bold active:scale-90 flex items-center justify-center cursor-pointer">
+                      100%
+                    </button>
+                  </div>
+                )}
+
+                {/* Mobile Touch Pan Hint */}
+                {mapZoom > 1 && (
+                  <div className="absolute bottom-2 right-2 text-[10px] text-cyan-300 bg-slate-950/90 px-2.5 py-1 rounded-lg border border-cyan-800/60 shadow-md font-medium pointer-events-none flex items-center gap-1">
+                    <span>👆 {language === 'hi' ? 'खिसकाने के लिए स्वाइप करें' : 'Swipe to slide map'}</span>
                   </div>
                 )}
               </div>
