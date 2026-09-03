@@ -1,0 +1,38 @@
+================================================================================
+   VayuCoupler — Windows Installation & Run Guide
+   SIH26082: Smart India Hackathon | Ministry of Earth Sciences (MoES)
+================================================================================
+
+Windows PC par VayuCoupler chalane ke 2 sabse aasan tarike hain:
+
+--------------------------------------------------------------------------------
+TARIKA 1: 1-Click Offline App (Zero Install - No Python Needed)
+--------------------------------------------------------------------------------
+Agar aapke PC me Python nahi hai aur aap turant app chalana chahte hain:
+1. Bas "VayuCoupler_Windows_Offline_App.html" par double-click karein.
+2. Ye aapke Google Chrome ya Microsoft Edge me turant khul jayegi.
+3. Isme sare features chalte hain:
+   - 168-hour Crisis Scrubber
+   - Interactive Delhi AQI Station Map
+   - Bilingual Voice Alerts (Hindi + English)
+   - 55+ Delhi NCR Commute Routes
+   - VayuAI Assistant (28 Q&As)
+
+--------------------------------------------------------------------------------
+TARIKA 2: Full Server Mode (FastAPI Backend + ML Engine)
+--------------------------------------------------------------------------------
+Agar aapke PC me Python installed hai (Python 3.9, 3.10, 3.11, ya 3.12):
+1. Bas "Launch_VayuCoupler_Windows.bat" par double-click karein.
+2. Ye automatic script:
+   - Python detect karegi
+   - Zaroori libraries install karegi
+   - Local FastAPI server start karegi
+   - Microsoft Edge ya Google Chrome ko Native App Mode me launch karegi
+3. Server ka URL: http://127.0.0.1:8000
+
+--------------------------------------------------------------------------------
+JURY / PRESENTATION GUIDE:
+--------------------------------------------------------------------------------
+Judges aur evaluation ke liye Q&A Guide PDF sath me diya gaya hai:
+- "docs/VayuCoupler_SIH_Judges_QA_Guide.pdf"
+================================================================================
