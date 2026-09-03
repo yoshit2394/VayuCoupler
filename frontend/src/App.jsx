@@ -254,12 +254,15 @@ export default function App() {
 
   // Station click handler
   const handleStationClick = (station) => {
+    sound.playStationSelect();
     setSelectedStationId(station.station_id);
     setStationModal(station);
+    setTimeout(() => sound.playModalOpen(), 60);
   };
 
   // Location redirect handler: switches tab and scrolls right to forecast card with flash animation
   const handleSelectAndScrollStation = (stationId) => {
+    sound.playStationSelect();
     setSelectedStationId(stationId);
     setActiveTab('overview');
     setTimeout(() => {
@@ -286,7 +289,7 @@ export default function App() {
   };
 
   const switchTab = (tabId) => {
-    sound.playTap();
+    sound.playTab(tabId);
     setActiveTab(tabId);
     setIsAiOpen(false);
     if (typeof window !== 'undefined') {
@@ -567,7 +570,10 @@ export default function App() {
             </div>
             <input 
               type="range" min="0" max="167" value={currentStep}
-              onChange={(e) => setCurrentStep(parseInt(e.target.value))}
+              onChange={(e) => {
+                sound.playSlider();
+                setCurrentStep(parseInt(e.target.value));
+              }}
               className="w-full accent-cyan-500 cursor-pointer h-2 bg-slate-800 rounded-lg appearance-none"
               style={{ accentColor: '#06B6D4' }}
             />
@@ -846,22 +852,195 @@ export default function App() {
                   }}
                 >
                   <svg viewBox="0 0 800 500" className="w-full h-full select-none">
-                    {/* Punjab/Haryana background */}
-                    <path d="M 40 40 L 320 40 L 340 240 L 40 220 Z" fill="#111B2B" stroke="#1E2E48" strokeWidth="1.5" opacity="0.6"/>
-                    <text x="70" y="70" fill="#64748B" fontSize="12" fontWeight="700" fontFamily="JetBrains Mono">PUNJAB &amp; HARYANA UPWIND SECTOR</text>
-
-                    {/* Delhi NCR Basin */}
-                    <path d="M 380 180 C 420 160, 560 160, 600 200 C 630 240, 620 360, 580 420 C 520 450, 420 440, 370 380 C 340 320, 350 220, 380 180 Z" fill="#131C2E" stroke="#06B6D4" strokeWidth="2" strokeDasharray="4 4" opacity="0.8"/>
-                    <text x="450" y="205" fill="#38BDF8" fontSize="13" fontWeight="800" fontFamily="JetBrains Mono">DELHI NCR BASIN</text>
-
-                    {/* Smoke corridor arrow */}
                     <defs>
-                      <linearGradient id="smokeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#F97316" stopOpacity="0.9" />
-                        <stop offset="100%" stopColor="#EF4444" stopOpacity="0.2" />
+                      {/* Atmospheric Dispersion Radial Gradient (Green Good Perimeter -> Red Harm Core) */}
+                      <radialGradient id="delhiBasinHeatmap" cx="62%" cy="60%" r="55%" fx="62%" fy="60%">
+                        <stop offset="0%" stopColor="#DC2626" stopOpacity="0.55" />   {/* Core Severe Harm Red */}
+                        <stop offset="35%" stopColor="#EA580C" stopOpacity="0.42" />  {/* Unhealthy Orange Plume */}
+                        <stop offset="68%" stopColor="#CA8A04" stopOpacity="0.28" />  {/* Moderate Yellow Buffer */}
+                        <stop offset="100%" stopColor="#059669" stopOpacity="0.32" /> {/* Clean Outer Perimeter Green (Good) */}
+                      </radialGradient>
+
+                      {/* Punjab & Haryana Upwind Crop Residue Terrain Gradient */}
+                      <linearGradient id="upwindTerrainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#131D2E" stopOpacity="0.95" />
+                        <stop offset="50%" stopColor="#1E293B" stopOpacity="0.9" />
+                        <stop offset="100%" stopColor="#451A03" stopOpacity="0.85" />
+                      </linearGradient>
+
+                      {/* Aerodynamic Smoke Inflow Corridor Gradient (NW -> SE Transport) */}
+                      <linearGradient id="smokeInflowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#F97316" stopOpacity="0.95" />
+                        <stop offset="55%" stopColor="#EF4444" stopOpacity="0.8" />
+                        <stop offset="100%" stopColor="#991B1B" stopOpacity="0.3" />
+                      </linearGradient>
+
+                      {/* Yamuna River Gradient */}
+                      <linearGradient id="yamunaFlowGrad" x1="0%" y1="0%" x2="40%" y2="100%">
+                        <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.95" />
+                        <stop offset="50%" stopColor="#0284C7" stopOpacity="0.85" />
+                        <stop offset="100%" stopColor="#0369A1" stopOpacity="0.75" />
                       </linearGradient>
                     </defs>
-                    <path d="M 220 130 Q 340 220, 470 290" fill="none" stroke="url(#smokeGrad)" strokeWidth="6" strokeLinecap="round" strokeDasharray="8 6" opacity="0.85"/>
+
+                    {/* Regional Geo-Grid Latitude/Longitude Guidelines */}
+                    <g opacity="0.15" stroke="#94A3B8" strokeWidth="0.8" strokeDasharray="3 3">
+                      <line x1="40" y1="120" x2="760" y2="120" />
+                      <line x1="40" y1="250" x2="760" y2="250" />
+                      <line x1="40" y1="380" x2="760" y2="380" />
+                      <line x1="200" y1="30" x2="200" y2="470" />
+                      <line x1="400" y1="30" x2="400" y2="470" />
+                      <line x1="600" y1="30" x2="600" y2="470" />
+                    </g>
+
+                    {/* ================= UPWIND AGRICULTURAL SECTOR (Punjab & Haryana) ================= */}
+                    <path 
+                      d="M 30 35 L 330 35 L 350 245 L 30 225 Z" 
+                      fill="url(#upwindTerrainGrad)" 
+                      stroke="#EA580C" 
+                      strokeWidth="1.5" 
+                      strokeDasharray="4 3" 
+                      opacity="0.9"
+                    />
+                    
+                    {/* Upwind Sector Header & Stubble Fire Badge */}
+                    <g transform="translate(45, 55)">
+                      <rect x="0" y="0" width="220" height="22" rx="6" fill="#0F172A" stroke="#334155" strokeWidth="1" />
+                      <text x="10" y="15" fill="#CBD5E1" fontSize="10.5" fontWeight="800" fontFamily="JetBrains Mono">
+                        🌾 PUNJAB &amp; HARYANA UPWIND
+                      </text>
+                    </g>
+                    
+                    <g transform="translate(45, 82)">
+                      <rect x="0" y="0" width="250" height="18" rx="5" fill="#7C2D12" stroke="#EA580C" strokeWidth="1" />
+                      <text x="8" y="12.5" fill="#FEF08A" fontSize="9" fontWeight="800" fontFamily="JetBrains Mono">
+                        🔥 NASA FIRMS: {fires?.total_active_fires || 1457} ACTIVE STUBBLE FIRES
+                      </text>
+                    </g>
+
+                    {/* Glowing Stubble Hotspots (Sangrur, Bhatinda, Kaithal, Karnal) */}
+                    {[
+                      { name: 'Sangrur', x: 110, y: 120 },
+                      { name: 'Bhatinda', x: 80, y: 170 },
+                      { name: 'Kaithal', x: 200, y: 135 },
+                      { name: 'Karnal', x: 275, y: 185 },
+                    ].map((f, fi) => (
+                      <g key={fi} transform={`translate(${f.x}, ${f.y})`}>
+                        <circle r="14" fill="#EF4444" opacity="0.3" className="animate-ping" />
+                        <circle r="8" fill="#EA580C" opacity="0.5" />
+                        <circle r="4" fill="#FEF08A" stroke="#EF4444" strokeWidth="1.5" />
+                        <text x="9" y="3.5" fill="#FDBA74" fontSize="8" fontWeight="700" fontFamily="JetBrains Mono">
+                          {f.name}
+                        </text>
+                      </g>
+                    ))}
+
+                    {/* Wind Vector Inflow Streamlines (NW -> SE Trapping Direction) */}
+                    <g opacity="0.85">
+                      <path d="M 200 120 Q 320 185, 450 265" fill="none" stroke="url(#smokeInflowGrad)" strokeWidth="5" strokeLinecap="round" strokeDasharray="12 8" />
+                      <path d="M 230 150 Q 345 215, 475 290" fill="none" stroke="url(#smokeInflowGrad)" strokeWidth="3.5" strokeLinecap="round" strokeDasharray="10 6" />
+                      <path d="M 265 180 Q 370 240, 500 315" fill="none" stroke="url(#smokeInflowGrad)" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="8 6" />
+                      
+                      {/* Flow direction indicator text */}
+                      <g transform="translate(265, 195) rotate(32)">
+                        <rect x="-4" y="-10" width="165" height="14" rx="4" fill="#0B1320" stroke="#F97316" strokeWidth="0.8" opacity="0.9" />
+                        <text x="4" y="0" fill="#FDBA74" fontSize="8" fontWeight="800" fontFamily="JetBrains Mono">
+                          💨 Inflow Vector (NW 220° • {met?.wind_speed_kmh || 8.3} km/h)
+                        </text>
+                      </g>
+                    </g>
+
+                    {/* ================= DELHI NCR BASIN (Green Perimeter to Red Harm Core) ================= */}
+                    {/* Outer Boundary with Clean Air Green Rim (Good Air Buffer) */}
+                    <path 
+                      d="M 370 170 C 420 145, 570 145, 620 190 C 655 235, 640 370, 595 435 C 530 470, 410 460, 360 395 C 325 330, 335 215, 370 170 Z" 
+                      fill="url(#delhiBasinHeatmap)" 
+                      stroke="#10B981" 
+                      strokeWidth="2.5" 
+                      opacity="0.95"
+                    />
+
+                    {/* Basin Title */}
+                    <g transform="translate(435, 175)">
+                      <rect x="0" y="0" width="140" height="20" rx="5" fill="#0F172A" stroke="#06B6D4" strokeWidth="1" />
+                      <text x="12" y="14" fill="#38BDF8" fontSize="11" fontWeight="900" fontFamily="JetBrains Mono">
+                        DELHI NCR BASIN
+                      </text>
+                    </g>
+
+                    {/* Core Atmospheric Trapping Plume (Red/Crimson Harm Hotspot) */}
+                    <ellipse 
+                      cx="495" 
+                      cy="295" 
+                      rx="105" 
+                      ry="72" 
+                      fill="#EF4444" 
+                      fillOpacity="0.25" 
+                      stroke="#EF4444" 
+                      strokeWidth="1.5" 
+                      strokeDasharray="6 4"
+                      className="animate-pulse"
+                    />
+                    
+                    <g transform="translate(415, 245)">
+                      <rect x="0" y="0" width="160" height="15" rx="4" fill="#450A0A" stroke="#EF4444" strokeWidth="0.8" opacity="0.9" />
+                      <text x="7" y="10.5" fill="#FCA5A5" fontSize="7.5" fontWeight="800" fontFamily="JetBrains Mono">
+                        🔴 SEVERE AIR TRAPPING CORE (300+)
+                      </text>
+                    </g>
+
+                    {/* Clean Air Perimeter Indicator (Green for Good) */}
+                    <g transform="translate(345, 435)">
+                      <rect x="0" y="0" width="155" height="15" rx="4" fill="#064E3B" stroke="#10B981" strokeWidth="0.8" opacity="0.9" />
+                      <text x="6" y="10.5" fill="#6EE7B7" fontSize="7.5" fontWeight="800" fontFamily="JetBrains Mono">
+                        🟢 Clean Ridge Perimeter (&lt;100)
+                      </text>
+                    </g>
+
+                    {/* Serpentine Yamuna River Course */}
+                    <path 
+                      d="M 475 140 Q 484 195 489 240 Q 498 295 515 350 Q 532 405 548 460" 
+                      stroke="url(#yamunaFlowGrad)" 
+                      strokeWidth="4" 
+                      fill="none" 
+                      opacity="0.85" 
+                      strokeLinecap="round" 
+                    />
+                    <path 
+                      d="M 475 140 Q 484 195 489 240 Q 498 295 515 350 Q 532 405 548 460" 
+                      stroke="#E0F2FE" 
+                      strokeWidth="1.2" 
+                      fill="none" 
+                      opacity="0.9" 
+                      strokeLinecap="round" 
+                    />
+                    <text x="524" y="375" fill="#38BDF8" fontSize="8" fontStyle="italic" fontWeight="800" fontFamily="JetBrains Mono">
+                      Yamuna River
+                    </text>
+
+                    {/* Floating Color Legend Bar (Green for Good, Red for Harm) */}
+                    <g transform="translate(25, 440)">
+                      <rect x="0" y="0" width="280" height="28" rx="7" fill="#0B1320" stroke="#334155" strokeWidth="1" opacity="0.92" />
+                      <text x="8" y="12" fill="#94A3B8" fontSize="7.5" fontWeight="800" fontFamily="JetBrains Mono">
+                        AIR QUALITY LEVEL KEY:
+                      </text>
+                      <g transform="translate(8, 17)">
+                        <circle cx="4" cy="4" r="3.5" fill="#10B981" />
+                        <text x="11" y="6.5" fill="#10B981" fontSize="7" fontWeight="bold">Good</text>
+
+                        <circle cx="48" cy="4" r="3.5" fill="#EAB308" />
+                        <text x="55" y="6.5" fill="#EAB308" fontSize="7" fontWeight="bold">Moderate</text>
+
+                        <circle cx="106" cy="4" r="3.5" fill="#F97316" />
+                        <text x="113" y="6.5" fill="#F97316" fontSize="7" fontWeight="bold">Poor</text>
+
+                        <circle cx="150" cy="4" r="3.5" fill="#EF4444" />
+                        <text x="157" y="6.5" fill="#EF4444" fontSize="7" fontWeight="bold">Severe (Harm)</text>
+
+                        <circle cx="225" cy="4" r="3.5" fill="#7F1D1D" />
+                        <text x="232" y="6.5" fill="#F87171" fontSize="7" fontWeight="bold">Hazard</text>
+                      </g>
+                    </g>
 
                     {/* Station Markers */}
                     {snapshot.stations.map((s) => {
@@ -1261,7 +1440,10 @@ export default function App() {
                     </div>
                     <input
                       type="range" min="0" max="100" value={s.val}
-                      onChange={(e) => s.set(parseInt(e.target.value))}
+                      onChange={(e) => {
+                        sound.playSlider();
+                        s.set(parseInt(e.target.value));
+                      }}
                       className="w-full cursor-pointer"
                       style={{ accentColor: s.color }}
                     />
