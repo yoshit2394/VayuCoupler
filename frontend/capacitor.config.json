@@ -1,5 +1,9 @@
 {
   "appId": "gov.in.moes.vayucoupler",
   "appName": "VayuCoupler",
-  "webDir": "dist"
+  "webDir": "dist",
+  "server": {
+    "url": "https://vayu-coupler.vercel.app",
+    "cleartext": true
+  }
 }
