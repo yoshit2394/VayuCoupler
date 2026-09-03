@@ -32,8 +32,7 @@ const OFFLINE_TOPICS_BY_LANG = {
     { label: "🚗 Truck Diversion & Odd-Even", query: "impact of commercial truck diversion and odd even rules" },
     { label: "📍 My Location Forecast", query: "my location air quality forecast" },
     { label: "📊 Delhi NCR Regional Live AQI", query: "delhi ncr regional live aqi and weather telemetry" },
-    { label: "📈 72-Hour Pollution Trajectory", query: "72-hour pollution forecast overview and peak timing" },
-    { label: "🏛️ Multi-Agency Dispatches", query: "what are the multi-agency executive action dispatches?" }
+    { label: "📈 72-Hour Pollution Trajectory", query: "72-hour pollution forecast overview and peak timing" }
   ],
   hi: [
     { label: "🏫 क्या स्कूल बंद होंगे?", query: "क्या वायु प्रदूषण के कारण स्कूल और कॉलेज बंद होंगे?" },
@@ -46,8 +45,7 @@ const OFFLINE_TOPICS_BY_LANG = {
     { label: "🚗 ट्रक डायवर्जन व ऑड-ईवन", query: "भारी वाणिज्यिक वाहनों के डायवर्जन और ऑड-ईवन का असर" },
     { label: "📍 मेरे स्थान का वायु पूर्वानुमान", query: "मेरी लोकेशन का पूर्वानुमान बताओ" },
     { label: "📊 दिल्ली एनसीआर औसत AQI", query: "दिल्ली एनसीआर का औसत वायु गुणवत्ता सूचकांक क्या है?" },
-    { label: "📈 72-घंटे प्रदूषण पूर्वानुमान", query: "अगले 72 घंटों का प्रदूषण पूर्वानुमान और पीक समय" },
-    { label: "🏛️ बहु-एजेंसी एक्शन ऑर्डर्स", query: "विभिन्न सरकारी एजेंसियों के लिए जारी कार्रवाई आदेश क्या हैं?" }
+    { label: "📈 72-घंटे प्रदूषण पूर्वानुमान", query: "अगले 72 घंटों का प्रदूषण पूर्वानुमान और पीक समय" }
   ],
   hinglish: [
     { label: "🏫 Schools Band Honge Ya Nahi?", query: "kal schools band honge ya nahi?" },
@@ -60,8 +58,7 @@ const OFFLINE_TOPICS_BY_LANG = {
     { label: "🚗 Truck Diversion & Odd-Even", query: "truck diversion odd even impact" },
     { label: "📍 Meri Location Ka Forecast", query: "meri location ka forecast bata" },
     { label: "📊 Delhi NCR Live AQI", query: "delhi ncr average aqi kitna hai?" },
-    { label: "📈 72-Hour Pollution Forecast", query: "72-hour pollution forecast overview" },
-    { label: "🏛️ Multi-Agency Dispatches", query: "multi agency stakeholder dispatches kya hain?" }
+    { label: "📈 72-Hour Pollution Forecast", query: "72-hour pollution forecast overview" }
   ]
 };
 
