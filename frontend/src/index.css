@@ -36,6 +36,14 @@
   }
 }
 
+.safe-area-pb {
+  padding-bottom: max(0.6rem, env(safe-area-inset-bottom));
+}
+.safe-area-pt {
+  padding-top: max(0.5rem, env(safe-area-inset-top));
+}
+
+
 /* Light Mode Overrides for UI Elements */
 html.light .bg-slate-900,
 html.light .bg-slate-900\/90,

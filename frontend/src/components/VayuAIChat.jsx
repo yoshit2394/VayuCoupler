@@ -83,15 +83,26 @@ export default function VayuAIChat({
   onSelectStation = null,
   language = 'hinglish',
   theme = 'dark',
-  onOpenSettings = null
+  onOpenSettings = null,
+  isOpen: isOpenProp = undefined,
+  onToggleOpen: onToggleOpenProp = undefined
 }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const isOpen = isOpenProp !== undefined ? isOpenProp : internalIsOpen;
+  const setIsOpen = (val) => {
+    if (onToggleOpenProp) {
+      onToggleOpenProp(typeof val === 'function' ? val(isOpen) : val);
+    } else {
+      setInternalIsOpen(val);
+    }
+  };
   const isUrlOffline = typeof window !== 'undefined' && (
     window.location.search.includes('offline') || 
     window.location.search.includes('mode=offline')
   );
   const [forceOffline, setForceOffline] = useState(isUrlOffline);
   const [isOnline, setIsOnline] = useState(() => typeof navigator !== 'undefined' ? navigator.onLine : true);
+
 
   const isAiOnline = !forceOffline && isOnline;
 
@@ -489,14 +500,14 @@ export default function VayuAIChat({
 
   return (
     <>
-      {/* ===== 1. FLOATING ACTION LAUNCHER BUTTON (Bottom-Right) ===== */}
-      <div className="fixed bottom-5 right-5 z-[90] flex items-center gap-2 select-none">
+      {/* ===== 1. FLOATING ACTION LAUNCHER BUTTON (Bottom-Right on Desktop/Tablet) ===== */}
+      <div className="hidden sm:flex fixed bottom-6 right-6 z-[90] items-center gap-2 select-none">
         
         {/* Helper tooltip tag when closed */}
         {!isOpen && (
           <div 
             onClick={() => setIsOpen(true)}
-            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 border border-cyan-500/40 text-xs font-semibold text-cyan-300 shadow-xl shadow-cyan-950/60 backdrop-blur-md cursor-pointer hover:border-cyan-400 transition animate-bounce">
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-cyan-500/40 text-xs font-semibold text-cyan-300 shadow-xl shadow-cyan-950/60 backdrop-blur-md cursor-pointer hover:border-cyan-400 transition animate-bounce">
             <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
             <span>{t('ai_copilot', language)}</span>
             <span className={`w-2 h-2 rounded-full ${forceOffline ? 'bg-amber-400' : 'bg-emerald-400 animate-ping'}`}></span>
@@ -531,12 +542,12 @@ export default function VayuAIChat({
         </button>
       </div>
 
-      {/* ===== 2. EXPANDED POP-UP CHAT DRAWER / WINDOW ===== */}
+      {/* ===== 2. EXPANDED POP-UP CHAT DRAWER / WINDOW (Full-Screen on Mobile, Floating on Desktop) ===== */}
       {isOpen && (
-        <div className="fixed bottom-22 right-4 sm:right-6 z-[95] w-[94vw] sm:w-[440px] max-w-[460px] h-[620px] max-h-[84vh] bg-[#0A131F]/95 border border-cyan-500/40 rounded-3xl shadow-2xl shadow-cyan-950/80 backdrop-blur-2xl flex flex-col overflow-hidden animate-[slideUp_0.25s_cubic-bezier(0.16,1,0.3,1)]">
+        <div className="fixed inset-0 sm:inset-auto sm:bottom-20 sm:right-6 z-[120] w-full sm:w-[450px] max-w-full sm:max-w-[460px] h-full sm:h-[630px] sm:max-h-[85vh] bg-[#07121A] sm:bg-[#0A131F]/95 sm:border sm:border-cyan-500/40 rounded-none sm:rounded-3xl shadow-2xl shadow-cyan-950/80 backdrop-blur-2xl flex flex-col overflow-hidden animate-[slideUp_0.25s_cubic-bezier(0.16,1,0.3,1)]">
           
           {/* Header */}
-          <div className="bg-gradient-to-r from-slate-900 via-slate-900/90 to-cyan-950/70 border-b border-cyan-500/20 p-3.5 flex items-center justify-between shrink-0">
+          <div className="bg-gradient-to-r from-slate-900 via-slate-900/90 to-cyan-950/70 border-b border-cyan-500/20 px-4 py-3.5 sm:p-3.5 flex items-center justify-between shrink-0 safe-area-pt">
             <div className="flex items-center gap-2.5">
               <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-slate-950 font-black shadow-md ${
                 !isAiOnline 
@@ -558,22 +569,21 @@ export default function VayuAIChat({
                     type="button"
                     onClick={() => setForceOffline(!forceOffline)}
                     className={`px-2 py-0.5 rounded-full font-mono text-[9px] font-bold border transition flex items-center gap-1 cursor-pointer active:scale-95 shadow-sm ${
-                      !isAiOnline
-                        ? 'bg-amber-950/90 text-amber-300 border-amber-500 hover:bg-amber-900 shadow-amber-950/50' 
-                        : 'bg-emerald-950/90 text-emerald-300 border-emerald-500 hover:bg-emerald-900 shadow-emerald-950/50'
+                      !isAiOnline 
+                        ? 'bg-amber-950/80 text-amber-300 border-amber-600/80 hover:bg-amber-900' 
+                        : 'bg-emerald-950/80 text-emerald-300 border-emerald-600/80 hover:bg-emerald-900'
                     }`}
-                    title="Click to toggle between Online (Gemini) and Offline AI Mode"
+                    title="Click to toggle between Online Gemini and Offline Physics AI"
                   >
                     <span className={`w-1.5 h-1.5 rounded-full ${!isAiOnline ? 'bg-amber-400' : 'bg-emerald-400 animate-pulse'}`}></span>
-                    <span>{!isAiOnline ? t('ai_offline_badge', language) : t('ai_online_badge', language)}</span>
+                    {!isAiOnline ? '⚡ Offline AI' : '🟢 Gemini 3.5 Flash'}
                   </button>
-                  <span className="text-slate-500">• T-{currentStep}h</span>
                 </div>
               </div>
             </div>
 
-            {/* Actions: Location, Settings, Refresh & Minimize */}
-            <div className="flex items-center gap-1">
+            {/* Actions: Location, Refresh & Close */}
+            <div className="flex items-center gap-1.5">
               <button 
                 onClick={handleLocationDetection}
                 className="p-1.5 rounded-lg bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 border border-cyan-700/70 text-xs font-semibold flex items-center gap-1 transition cursor-pointer"
@@ -590,9 +600,10 @@ export default function VayuAIChat({
               </button>
               <button 
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition cursor-pointer"
-                title="Minimize">
+                className="px-2.5 py-1.5 rounded-xl bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 border border-cyan-700/60 transition cursor-pointer flex items-center gap-1 text-xs font-bold active:scale-95"
+                title="Close VayuAI">
                 <ChevronDown className="w-4 h-4" />
+                <span className="sm:hidden">Close</span>
               </button>
             </div>
           </div>
@@ -824,7 +835,7 @@ export default function VayuAIChat({
           </div>
 
           {/* Input Box + Voice + Send / Stop Bar */}
-          <div className="p-3 bg-slate-950 border-t border-slate-800/80 shrink-0">
+          <div className="p-3 bg-slate-950 border-t border-slate-800/80 shrink-0 safe-area-pb">
             {isListening && (
               <div className="mb-2 p-1.5 rounded-lg bg-rose-950/60 border border-rose-700/80 text-[11px] text-rose-300 flex items-center justify-between animate-pulse">
                 <span className="flex items-center gap-1.5">
@@ -839,7 +850,7 @@ export default function VayuAIChat({
 
             <form 
               onSubmit={(e) => { e.preventDefault(); handleSend(); }}
-              className="flex items-center gap-1.5 bg-slate-900 border border-slate-700/80 rounded-2xl p-1 focus-within:border-cyan-500 focus-within:ring-1 focus-within:ring-cyan-500/40 transition"
+              className="flex items-center gap-1.5 bg-slate-900 border border-slate-700/80 rounded-2xl p-1.5 sm:p-1 focus-within:border-cyan-500 focus-within:ring-1 focus-within:ring-cyan-500/40 transition"
             >
               {/* Text input */}
               <input
@@ -848,7 +859,7 @@ export default function VayuAIChat({
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={t('ai_placeholder', language)}
-                className="flex-1 bg-transparent px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none"
+                className="flex-1 bg-transparent px-3 py-2 text-sm sm:text-xs text-white placeholder-slate-500 focus:outline-none"
               />
 
               {/* Voice Mic Button */}

@@ -4,7 +4,8 @@ import {
   RotateCcw, Play, Pause, Activity, Gauge, Layers, Thermometer, 
   Compass, Flame, MapPin, TrendingUp, PieChart, CheckCircle, Radio,
   ZoomIn, ZoomOut, X, AlertTriangle, Building2, Truck, GraduationCap,
-  Heart, Users, Leaf, AlertCircle, ArrowRight, ChevronDown, Settings
+  Heart, Users, Leaf, AlertCircle, ArrowRight, ChevronDown, Settings,
+  Bot, Sparkles
 } from 'lucide-react';
 import { 
   fetchStations, fetchSnapshot, fetchStationForecast, 
@@ -19,6 +20,7 @@ export default function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('vayucoupler_theme') || 'dark');
   const [language, setLanguage] = useState(() => localStorage.getItem('vayucoupler_lang') || 'hinglish');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isAiOpen, setIsAiOpen] = useState(false);
 
   const [currentStep, setCurrentStep] = useState(72);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -180,8 +182,9 @@ export default function App() {
     <div className="min-h-screen bg-[#0B0F17] text-slate-100 flex flex-col font-sans">
       
       {/* ===== TOP NAVIGATION ===== */}
-      <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 px-6 py-3">
-        <div className="max-w-[1720px] mx-auto flex items-center justify-between gap-4">
+      <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 px-4 md:px-6 py-2.5 md:py-3 safe-area-pt">
+        {/* Desktop Navbar */}
+        <div className="hidden md:flex max-w-[1720px] mx-auto items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
               <Wind className="w-5 h-5 text-white" />
@@ -230,8 +233,41 @@ export default function App() {
               className="px-3 py-1.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-300 hover:text-cyan-300 border border-slate-800 flex items-center gap-1.5 text-xs font-semibold transition cursor-pointer active:scale-95 shadow-sm"
               title="System Preferences (Theme & Language)"
             >
-              <Settings className="w-3.5 h-3.5 text-cyan-400 animate-[spin-slow_12s_linear_infinite]" />
-              <span className="hidden md:inline">{t('settings_btn', language)}</span>
+              <Settings className="w-3.5 h-3.5 text-cyan-400" />
+              <span>{t('settings_btn', language)}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Native App Bar */}
+        <div className="md:hidden flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center shadow-md shadow-cyan-500/20">
+              <Wind className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-sm font-black text-white tracking-tight">VayuCoupler</span>
+                <span className="text-[8px] font-bold px-1 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 font-mono">MoES</span>
+              </div>
+              <p className="text-[9px] text-slate-400">Delhi-NCR Coupled AQI</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold border ${
+              snapshot.delhi_ncr_avg_aqi > 400 ? 'bg-red-950/80 text-red-300 border-red-700/80' :
+              snapshot.delhi_ncr_avg_aqi > 300 ? 'bg-orange-950/80 text-orange-300 border-orange-700/80' :
+              'bg-amber-950/80 text-amber-300 border-amber-700/80'
+            }`}>
+              AQI {snapshot.delhi_ncr_avg_aqi}
+            </span>
+            <button 
+              onClick={() => setIsSettingsOpen(true)}
+              className="p-1.5 rounded-lg bg-slate-950 text-slate-300 border border-slate-800 active:scale-95"
+              title="Settings"
+            >
+              <Settings className="w-4 h-4 text-cyan-400" />
             </button>
           </div>
         </div>
@@ -872,7 +908,69 @@ export default function App() {
         </div>
       )}
 
-      {/* Floating VayuAI Copilot Assistant (Bottom Right) */}
+      {/* ===== MOBILE BOTTOM NAVIGATION DOCK (Native Phone Dock) ===== */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#07121A]/95 border-t border-cyan-900/40 backdrop-blur-xl px-2 py-1.5 flex items-center justify-around shadow-2xl safe-area-pb">
+        {/* Tab 1: Overview */}
+        <button
+          onClick={() => { setActiveTab('overview'); setIsAiOpen(false); }}
+          className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition active:scale-95 ${
+            activeTab === 'overview' && !isAiOpen ? 'text-cyan-400 font-bold bg-cyan-950/60' : 'text-slate-400'
+          }`}
+        >
+          <LayoutDashboard className="w-5 h-5 mb-0.5" />
+          <span className="text-[9px] font-medium">{t('tab_overview', language)}</span>
+        </button>
+
+        {/* Tab 2: GRAP */}
+        <button
+          onClick={() => { setActiveTab('grap'); setIsAiOpen(false); }}
+          className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition active:scale-95 ${
+            activeTab === 'grap' && !isAiOpen ? 'text-cyan-400 font-bold bg-cyan-950/60' : 'text-slate-400'
+          }`}
+        >
+          <ShieldAlert className="w-5 h-5 mb-0.5" />
+          <span className="text-[9px] font-medium">{t('tab_grap', language)}</span>
+        </button>
+
+        {/* CENTER PROMINENT VAYUAI COPILOT LAUNCHER */}
+        <button
+          onClick={() => setIsAiOpen(prev => !prev)}
+          className="relative -top-3.5 flex flex-col items-center justify-center group active:scale-95 transition-transform"
+        >
+          <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 via-teal-400 to-emerald-400 text-slate-950 flex items-center justify-center shadow-lg shadow-cyan-500/40 border-2 border-white/90">
+            <Bot className="w-6 h-6 stroke-[2.5]" />
+            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-950 animate-ping"></span>
+            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-950"></span>
+          </div>
+          <span className="text-[10px] font-black text-cyan-300 mt-0.5 tracking-tight flex items-center gap-1">
+            VayuAI
+          </span>
+        </button>
+
+        {/* Tab 3: What-If */}
+        <button
+          onClick={() => { setActiveTab('whatif'); setIsAiOpen(false); }}
+          className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition active:scale-95 ${
+            activeTab === 'whatif' && !isAiOpen ? 'text-cyan-400 font-bold bg-cyan-950/60' : 'text-slate-400'
+          }`}
+        >
+          <Sliders className="w-5 h-5 mb-0.5" />
+          <span className="text-[9px] font-medium">{t('tab_whatif', language)}</span>
+        </button>
+
+        {/* Tab 4: Dispatches */}
+        <button
+          onClick={() => { setActiveTab('dispatches'); setIsAiOpen(false); }}
+          className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition active:scale-95 ${
+            activeTab === 'dispatches' && !isAiOpen ? 'text-cyan-400 font-bold bg-cyan-950/60' : 'text-slate-400'
+          }`}
+        >
+          <Send className="w-5 h-5 mb-0.5" />
+          <span className="text-[9px] font-medium">{t('tab_dispatches', language)}</span>
+        </button>
+      </nav>
+
+      {/* Floating / Full-Screen VayuAI Copilot Assistant */}
       <VayuAIChat 
         currentStep={currentStep} 
         snapshot={snapshot} 
@@ -880,6 +978,8 @@ export default function App() {
         language={language}
         theme={theme}
         onOpenSettings={() => setIsSettingsOpen(true)}
+        isOpen={isAiOpen}
+        onToggleOpen={setIsAiOpen}
       />
 
       {/* System Settings Modal (Theme & Language) */}
