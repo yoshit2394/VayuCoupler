@@ -24,6 +24,100 @@ function getClosestStepKey(stepHour) {
   return String(closest);
 }
 
+export function getInterpolatedSnapshot(stepHour = 72) {
+  const steps = [0, 24, 48, 72, 96, 120, 144, 168];
+  const hour = Math.max(0, Math.min(167, Math.round(stepHour)));
+
+  // Find bounding steps
+  let lower = 0;
+  let upper = 24;
+  for (let i = 0; i < steps.length - 1; i++) {
+    if (hour >= steps[i] && hour <= steps[i + 1]) {
+      lower = steps[i];
+      upper = steps[i + 1];
+      break;
+    }
+  }
+
+  const snap1 = offlineBundle.steps[String(lower)]?.snapshot || offlineBundle.steps["72"].snapshot;
+  const snap2 = offlineBundle.steps[String(upper)]?.snapshot || offlineBundle.steps[String(lower)]?.snapshot;
+
+  if (!snap2 || lower === upper || hour === lower) {
+    return { ...snap1, step_hour: hour };
+  }
+
+  const fraction = (hour - lower) / (upper - lower);
+
+  // Category helper
+  const getCat = (aqi) => {
+    if (aqi > 400) return { name: 'Severe', color: '#EF4444' };
+    if (aqi > 300) return { name: 'Very Poor', color: '#F97316' };
+    if (aqi > 200) return { name: 'Poor', color: '#F59E0B' };
+    if (aqi > 100) return { name: 'Moderate', color: '#EAB308' };
+    return { name: 'Satisfactory', color: '#10B981' };
+  };
+
+  const avgAqi = Math.round(snap1.delhi_ncr_avg_aqi + fraction * (snap2.delhi_ncr_avg_aqi - snap1.delhi_ncr_avg_aqi));
+  const catInfo = getCat(avgAqi);
+
+  const m1 = snap1.meteorology;
+  const m2 = snap2.meteorology;
+  const met = {
+    ...m1,
+    ventilation_index_m2s: +(m1.ventilation_index_m2s + fraction * (m2.ventilation_index_m2s - m1.ventilation_index_m2s)).toFixed(1),
+    boundary_layer_height_m: +(m1.boundary_layer_height_m + fraction * (m2.boundary_layer_height_m - m1.boundary_layer_height_m)).toFixed(1),
+    inversion_strength_c: +(m1.inversion_strength_c + fraction * (m2.inversion_strength_c - m1.inversion_strength_c)).toFixed(1),
+    wind_speed_kmh: +(m1.wind_speed_kmh + fraction * (m2.wind_speed_kmh - m1.wind_speed_kmh)).toFixed(1),
+  };
+  met.ventilation_status = met.ventilation_index_m2s > 3500 ? "Favorable (>3500)" : (met.ventilation_index_m2s > 2000 ? "Moderate (2000-3500)" : "Critical Trapping (<2000)");
+
+  const f1 = snap1.stubble_burning;
+  const f2 = snap2.stubble_burning;
+  const fires = {
+    ...f1,
+    total_active_fires: Math.round(f1.total_active_fires + fraction * (f2.total_active_fires - f1.total_active_fires)),
+  };
+
+  const a1 = snap1.source_attribution;
+  const a2 = snap2.source_attribution;
+  const source_attribution = {
+    stubble_burning: Math.round(a1.stubble_burning + fraction * (a2.stubble_burning - a1.stubble_burning)),
+    vehicular_emissions: Math.round(a1.vehicular_emissions + fraction * (a2.vehicular_emissions - a1.vehicular_emissions)),
+    road_construction_dust: Math.round(a1.road_construction_dust + fraction * (a2.road_construction_dust - a1.road_construction_dust)),
+    industrial_energy: Math.round(a1.industrial_energy + fraction * (a2.industrial_energy - a1.industrial_energy)),
+    secondary_and_domestic: Math.round(a1.secondary_and_domestic + fraction * (a2.secondary_and_domestic - a1.secondary_and_domestic)),
+  };
+
+  const stations = (snap1.stations || []).map((st1, idx) => {
+    const st2 = snap2.stations?.[idx] || st1;
+    const aqi = Math.round(st1.aqi + fraction * (st2.aqi - st1.aqi));
+    const pm25 = +(st1.pm25 + fraction * (st2.pm25 - st1.pm25)).toFixed(1);
+    const stubbleShare = +(st1.stubble_share_ugm3 + fraction * ((st2.stubble_share_ugm3 || 0) - st1.stubble_share_ugm3)).toFixed(1);
+    const stCat = getCat(aqi);
+
+    return {
+      ...st1,
+      aqi,
+      pm25,
+      stubble_share_ugm3: stubbleShare,
+      category: stCat.name,
+      category_color: stCat.color,
+    };
+  });
+
+  return {
+    ...snap1,
+    step_hour: hour,
+    delhi_ncr_avg_aqi: avgAqi,
+    category: catInfo.name,
+    category_color: catInfo.color,
+    meteorology: met,
+    stubble_burning: fires,
+    source_attribution,
+    stations,
+  };
+}
+
 export async function fetchStations() {
   if (isOffline()) return offlineBundle.stations || [];
   try {
@@ -36,16 +130,16 @@ export async function fetchStations() {
 }
 
 export async function fetchSnapshot(stepHour = 72) {
-  const key = getClosestStepKey(stepHour);
-  const fallback = offlineBundle.steps[key]?.snapshot || offlineBundle.steps["72"].snapshot;
-  if (isOffline()) return fallback;
+  // Always compute smoothly interpolated continuous snapshot instantly
+  const interpolated = getInterpolatedSnapshot(stepHour);
+  if (isOffline()) return interpolated;
   try {
-    const res = await fetch(`${BASE_URL}/api/snapshot?step_hour=${stepHour}`, { signal: AbortSignal.timeout(1500) });
+    const res = await fetch(`${BASE_URL}/api/snapshot?step_hour=${stepHour}`, { signal: AbortSignal.timeout(1200) });
     if (res.ok) return await res.json();
   } catch (e) {
-    console.warn('Using offline snapshot fallback:', e);
+    // Graceful fallback to continuous interpolated snapshot
   }
-  return fallback;
+  return interpolated;
 }
 
 export async function fetchStationForecast(stationId, stepHour = 72) {
@@ -53,14 +147,26 @@ export async function fetchStationForecast(stationId, stepHour = 72) {
   const fallback = offlineBundle.stations_forecast[`${stationId}_${key}`] || 
                    offlineBundle.stations_forecast[`${stationId}_72`] || 
                    offlineBundle.stations_forecast['DEL001_72'];
-  if (isOffline()) return fallback;
+
+  const interpSnap = getInterpolatedSnapshot(stepHour);
+  const st = interpSnap.stations?.find(s => s.station_id === stationId);
+  const enriched = fallback && st ? {
+    ...fallback,
+    current_aqi: st.aqi,
+    current_category: st.category,
+    current_category_color: st.category_color,
+    station_name: st.name,
+    region: st.region
+  } : fallback;
+
+  if (isOffline()) return enriched;
   try {
-    const res = await fetch(`${BASE_URL}/api/forecast/station/${stationId}?step_hour=${stepHour}`, { signal: AbortSignal.timeout(1500) });
+    const res = await fetch(`${BASE_URL}/api/forecast/station/${stationId}?step_hour=${stepHour}`, { signal: AbortSignal.timeout(1200) });
     if (res.ok) return await res.json();
   } catch (e) {
-    console.warn('Using offline station forecast fallback:', e);
+    // Fallback to enriched offline forecast
   }
-  return fallback;
+  return enriched;
 }
 
 export async function fetchRegionalForecast(stepHour = 72) {
@@ -113,28 +219,93 @@ export async function fetchInterstateGrid(stepHour = 72) {
   return fallback;
 }
 
-export async function runWhatIfSimulation(params) {
-  try {
-    const res = await fetch(`${BASE_URL}/api/what-if`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(params),
-      signal: AbortSignal.timeout(4000)
-    });
-    if (res.ok) return await res.json();
-  } catch (e) {
-    console.warn('Using offline simulation fallback:', e);
+export async function runWhatIfSimulation(params = {}) {
+  const stubblePct = params.stubble_reduction_pct ?? 50;
+  const truckPct = params.truck_reduction_pct ?? 40;
+  const dustPct = params.dust_reduction_pct ?? 30;
+  const industryPct = params.industry_switch_pct ?? 20;
+  const step = params.step_hour ?? 72;
+
+  // Calculate realistic individual mitigations
+  const stubbleImpact = Math.round((stubblePct / 100) * 110);
+  const truckImpact = Math.round((truckPct / 100) * 55);
+  const dustImpact = Math.round((dustPct / 100) * 35);
+  const industryImpact = Math.round((industryPct / 100) * 30);
+
+  const totalReduction = stubbleImpact + truckImpact + dustImpact + industryImpact;
+
+  // Baseline peak depends on episode step (rises to Day 5 peak ~460 then clears Day 7)
+  let basePeak = 455;
+  if (step <= 36) basePeak = 285;
+  else if (step <= 60) basePeak = 345;
+  else if (step <= 96) basePeak = 420;
+  else if (step <= 130) basePeak = 475;
+  else basePeak = 210;
+
+  const mitigatedPeak = Math.max(75, basePeak - totalReduction);
+
+  const getCat = (aqi) => {
+    if (aqi > 400) return 'Severe Emergency (गंभीर)';
+    if (aqi > 300) return 'Very Poor (बहुत खराब)';
+    if (aqi > 200) return 'Poor (खराब)';
+    if (aqi > 100) return 'Moderate (मध्यम)';
+    return 'Satisfactory (संतोषजनक)';
+  };
+
+  let verdict = '';
+  if (totalReduction > 160) {
+    verdict = `Critical Success: Combined policy interventions successfully suppress peak smog episode by ${totalReduction} AQI points, downgrading Delhi-NCR from Severe+ to ${getCat(mitigatedPeak).split(' ')[0]}.`;
+  } else if (totalReduction > 90) {
+    verdict = `Substantial Impact: -${totalReduction} AQI points avoided. Stubble fire curbs and commercial truck bypass provide the highest atmospheric relief.`;
+  } else {
+    verdict = `Moderate Relief: -${totalReduction} AQI points reduced. Increase farm fire suppression and commercial transport bypass for greater regional protection.`;
   }
-  // Local approximation
-  const stubbleRed = params.stubble_reduction_pct || 0;
-  const truckRed = params.truck_diversion_enabled ? 25 : 0;
-  const delta = Math.round(stubbleRed * 0.8 + truckRed);
+
+  // Try remote backend if online
+  if (!isOffline()) {
+    try {
+      const res = await fetch(`${BASE_URL}/api/what-if`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(params),
+        signal: AbortSignal.timeout(1500)
+      });
+      if (res.ok) {
+        const raw = await res.json();
+        if (raw.baseline_peak_aqi) return raw;
+        if (raw.counterfactual_mitigated) {
+          const bPeak = raw.baseline_uncontrolled?.peak_risk_aqi || basePeak;
+          const mPeak = raw.counterfactual_mitigated?.peak_risk_aqi || mitigatedPeak;
+          const red = raw.counterfactual_mitigated?.total_aqi_points_prevented || totalReduction;
+          return {
+            baseline_peak_aqi: bPeak,
+            baseline_category: getCat(bPeak),
+            mitigated_peak_aqi: mPeak,
+            mitigated_category: getCat(mPeak),
+            aqi_reduction: red,
+            stubble_reduction_impact: stubbleImpact,
+            truck_reduction_impact: truckImpact,
+            dust_reduction_impact: dustImpact,
+            industry_reduction_impact: industryImpact,
+            policy_verdict: verdict
+          };
+        }
+      }
+    } catch (_) {}
+  }
+
+  // Instant calculated counterfactual response
   return {
-    baseline_delhi_aqi: 280,
-    mitigated_delhi_aqi: Math.max(120, 280 - delta),
-    aqi_reduction_pts: delta,
-    peak_risk_reduction_pct: Math.min(60, Math.round(delta / 3)),
-    mitigation_level: delta > 50 ? "HIGH" : (delta > 20 ? "MODERATE" : "LOW")
+    baseline_peak_aqi: basePeak,
+    baseline_category: getCat(basePeak),
+    mitigated_peak_aqi: mitigatedPeak,
+    mitigated_category: getCat(mitigatedPeak),
+    aqi_reduction: totalReduction,
+    stubble_reduction_impact: stubbleImpact,
+    truck_reduction_impact: truckImpact,
+    dust_reduction_impact: dustImpact,
+    industry_reduction_impact: industryImpact,
+    policy_verdict: verdict
   };
 }
 
