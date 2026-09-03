@@ -281,42 +281,113 @@ export default function App() {
         </div>
       </header>
 
-      {/* ===== TIME SCRUBBER ===== */}
-      <section className="bg-slate-950 border-b border-slate-800 px-6 py-3">
-        <div className="max-w-[1720px] mx-auto flex flex-col md:flex-row items-center gap-4">
-          <div className="flex items-center gap-2 shrink-0">
+      {/* ===== TIME SCRUBBER (Simplified 7-Day Forecast Timeline) ===== */}
+      <section className="bg-slate-950/90 border-b border-slate-800 px-4 sm:px-6 py-3">
+        <div className="max-w-[1720px] mx-auto flex flex-col md:flex-row items-center gap-3 md:gap-4">
+          
+          {/* Play/Pause & Simple Day Badge */}
+          <div className="flex items-center gap-2 shrink-0 self-start md:self-auto">
             <button 
               onClick={() => setIsPlaying(!isPlaying)}
-              className="w-8 h-8 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white flex items-center justify-center">
-              {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+              className="w-8 h-8 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white flex items-center justify-center transition active:scale-95 shadow-md shadow-cyan-900/40 cursor-pointer"
+              title={isPlaying ? "Pause Timeline" : "Play 7-Day Forecast"}
+            >
+              {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
             </button>
-            <span className="text-xs font-mono font-bold text-cyan-400 bg-slate-900 px-2 py-1 rounded border border-slate-800">
-              T-Hour: {currentStep} / 167
-            </span>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold">
+              <span className="text-cyan-400 font-bold">
+                📅 Day {Math.min(7, Math.max(1, Math.floor(currentStep / 24) + 1))}
+              </span>
+              <span className="text-slate-500 text-[10px]">({currentStep}h)</span>
+              <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
+                currentStep >= 144 ? 'text-emerald-300 bg-emerald-950/80 border border-emerald-700/60' :
+                currentStep >= 96  ? 'text-rose-300 bg-rose-950/80 border border-rose-700/60' :
+                currentStep >= 48  ? 'text-amber-300 bg-amber-950/80 border border-amber-700/60' :
+                                     'text-cyan-300 bg-cyan-950/80 border border-cyan-700/60'
+              }`}>
+                {currentStep >= 144 ? '🍃 Relief' :
+                 currentStep >= 96  ? '🚨 Peak Smog' :
+                 currentStep >= 48  ? '⚡ Alert' : '🟢 Normal'}
+              </span>
+            </div>
           </div>
 
-          <div className="flex-1 w-full flex flex-col gap-1">
-            <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
-              <span>Day 1: Moderate</span>
-              <span className="text-amber-400">Day 3: Inversion Alerts (T-72h)</span>
-              <span className="text-rose-400 font-bold">Day 5: Peak Smog Crisis</span>
-              <span className="text-emerald-400">Day 7: Dispersal</span>
+          {/* Slider & Simple Milestone Labels */}
+          <div className="flex-1 w-full flex flex-col gap-1.5">
+            <div className="flex items-center justify-between text-[11px] font-medium text-slate-400 px-0.5">
+              <span className="text-slate-300 flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-cyan-400 inline-block"></span>
+                Day 1 (Normal)
+              </span>
+              <span className="text-amber-400 flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
+                Day 3 (Alert)
+              </span>
+              <span className="text-rose-400 font-bold flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-rose-400 inline-block animate-ping"></span>
+                Day 5 (Peak Smog)
+              </span>
+              <span className="text-emerald-400 flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span>
+                Day 7 (Saaf Hawa)
+              </span>
             </div>
             <input 
               type="range" min="0" max="167" value={currentStep}
               onChange={(e) => setCurrentStep(parseInt(e.target.value))}
-              className="w-full accent-cyan-500 cursor-pointer"
+              className="w-full accent-cyan-500 cursor-pointer h-2 bg-slate-800 rounded-lg appearance-none"
               style={{ accentColor: '#06B6D4' }}
             />
           </div>
 
-          <div className="flex items-center gap-1.5 shrink-0 text-xs">
-            <button onClick={() => setCurrentStep(24)} className="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 border border-slate-800">T-24h</button>
-            <button onClick={() => setCurrentStep(72)} className="px-2.5 py-1 rounded bg-amber-950 text-amber-300 border border-amber-800 font-semibold">T-72h ⚡</button>
-            <button onClick={() => setCurrentStep(96)} className="px-2.5 py-1 rounded bg-rose-950 text-rose-300 border border-rose-800 font-bold">T-96h 🚨</button>
-            <button onClick={() => setCurrentStep(120)} className="px-2.5 py-1 rounded bg-purple-950 text-purple-300 border border-purple-800 font-bold">Peak</button>
-            <button onClick={() => setCurrentStep(156)} className="px-2.5 py-1 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Recovery</button>
+          {/* Simple 4 Quick Day Buttons */}
+          <div className="grid grid-cols-4 sm:flex items-center gap-1.5 shrink-0 text-xs w-full md:w-auto">
+            <button 
+              type="button"
+              onClick={() => setCurrentStep(24)} 
+              className={`px-2.5 py-1.5 rounded-xl border text-center transition cursor-pointer active:scale-95 text-[11px] font-semibold ${
+                currentStep <= 36 
+                  ? 'bg-cyan-950 text-cyan-300 border-cyan-500 shadow-md shadow-cyan-950' 
+                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+              }`}
+            >
+              🟢 Day 1
+            </button>
+            <button 
+              type="button"
+              onClick={() => setCurrentStep(72)} 
+              className={`px-2.5 py-1.5 rounded-xl border text-center transition cursor-pointer active:scale-95 text-[11px] font-semibold ${
+                currentStep >= 48 && currentStep <= 84 
+                  ? 'bg-amber-950 text-amber-300 border-amber-500 shadow-md shadow-amber-950' 
+                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+              }`}
+            >
+              ⚡ Day 3 Alert
+            </button>
+            <button 
+              type="button"
+              onClick={() => setCurrentStep(120)} 
+              className={`px-2.5 py-1.5 rounded-xl border text-center transition cursor-pointer active:scale-95 text-[11px] font-bold ${
+                currentStep >= 96 && currentStep <= 132 
+                  ? 'bg-rose-950 text-rose-300 border-rose-500 shadow-md shadow-rose-950' 
+                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+              }`}
+            >
+              🚨 Day 5 Peak
+            </button>
+            <button 
+              type="button"
+              onClick={() => setCurrentStep(156)} 
+              className={`px-2.5 py-1.5 rounded-xl border text-center transition cursor-pointer active:scale-95 text-[11px] font-semibold ${
+                currentStep >= 144 
+                  ? 'bg-emerald-950 text-emerald-300 border-emerald-500 shadow-md shadow-emerald-950' 
+                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+              }`}
+            >
+              🍃 Day 7 Relief
+            </button>
           </div>
+
         </div>
       </section>
 
