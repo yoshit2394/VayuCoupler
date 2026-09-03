@@ -24,6 +24,13 @@
       radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.07) 0%, transparent 45%),
       radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.6) 0%, transparent 100%);
     background-attachment: fixed;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   html.light body {
@@ -375,3 +382,31 @@ html.light .forecast-highlight-active {
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
   z-index: 40 !important;
 }
+
+/* Micro-interaction & Performance Utility Classes */
+@keyframes subtleFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-subtle-up {
+  animation: subtleFadeInUp 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.card-interactive {
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.18s ease;
+  will-change: transform;
+}
+.card-interactive:hover {
+  transform: translateY(-2px);
+}
+.card-interactive:active {
+  transform: scale(0.98);
+}
+

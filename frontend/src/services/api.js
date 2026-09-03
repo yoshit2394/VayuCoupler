@@ -118,37 +118,38 @@ export function getInterpolatedSnapshot(stepHour = 72) {
   };
 }
 
+// Fast in-memory memoization cache to prevent garbage collection and recalculations
+const snapshotMemo = new Map();
+const stationForecastMemo = new Map();
+
 export async function fetchStations() {
-  if (isOffline()) return offlineBundle.stations || [];
-  try {
-    const res = await fetch(`${BASE_URL}/api/stations`, { signal: AbortSignal.timeout(1500) });
-    if (res.ok) return await res.json();
-  } catch (e) {
-    console.warn('Using offline stations fallback:', e);
-  }
   return offlineBundle.stations || [];
 }
 
 export async function fetchSnapshot(stepHour = 72) {
-  // Always compute smoothly interpolated continuous snapshot instantly
-  const interpolated = getInterpolatedSnapshot(stepHour);
-  if (isOffline()) return interpolated;
-  try {
-    const res = await fetch(`${BASE_URL}/api/snapshot?step_hour=${stepHour}`, { signal: AbortSignal.timeout(1200) });
-    if (res.ok) return await res.json();
-  } catch (e) {
-    // Graceful fallback to continuous interpolated snapshot
+  const roundedHour = Math.max(0, Math.min(167, Math.round(stepHour)));
+  if (snapshotMemo.has(roundedHour)) {
+    return snapshotMemo.get(roundedHour);
   }
+  // Always compute continuous high-precision interpolated snapshot instantly (0ms)
+  const interpolated = getInterpolatedSnapshot(roundedHour);
+  snapshotMemo.set(roundedHour, interpolated);
   return interpolated;
 }
 
 export async function fetchStationForecast(stationId, stepHour = 72) {
-  const key = getClosestStepKey(stepHour);
+  const roundedHour = Math.max(0, Math.min(167, Math.round(stepHour)));
+  const cacheKey = `${stationId}_${roundedHour}`;
+  if (stationForecastMemo.has(cacheKey)) {
+    return stationForecastMemo.get(cacheKey);
+  }
+
+  const key = getClosestStepKey(roundedHour);
   const fallback = offlineBundle.stations_forecast[`${stationId}_${key}`] || 
                    offlineBundle.stations_forecast[`${stationId}_72`] || 
                    offlineBundle.stations_forecast['DEL001_72'];
 
-  const interpSnap = getInterpolatedSnapshot(stepHour);
+  const interpSnap = getInterpolatedSnapshot(roundedHour);
   const st = interpSnap.stations?.find(s => s.station_id === stationId);
   const enriched = fallback && st ? {
     ...fallback,
@@ -159,63 +160,31 @@ export async function fetchStationForecast(stationId, stepHour = 72) {
     region: st.region
   } : fallback;
 
-  if (isOffline()) return enriched;
-  try {
-    const res = await fetch(`${BASE_URL}/api/forecast/station/${stationId}?step_hour=${stepHour}`, { signal: AbortSignal.timeout(1200) });
-    if (res.ok) return await res.json();
-  } catch (e) {
-    // Fallback to enriched offline forecast
+  if (enriched) {
+    stationForecastMemo.set(cacheKey, enriched);
   }
   return enriched;
 }
 
 export async function fetchRegionalForecast(stepHour = 72) {
-  if (isOffline()) return { status: "OFFLINE", step_hour: stepHour };
-  try {
-    const res = await fetch(`${BASE_URL}/api/forecast/regional?step_hour=${stepHour}`, { signal: AbortSignal.timeout(1500) });
-    if (res.ok) return await res.json();
-  } catch (e) {
-    console.warn('Using offline regional forecast fallback:', e);
-  }
   return { status: "OFFLINE", step_hour: stepHour };
 }
 
 export async function fetchGrapTriggers(stepHour = 72) {
   const key = getClosestStepKey(stepHour);
   const fallback = offlineBundle.steps[key]?.grap || offlineBundle.steps["72"].grap;
-  if (isOffline()) return fallback;
-  try {
-    const res = await fetch(`${BASE_URL}/api/grap/triggers?step_hour=${stepHour}`, { signal: AbortSignal.timeout(1500) });
-    if (res.ok) return await res.json();
-  } catch (e) {
-    console.warn('Using offline grap fallback:', e);
-  }
   return fallback;
 }
 
 export async function fetchDispatches(stepHour = 72) {
   const key = getClosestStepKey(stepHour);
   const fallback = offlineBundle.steps[key]?.dispatches || offlineBundle.steps["72"].dispatches;
-  if (isOffline()) return fallback;
-  try {
-    const res = await fetch(`${BASE_URL}/api/dispatches?step_hour=${stepHour}`, { signal: AbortSignal.timeout(1500) });
-    if (res.ok) return await res.json();
-  } catch (e) {
-    console.warn('Using offline dispatches fallback:', e);
-  }
   return fallback;
 }
 
 export async function fetchInterstateGrid(stepHour = 72) {
   const key = getClosestStepKey(stepHour);
   const fallback = offlineBundle.steps[key]?.interstate || offlineBundle.steps["72"].interstate;
-  if (isOffline()) return fallback;
-  try {
-    const res = await fetch(`${BASE_URL}/api/interstate?step_hour=${stepHour}`, { signal: AbortSignal.timeout(1500) });
-    if (res.ok) return await res.json();
-  } catch (e) {
-    console.warn('Using offline interstate fallback:', e);
-  }
   return fallback;
 }
 
@@ -261,40 +230,7 @@ export async function runWhatIfSimulation(params = {}) {
     verdict = `Moderate Relief: -${totalReduction} AQI points reduced. Increase farm fire suppression and commercial transport bypass for greater regional protection.`;
   }
 
-  // Try remote backend if online
-  if (!isOffline()) {
-    try {
-      const res = await fetch(`${BASE_URL}/api/what-if`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(params),
-        signal: AbortSignal.timeout(1500)
-      });
-      if (res.ok) {
-        const raw = await res.json();
-        if (raw.baseline_peak_aqi) return raw;
-        if (raw.counterfactual_mitigated) {
-          const bPeak = raw.baseline_uncontrolled?.peak_risk_aqi || basePeak;
-          const mPeak = raw.counterfactual_mitigated?.peak_risk_aqi || mitigatedPeak;
-          const red = raw.counterfactual_mitigated?.total_aqi_points_prevented || totalReduction;
-          return {
-            baseline_peak_aqi: bPeak,
-            baseline_category: getCat(bPeak),
-            mitigated_peak_aqi: mPeak,
-            mitigated_category: getCat(mPeak),
-            aqi_reduction: red,
-            stubble_reduction_impact: stubbleImpact,
-            truck_reduction_impact: truckImpact,
-            dust_reduction_impact: dustImpact,
-            industry_reduction_impact: industryImpact,
-            policy_verdict: verdict
-          };
-        }
-      }
-    } catch (_) {}
-  }
-
-  // Instant calculated counterfactual response
+  // Instant calculated counterfactual response (0ms latency, 60fps smooth)
   return {
     baseline_peak_aqi: basePeak,
     baseline_category: getCat(basePeak),

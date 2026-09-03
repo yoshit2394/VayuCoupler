@@ -507,7 +507,7 @@ export default function VayuAIChat({
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-cyan-500/40 text-xs font-semibold text-cyan-300 shadow-xl shadow-cyan-950/60 backdrop-blur-md cursor-pointer hover:border-cyan-400 transition animate-bounce">
             <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
             <span>{t('ai_copilot', language)}</span>
-            <span className={`w-2 h-2 rounded-full ${forceOffline ? 'bg-amber-400' : 'bg-emerald-400 animate-ping'}`}></span>
+            <span className={`w-2 h-2 rounded-full ${forceOffline ? 'bg-amber-400' : 'bg-emerald-400 animate-pulse'}`}></span>
           </div>
         )}
 
@@ -844,7 +844,7 @@ export default function VayuAIChat({
             {isListening && (
               <div className="mb-2 p-1.5 rounded-lg bg-rose-950/60 border border-rose-700/80 text-[11px] text-rose-300 flex items-center justify-between animate-pulse">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-rose-400 animate-ping"></span>
+                  <span className="w-2 h-2 rounded-full bg-rose-400 animate-pulse"></span>
                   Listening... Bolna shuru kijiye
                 </span>
                 <button onClick={toggleVoice} className="text-[10px] font-bold text-rose-300 hover:underline cursor-pointer">

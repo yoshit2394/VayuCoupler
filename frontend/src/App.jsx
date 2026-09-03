@@ -4,7 +4,7 @@ import {
   RotateCcw, Play, Pause, Activity, Gauge, Layers, Thermometer, 
   Compass, Flame, MapPin, TrendingUp, PieChart, CheckCircle, Radio,
   ZoomIn, ZoomOut, X, AlertTriangle, Building2, Truck, GraduationCap,
-  Heart, Users, Leaf, AlertCircle, ArrowRight, ChevronDown, Settings,
+  Heart, Users, Leaf, AlertCircle, ArrowRight, ChevronDown, ChevronRight, Settings,
   Bot, Sparkles, Navigation, Crosshair
 } from 'lucide-react';
 import { 
@@ -29,6 +29,8 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedStationId, setSelectedStationId] = useState('DEL001');
   const [selectedRoleId, setSelectedRoleId] = useState('ROLE_AGRI');
+  const [checkedDispatchTasks, setCheckedDispatchTasks] = useState({});
+  const [activeInterstateModal, setActiveInterstateModal] = useState(null);
 
   // Geolocation & local station auto-detection
   const [userLocation, setUserLocation] = useState(() => {
@@ -374,7 +376,7 @@ export default function App() {
               <Navigation className={`w-3.5 h-3.5 text-cyan-400 ${locationStatus === 'detecting' ? 'animate-spin' : ''}`} />
               {userLocation ? (
                 <span className="flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                   <span>{userLocation.closestStation.name.split(' ')[0]} ({userLocation.distanceKm}km)</span>
                 </span>
               ) : (
@@ -441,7 +443,7 @@ export default function App() {
               <Navigation className={`w-3 h-3 text-cyan-400 ${locationStatus === 'detecting' ? 'animate-spin' : ''}`} />
               {userLocation ? (
                 <span className="flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                   <span className="truncate max-w-[85px]">{userLocation.closestStation.name.split(' ')[0]}</span>
                   <span className="text-[9px] text-cyan-400/80 font-mono">({userLocation.distanceKm}km)</span>
                 </span>
@@ -492,7 +494,7 @@ export default function App() {
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-xs font-bold text-white flex items-center gap-1.5 truncate">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 <span>{language === 'hi' ? 'आपकी लाइव लोकेशन सेट हो गई है' : 'Local Air Quality Set to Your Location'}</span>
               </div>
               <div className="text-[11px] text-cyan-300 font-medium truncate mt-0.5">
@@ -560,7 +562,7 @@ export default function App() {
                 {t('scrubber_d3', language)}
               </span>
               <span className="text-rose-400 font-bold flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-rose-400 inline-block animate-ping"></span>
+                <span className="w-2 h-2 rounded-full bg-rose-400 inline-block animate-pulse"></span>
                 {t('scrubber_d5', language)}
               </span>
               <span className="text-emerald-400 flex items-center gap-1">
@@ -653,7 +655,7 @@ export default function App() {
                   </span>
                   {userLocation ? (
                     <span className="text-[9px] text-cyan-300 font-medium flex items-center gap-1 bg-cyan-950/80 px-1.5 py-0.5 rounded border border-cyan-800/60 shrink-0">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                       <span>{userLocation.distanceKm} km</span>
                     </span>
                   ) : (
@@ -926,7 +928,7 @@ export default function App() {
                       { name: 'Karnal', x: 275, y: 185 },
                     ].map((f, fi) => (
                       <g key={fi} transform={`translate(${f.x}, ${f.y})`}>
-                        <circle r="14" fill="#EF4444" opacity="0.3" className="animate-ping" />
+                        <circle r="12" fill="#EF4444" opacity="0.35" className="animate-pulse" />
                         <circle r="8" fill="#EA580C" opacity="0.5" />
                         <circle r="4" fill="#FEF08A" stroke="#EF4444" strokeWidth="1.5" />
                         <text x="9" y="3.5" fill="#FDBA74" fontSize="8" fontWeight="700" fontFamily="JetBrains Mono">
@@ -1069,8 +1071,8 @@ export default function App() {
                           <circle r="32" fill="transparent" pointerEvents="all" data-station="true" />
                           {isSel && (
                             <>
-                              <circle r="26" fill={s.category_color} opacity="0.3" className="animate-ping" pointerEvents="none" />
-                              <circle r="22" fill={s.category_color} opacity="0.25" stroke="#FFFFFF" strokeWidth="1.5" pointerEvents="none" />
+                              <circle r="24" fill={s.category_color} opacity="0.35" className="animate-pulse" pointerEvents="none" />
+                              <circle r="20" fill={s.category_color} opacity="0.25" stroke="#FFFFFF" strokeWidth="1.5" pointerEvents="none" />
                             </>
                           )}
                           <circle 
@@ -1126,8 +1128,8 @@ export default function App() {
                         return (
                           <g transform={`translate(${ux}, ${uy})`} className="cursor-pointer">
                             {/* Animated Pulse Rings */}
-                            <circle r="26" fill="#06B6D4" opacity="0.3" className="animate-ping" />
-                            <circle r="15" fill="#06B6D4" opacity="0.45" />
+                            <circle r="22" fill="#06B6D4" opacity="0.35" className="animate-pulse" />
+                            <circle r="14" fill="#06B6D4" opacity="0.45" />
                             <circle r="7.5" fill="#22D3EE" stroke="#FFFFFF" strokeWidth="2.5" />
                             {/* Pin Label */}
                             <g transform="translate(0, -20)">
@@ -1301,99 +1303,117 @@ export default function App() {
         {/* ==================== DISPATCHES TAB ==================== */}
         {activeTab === 'dispatches' && dispatches && (
           <div className="flex flex-col gap-5">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-800/80">
               <div>
-                <span className="text-[10px] font-mono font-bold text-rose-400 bg-rose-950 px-2 py-0.5 rounded border border-rose-800">LIVE MULTI-AGENCY DISPATCH</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-mono font-bold text-rose-400 bg-rose-950 px-2 py-0.5 rounded border border-rose-800">
+                    LIVE MULTI-AGENCY DISPATCH
+                  </span>
+                  <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800/80">
+                    6 Coordinated Agencies
+                  </span>
+                </div>
                 <h2 className="text-xl font-bold text-white mt-1 flex items-center gap-2">
                   <Send className="w-5 h-5 text-cyan-400" /> Stakeholder Action Dispatch Center
                 </h2>
-                <p className="text-xs text-slate-400 mt-0.5">Role-specific pre-emptive orders dispatched to all agencies based on 72h forecast.</p>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Pre-emptive directives dispatched with 72h lead time. Tap any agency card to view the official protocol & evidence.
+                </p>
               </div>
-              <div className="text-right">
+              <div className="sm:text-right shrink-0">
                 <div className="text-xs text-slate-400 font-mono">T-Hour {currentStep} of 167</div>
                 <div className="text-sm font-bold text-cyan-400 mt-0.5">{snapshot.category} — AQI {snapshot.delhi_ncr_avg_aqi}</div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
               {dispatches.dispatches && dispatches.dispatches.map((d, i) => {
                 const icons = {
-                  'ROLE_AGRI': <Leaf className="w-5 h-5" />,
-                  'ROLE_POLICE': <AlertTriangle className="w-5 h-5" />,
-                  'ROLE_INDUSTRY': <Building2 className="w-5 h-5" />,
-                  'ROLE_SCHOOLS': <GraduationCap className="w-5 h-5" />,
-                  'ROLE_HOSPITALS': <Heart className="w-5 h-5" />,
-                  'ROLE_CITIZENS': <Users className="w-5 h-5" />,
-                  'ROLE_MCD': <Truck className="w-5 h-5" />,
+                  'ROLE_AGRI': <Leaf className="w-4 h-4" />,
+                  'ROLE_POLICE': <AlertTriangle className="w-4 h-4" />,
+                  'ROLE_INDUSTRY': <Building2 className="w-4 h-4" />,
+                  'ROLE_SCHOOLS': <GraduationCap className="w-4 h-4" />,
+                  'ROLE_HOSPITALS': <Heart className="w-4 h-4" />,
+                  'ROLE_CITIZENS': <Users className="w-4 h-4" />,
+                  'ROLE_MCD': <Truck className="w-4 h-4" />,
                 };
                 const urgColors = {
                   'EMERGENCY': { 
-                    card: 'bg-white dark:bg-slate-900/90 border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-500 shadow-sm',
-                    badge: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-800 font-bold',
-                    icon: 'text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-slate-950 border border-rose-200 dark:border-slate-800'
+                    card: 'bg-slate-900/90 hover:bg-slate-800/90 border-slate-800 hover:border-rose-500/80 border-l-4 border-l-rose-500 shadow-rose-950/20',
+                    badge: 'bg-rose-950 text-rose-300 border border-rose-800 font-bold',
+                    icon: 'text-rose-400 bg-rose-950/60 border border-rose-900/70',
+                    dot: 'bg-rose-400 animate-pulse'
                   },
                   'CRITICAL': { 
-                    card: 'bg-white dark:bg-slate-900/90 border-slate-200 dark:border-slate-800 border-l-4 border-l-orange-500 shadow-sm',
-                    badge: 'bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300 border border-orange-300 dark:border-orange-800 font-bold',
-                    icon: 'text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-slate-950 border border-orange-200 dark:border-slate-800'
+                    card: 'bg-slate-900/90 hover:bg-slate-800/90 border-slate-800 hover:border-orange-500/80 border-l-4 border-l-orange-500 shadow-orange-950/20',
+                    badge: 'bg-orange-950 text-orange-300 border border-orange-800 font-bold',
+                    icon: 'text-orange-400 bg-orange-950/60 border border-orange-900/70',
+                    dot: 'bg-orange-400 animate-pulse'
                   },
                   'HIGH': { 
-                    card: 'bg-white dark:bg-slate-900/90 border-slate-200 dark:border-slate-800 border-l-4 border-l-amber-500 shadow-sm',
-                    badge: 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-800 font-bold',
-                    icon: 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-slate-950 border border-amber-200 dark:border-slate-800'
+                    card: 'bg-slate-900/90 hover:bg-slate-800/90 border-slate-800 hover:border-amber-500/80 border-l-4 border-l-amber-500 shadow-amber-950/20',
+                    badge: 'bg-amber-950 text-amber-300 border border-amber-800 font-bold',
+                    icon: 'text-amber-400 bg-amber-950/60 border border-amber-900/70',
+                    dot: 'bg-amber-400'
                   },
                   'MODERATE': { 
-                    card: 'bg-white dark:bg-slate-900/90 border-slate-200 dark:border-slate-800 border-l-4 border-l-cyan-500 shadow-sm',
-                    badge: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-950 dark:text-cyan-300 border border-cyan-300 dark:border-cyan-800 font-bold',
-                    icon: 'text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-slate-950 border border-cyan-200 dark:border-slate-800'
+                    card: 'bg-slate-900/90 hover:bg-slate-800/90 border-slate-800 hover:border-cyan-500/80 border-l-4 border-l-cyan-500 shadow-cyan-950/20',
+                    badge: 'bg-cyan-950 text-cyan-300 border border-cyan-800 font-bold',
+                    icon: 'text-cyan-400 bg-cyan-950/60 border border-cyan-900/70',
+                    dot: 'bg-cyan-400'
                   },
                 };
                 const urg = d.urgency || 'HIGH';
                 const clr = urgColors[urg] || urgColors['HIGH'];
+                const allActions = (d.action_items || d.actions || d.orders || [d.action]).filter(Boolean);
+                const actionCount = allActions.length;
+
                 return (
                   <div 
                     key={i} 
                     onClick={() => {
-                      sound.playTap();
+                      sound.playModalOpen();
                       setActiveDispatchModal(d);
                     }}
-                    className={`rounded-2xl border p-4 flex flex-col gap-3 transition-all cursor-pointer hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] ${clr.card}`}
-                    title="Tap to open executive dispatch order"
+                    className={`group rounded-2xl border p-3.5 sm:p-4 flex flex-col justify-between gap-3 transition-all duration-200 cursor-pointer card-interactive hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] animate-subtle-up ${clr.card}`}
+                    style={{ animationDelay: `${i * 40}ms` }}
+                    title="Tap to inspect full official directives, action checklist & coupled atmospheric evidence"
                   >
-                    {/* Header */}
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex items-center gap-2.5">
-                        <div className={`p-2 rounded-xl ${clr.icon}`}>
-                          {icons[d.role_id] || <Send className="w-5 h-5" />}
+                    {/* Top Executive Header */}
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className={`p-2 rounded-xl shrink-0 transition-transform group-hover:scale-105 ${clr.icon}`}>
+                          {icons[d.role_id] || <Send className="w-4 h-4" />}
                         </div>
-                        <div>
-                          <div className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">{d.role_id}</div>
-                          <div className="text-sm font-bold text-slate-900 dark:text-white">{d.role_label || d.agency}</div>
+                        <div className="min-w-0">
+                          <div className="text-[10px] font-mono font-bold text-slate-400 tracking-wider truncate uppercase">
+                            {d.role_id}
+                          </div>
+                          <div className="text-sm font-bold text-white truncate group-hover:text-cyan-300 transition-colors">
+                            {d.role_label || d.agency}
+                          </div>
                         </div>
                       </div>
-                      <div className="flex flex-col items-end gap-1">
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full ${clr.badge}`}>{urg}</span>
-                        <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400 font-bold flex items-center gap-0.5">
-                          Open Order ↗
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full shrink-0 tracking-wide font-mono flex items-center gap-1 ${clr.badge}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${clr.dot}`}></span>
+                        {urg}
+                      </span>
+                    </div>
+
+                    {/* Bottom Status & Clean Trigger */}
+                    <div className="flex items-center justify-between text-[11px] font-mono border-t border-slate-800/80 pt-2.5 text-slate-400">
+                      <div className="flex items-center gap-1.5">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-cyan-950/80 text-cyan-300 border border-cyan-800/60 font-semibold text-[10px]">
+                          <CheckCircle className="w-3 h-3 text-cyan-400" />
+                          {actionCount} {language === 'hi' ? 'आदेश' : 'Orders'}
+                        </span>
+                        <span className="text-[10px] text-slate-400 hidden sm:inline">
+                          • ⚡ 72h Pre-emptive Lead
                         </span>
                       </div>
-                    </div>
-
-                    {/* Actions list */}
-                    <div className="flex flex-col gap-1.5">
-                      {(d.action_items || d.actions || d.orders || [d.action]).filter(Boolean).map((action, j) => (
-                        <div key={j} className="flex items-start gap-2 p-2 rounded-lg bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 text-xs text-slate-800 dark:text-slate-300">
-                          <CheckCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                          <span>{action}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Footer */}
-                    <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 font-mono border-t border-slate-200 dark:border-slate-800 pt-2">
-                      <span>{d.deadline ? `⏰ Deadline: ${d.deadline}` : '⚡ 72h Pre-emptive Lead'}</span>
-                      <span className="text-cyan-600 dark:text-cyan-400 font-bold underline decoration-dotted">
-                        {language === 'hi' ? 'आदेश विवरण ↗' : 'View Protocol ↗'}
+                      <span className="text-cyan-400 group-hover:text-cyan-300 font-bold text-xs flex items-center gap-1 group-hover:translate-x-1 transition-all">
+                        {language === 'hi' ? 'आदेश देखें' : 'View Protocol'}
+                        <ChevronRight className="w-3.5 h-3.5" />
                       </span>
                     </div>
                   </div>
@@ -1403,8 +1423,8 @@ export default function App() {
               {/* Fallback if dispatches.dispatches is not an array */}
               {!dispatches.dispatches && (
                 <div className="col-span-full">
-                  <div className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl p-6">
-                    <pre className="text-xs text-slate-700 dark:text-slate-300 font-mono overflow-auto">{JSON.stringify(dispatches, null, 2)}</pre>
+                  <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 text-center text-slate-400 text-xs">
+                    No active dispatches available for this time step.
                   </div>
                 </div>
               )}
@@ -1531,50 +1551,58 @@ export default function App() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {interstate.states && interstate.states.map((state, i) => {
                 const urgClr = {
-                  'EMERGENCY': { ring: 'border-rose-600', badge: 'bg-rose-950 text-rose-300 border-rose-700', icon: '🆘' },
-                  'CRITICAL': { ring: 'border-orange-600', badge: 'bg-orange-950 text-orange-300 border-orange-700', icon: '🚨' },
-                  'HIGH': { ring: 'border-amber-600', badge: 'bg-amber-950 text-amber-300 border-amber-700', icon: '⚠️' },
-                  'ELEVATED': { ring: 'border-cyan-700', badge: 'bg-cyan-950 text-cyan-300 border-cyan-800', icon: '📡' },
-                  'MODERATE': { ring: 'border-slate-700', badge: 'bg-slate-800 text-slate-300 border-slate-700', icon: '✅' },
-                  'LOW': { ring: 'border-emerald-800', badge: 'bg-emerald-950 text-emerald-300 border-emerald-800', icon: '🟢' },
+                  'EMERGENCY': { ring: 'border-rose-600/80', badge: 'bg-rose-950 text-rose-300 border-rose-700', icon: '🆘' },
+                  'CRITICAL': { ring: 'border-orange-600/80', badge: 'bg-orange-950 text-orange-300 border-orange-700', icon: '🚨' },
+                  'HIGH': { ring: 'border-amber-600/80', badge: 'bg-amber-950 text-amber-300 border-amber-700', icon: '⚠️' },
+                  'ELEVATED': { ring: 'border-cyan-700/80', badge: 'bg-cyan-950 text-cyan-300 border-cyan-800', icon: '📡' },
+                  'MODERATE': { ring: 'border-slate-700/80', badge: 'bg-slate-800 text-slate-300 border-slate-700', icon: '✅' },
+                  'LOW': { ring: 'border-emerald-800/80', badge: 'bg-emerald-950 text-emerald-300 border-emerald-800', icon: '🟢' },
                 }[state.coordination_urgency] || { ring: 'border-slate-700', badge: 'bg-slate-800 text-slate-300 border-slate-700', icon: '📋' };
 
                 return (
-                  <div key={i} className={`bg-slate-900/80 border-2 ${urgClr.ring} rounded-2xl p-4 flex flex-col gap-3`}>
+                  <div 
+                    key={i} 
+                    onClick={() => {
+                      sound.playModalOpen();
+                      setActiveInterstateModal(state);
+                    }}
+                    className={`bg-slate-900/90 border-2 ${urgClr.ring} rounded-2xl p-4 flex flex-col justify-between gap-3 cursor-pointer card-interactive hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] animate-subtle-up group`}
+                    style={{ animationDelay: `${i * 40}ms` }}
+                    title="Tap to inspect full interstate coordination protocol and action checklist"
+                  >
                     {/* State Header */}
-                    <div className="flex items-start justify-between">
+                    <div className="flex items-start justify-between gap-2">
                       <div>
-                        <div className="text-xs text-slate-400 font-mono">{state.role}</div>
-                        <div className="text-base font-bold text-white mt-0.5">{state.state}</div>
+                        <div className="text-[10px] text-slate-400 font-mono tracking-wider uppercase">{state.role}</div>
+                        <div className="text-base font-bold text-white mt-0.5 group-hover:text-cyan-300 transition-colors">{state.state}</div>
                       </div>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${urgClr.badge} flex items-center gap-1`}>
+                      <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${urgClr.badge} flex items-center gap-1 shrink-0 font-mono`}>
                         {urgClr.icon} {state.coordination_urgency}
                       </span>
                     </div>
 
                     {/* Status + Forecast Risk */}
-                    <div className="flex flex-col gap-1.5 text-xs">
-                      <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
-                        <span className="text-slate-500 text-[10px] uppercase font-mono">Current Status</span>
-                        <div className="text-slate-200 font-medium mt-0.5">{state.current_status}</div>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="p-2 rounded-xl bg-slate-950/80 border border-slate-800">
+                        <span className="text-slate-400 text-[10px] uppercase font-mono font-semibold">Status</span>
+                        <div className="text-slate-200 font-medium mt-0.5 line-clamp-1">{state.current_status}</div>
                       </div>
-                      <div className="p-2 rounded-lg bg-slate-950 border border-amber-800/50">
-                        <span className="text-amber-400 text-[10px] uppercase font-mono">Forecast Risk</span>
-                        <div className="text-amber-200 font-medium mt-0.5">{state.forecast_risk}</div>
+                      <div className="p-2 rounded-xl bg-slate-950/80 border border-amber-900/40">
+                        <span className="text-amber-400 text-[10px] uppercase font-mono font-semibold">Forecast Risk</span>
+                        <div className="text-amber-200 font-medium mt-0.5 line-clamp-1">{state.forecast_risk}</div>
                       </div>
                     </div>
 
-                    {/* Active Mandates */}
-                    <div>
-                      <div className="text-[10px] text-slate-500 uppercase font-mono mb-1.5">Active Mandates</div>
-                      <div className="flex flex-col gap-1">
-                        {state.active_mandates.map((m, j) => (
-                          <div key={j} className="flex items-start gap-1.5 text-xs text-slate-300">
-                            <CheckCircle className="w-3 h-3 text-emerald-500 shrink-0 mt-0.5" />
-                            {m}
-                          </div>
-                        ))}
-                      </div>
+                    {/* Clean Footer */}
+                    <div className="border-t border-slate-800/80 pt-2.5 flex items-center justify-between text-[11px] font-mono">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-cyan-950/80 text-cyan-300 border border-cyan-800/60 font-semibold text-[10px]">
+                        <CheckCircle className="w-3 h-3 text-cyan-400" />
+                        {state.active_mandates.length} {language === 'hi' ? 'कार्य' : 'Tasks Active'}
+                      </span>
+                      <span className="text-cyan-400 group-hover:text-cyan-300 font-bold text-xs flex items-center gap-1 group-hover:translate-x-1 transition-all">
+                        {language === 'hi' ? 'प्रोटोकॉल देखें' : 'View Protocol'}
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </span>
                     </div>
                   </div>
                 );
@@ -1758,21 +1786,44 @@ export default function App() {
               </div>
             )}
 
-            {/* Mandatory Action Items / Orders */}
+            {/* Mandatory Action Items / Orders (Interactive Checklist) */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-200 uppercase font-mono">
                   Mandatory Directives ({ (activeDispatchModal.action_items || activeDispatchModal.actions || []).length } Tasks)
                 </span>
-                <span className="text-[10px] text-emerald-400 font-mono">Pre-Emptive Protocol Active</span>
+                <span className="text-[10px] text-cyan-400 font-mono">
+                  {language === 'hi' ? 'क्लिक करके टास्क पूरा मार्क करें' : 'Tap item to mark completed'}
+                </span>
               </div>
               <div className="flex flex-col gap-2">
-                {(activeDispatchModal.action_items || activeDispatchModal.actions || activeDispatchModal.orders || [activeDispatchModal.action]).filter(Boolean).map((act, k) => (
-                  <div key={k} className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-start gap-2.5 text-xs text-slate-200 leading-relaxed shadow-sm">
-                    <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                    <span>{act}</span>
-                  </div>
-                ))}
+                {(activeDispatchModal.action_items || activeDispatchModal.actions || activeDispatchModal.orders || [activeDispatchModal.action]).filter(Boolean).map((act, k) => {
+                  const taskId = `${activeDispatchModal.role_id}_${k}`;
+                  const isDone = !!checkedDispatchTasks[taskId];
+                  return (
+                    <div 
+                      key={k} 
+                      onClick={() => {
+                        sound.playTap();
+                        setCheckedDispatchTasks(prev => ({ ...prev, [taskId]: !prev[taskId] }));
+                      }}
+                      className={`p-3 rounded-xl border flex items-start gap-3 text-xs transition-all duration-200 cursor-pointer select-none card-interactive ${
+                        isDone 
+                          ? 'bg-emerald-950/40 border-emerald-600/70 text-emerald-200 shadow-sm' 
+                          : 'bg-slate-900/90 hover:bg-slate-800 border-slate-800 text-slate-200'
+                      }`}
+                    >
+                      <div className={`w-4 h-4 rounded mt-0.5 flex items-center justify-center shrink-0 border transition-all ${
+                        isDone ? 'bg-emerald-500 border-emerald-400 text-slate-950' : 'border-slate-600 bg-slate-950'
+                      }`}>
+                        {isDone && <CheckCircle className="w-3.5 h-3.5 text-slate-950 stroke-[3]" />}
+                      </div>
+                      <span className={`leading-relaxed ${isDone ? 'line-through opacity-85 text-emerald-300' : ''}`}>
+                        {act}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -1800,6 +1851,130 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => setActiveDispatchModal(null)}
+                className="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs sm:text-sm transition cursor-pointer active:scale-95"
+              >
+                {language === 'hi' ? 'बंद करें' : 'Close'}
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ==================== INTERSTATE COORDINATION MODAL ==================== */}
+      {activeInterstateModal && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200"
+          onClick={(e) => { if (e.target === e.currentTarget) setActiveInterstateModal(null); }}
+        >
+          <div className="bg-[#0B1320] border border-slate-700 dark:border-sky-800/80 rounded-3xl p-5 sm:p-6 w-full max-w-xl shadow-2xl shadow-black/90 flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
+            
+            {/* Header */}
+            <div className="flex items-start justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-sky-950/80 border border-sky-700/60 flex items-center justify-center text-sky-400 shadow-md shrink-0">
+                  <GitMerge className="w-6 h-6" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono font-black text-sky-400 bg-sky-950 px-2 py-0.5 rounded border border-sky-800">
+                      {activeInterstateModal.role}
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-900 text-sky-300 border border-sky-700">
+                      {activeInterstateModal.coordination_urgency}
+                    </span>
+                  </div>
+                  <h3 className="text-base sm:text-lg font-bold text-white mt-1">
+                    {activeInterstateModal.state} — Cross-Border Action Grid
+                  </h3>
+                  <div className="text-xs text-slate-400">
+                    Status: {activeInterstateModal.current_status}
+                  </div>
+                </div>
+              </div>
+              <button 
+                type="button"
+                onClick={() => setActiveInterstateModal(null)}
+                className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer active:scale-95"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Cross-Border Atmospheric Transport Context */}
+            <div className="p-3.5 rounded-2xl bg-sky-950/40 border border-sky-800/50 flex flex-col gap-2">
+              <span className="text-[10px] font-mono font-bold text-sky-400 uppercase tracking-wider">
+                Cross-Border Transboundary Transport Context
+              </span>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
+                  <div className="text-[10px] text-slate-400 font-mono">Current Status</div>
+                  <div className="text-xs font-semibold text-slate-200 mt-0.5">{activeInterstateModal.current_status}</div>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-900/90 border border-amber-900/40">
+                  <div className="text-[10px] text-amber-400 font-mono">Forecast Downwind Risk</div>
+                  <div className="text-xs font-semibold text-amber-300 mt-0.5">{activeInterstateModal.forecast_risk}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Mandatory Cross-State Directives (Interactive Checklist) */}
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-200 uppercase font-mono">
+                  Cross-State Directives ({activeInterstateModal.active_mandates.length} Mandates)
+                </span>
+                <span className="text-[10px] text-sky-400 font-mono">
+                  {language === 'hi' ? 'क्लिक करके टास्क पूरा मार्क करें' : 'Tap to toggle completion'}
+                </span>
+              </div>
+              <div className="flex flex-col gap-2">
+                {activeInterstateModal.active_mandates.map((mandate, idx) => {
+                  const stateTaskId = `state_${activeInterstateModal.state}_${idx}`;
+                  const isDone = !!checkedDispatchTasks[stateTaskId];
+                  return (
+                    <div 
+                      key={idx}
+                      onClick={() => {
+                        sound.playTap();
+                        setCheckedDispatchTasks(prev => ({ ...prev, [stateTaskId]: !prev[stateTaskId] }));
+                      }}
+                      className={`p-3 rounded-xl border flex items-start gap-3 text-xs transition-all duration-200 cursor-pointer select-none card-interactive ${
+                        isDone 
+                          ? 'bg-emerald-950/40 border-emerald-600/70 text-emerald-200 shadow-sm' 
+                          : 'bg-slate-900/90 hover:bg-slate-800 border-slate-800 text-slate-200'
+                      }`}
+                    >
+                      <div className={`w-4 h-4 rounded mt-0.5 flex items-center justify-center shrink-0 border transition-all ${
+                        isDone ? 'bg-emerald-500 border-emerald-400 text-slate-950' : 'border-slate-600 bg-slate-950'
+                      }`}>
+                        {isDone && <CheckCircle className="w-3.5 h-3.5 text-slate-950 stroke-[3]" />}
+                      </div>
+                      <span className={`leading-relaxed ${isDone ? 'line-through opacity-85 text-emerald-300' : ''}`}>
+                        {mandate}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Modal Buttons */}
+            <div className="flex items-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  sound.playTap();
+                  alert(language === 'hi' ? 'अंतरराज्यीय समन्वय अभिस्वीकृत हो गया!' : 'Interstate Coordination Mandate Acknowledged & Synchronized!');
+                  setActiveInterstateModal(null);
+                }}
+                className="flex-1 py-3 rounded-xl bg-gradient-to-r from-sky-600 to-cyan-500 hover:from-sky-500 hover:to-cyan-400 text-slate-950 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-lg shadow-sky-900/40"
+              >
+                <CheckCircle className="w-4 h-4" /> {language === 'hi' ? 'अभिस्वीकृत करें (Acknowledge)' : 'Acknowledge Mandates'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveInterstateModal(null)}
                 className="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs sm:text-sm transition cursor-pointer active:scale-95"
               >
                 {language === 'hi' ? 'बंद करें' : 'Close'}
@@ -1864,8 +2039,7 @@ export default function App() {
               
               <div className="relative w-13 h-13 rounded-2xl bg-gradient-to-tr from-cyan-500 via-teal-400 to-emerald-400 text-slate-950 flex items-center justify-center shadow-2xl shadow-cyan-500/50 border-2 border-white/95 group-hover:rotate-6 group-hover:scale-110 transition-all duration-300">
                 <Bot className="w-6 h-6 stroke-[2.5] transition-transform duration-300 group-hover:scale-115" />
-                <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-950 animate-ping"></span>
-                <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-950"></span>
+                <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-950 animate-pulse"></span>
               </div>
               <span className="text-[10px] font-black text-cyan-300 mt-1 tracking-wider uppercase group-hover:text-white transition-colors flex items-center gap-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                 VayuAI
