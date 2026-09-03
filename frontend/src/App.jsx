@@ -326,69 +326,6 @@ export default function App() {
         {/* ==================== OVERVIEW / COMMAND CENTER TAB ==================== */}
         {activeTab === 'overview' && (
           <div className="flex flex-col gap-5 md:gap-6">
-            
-            {/* Quick Feature Redirect Hub: Click to jump directly to any tab */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
-              <button
-                type="button"
-                onClick={() => switchTab('grap')}
-                className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-cyan-950/70 via-slate-900 to-slate-950 border border-cyan-800/60 hover:border-cyan-400 text-left transition active:scale-95 group shadow-lg cursor-pointer"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-cyan-950 border border-cyan-700/80 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
-                    <ShieldAlert className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <ArrowRight className="w-3.5 h-3.5 text-cyan-400 group-hover:translate-x-1 transition-transform" />
-                </div>
-                <div className="text-xs sm:text-sm font-bold text-white">Predictive GRAP</div>
-                <div className="text-[10px] text-cyan-300/80 font-medium">Stage-IV Curbs ➔</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => switchTab('whatif')}
-                className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-indigo-950/70 via-slate-900 to-slate-950 border border-indigo-800/60 hover:border-indigo-400 text-left transition active:scale-95 group shadow-lg cursor-pointer"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-indigo-950 border border-indigo-700/80 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
-                    <Sliders className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <ArrowRight className="w-3.5 h-3.5 text-indigo-400 group-hover:translate-x-1 transition-transform" />
-                </div>
-                <div className="text-xs sm:text-sm font-bold text-white">What-If Policy Sim</div>
-                <div className="text-[10px] text-indigo-300/80 font-medium">Test Interventions ➔</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => switchTab('dispatches')}
-                className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-amber-950/70 via-slate-900 to-slate-950 border border-amber-800/60 hover:border-amber-400 text-left transition active:scale-95 group shadow-lg cursor-pointer"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-950 border border-amber-700/80 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
-                    <Send className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <ArrowRight className="w-3.5 h-3.5 text-amber-400 group-hover:translate-x-1 transition-transform" />
-                </div>
-                <div className="text-xs sm:text-sm font-bold text-white">Agency Dispatches</div>
-                <div className="text-[10px] text-amber-300/80 font-medium">Multi-Agency Orders ➔</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setIsAiOpen(true)}
-                className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-emerald-950/70 via-slate-900 to-slate-950 border border-emerald-800/60 hover:border-emerald-400 text-left transition active:scale-95 group shadow-lg cursor-pointer"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-950 border border-emerald-700/80 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
-                    <Bot className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <ArrowRight className="w-3.5 h-3.5 text-emerald-400 group-hover:translate-x-1 transition-transform" />
-                </div>
-                <div className="text-xs sm:text-sm font-bold text-white">VayuAI Copilot</div>
-                <div className="text-[10px] text-emerald-300/80 font-medium">Open AI Popup ➔</div>
-              </button>
-            </div>
 
             {/* 6 Key Atmospheric Coupling Telemetry Cards */}
             <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
@@ -985,65 +922,102 @@ export default function App() {
         </div>
       )}
 
-      {/* ===== MOBILE BOTTOM NAVIGATION DOCK (Native Phone Dock) ===== */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#07121A]/95 border-t border-cyan-900/40 backdrop-blur-xl px-2 py-1.5 flex items-center justify-around shadow-2xl safe-area-pb">
+      {/* ===== MOBILE & TABLET BOTTOM NAVIGATION DOCK (Animated Floating Dock) ===== */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#07121A]/95 border-t border-cyan-800/40 backdrop-blur-2xl px-2 py-2 flex items-center justify-around shadow-[0_-8px_30px_rgba(0,0,0,0.8)] safe-area-pb">
+        
         {/* Tab 1: Overview */}
         <button
+          type="button"
           onClick={() => switchTab('overview')}
-          className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition active:scale-95 ${
-            activeTab === 'overview' && !isAiOpen ? 'text-cyan-400 font-bold bg-cyan-950/60' : 'text-slate-400'
+          className={`relative group flex flex-col items-center justify-center py-1.5 px-3 rounded-2xl transition-all duration-300 cursor-pointer active:scale-90 ${
+            activeTab === 'overview' && !isAiOpen 
+              ? 'text-cyan-300 font-bold bg-gradient-to-b from-cyan-950/80 to-slate-900/70 border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.35)]' 
+              : 'text-slate-400 hover:text-cyan-300 hover:bg-slate-900/80 border border-transparent hover:border-cyan-800/50 hover:shadow-[0_0_12px_rgba(6,182,212,0.2)]'
           }`}
         >
-          <LayoutDashboard className="w-5 h-5 mb-0.5" />
-          <span className="text-[9px] font-medium">{t('tab_overview', language)}</span>
+          <div className="relative">
+            <LayoutDashboard className="w-5 h-5 mb-0.5 transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-1 text-cyan-400 group-hover:text-cyan-300" />
+            {activeTab === 'overview' && !isAiOpen && (
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee]"></span>
+            )}
+          </div>
+          <span className="text-[9px] font-semibold tracking-tight transition-all duration-200 group-hover:tracking-normal">{t('tab_overview', language)}</span>
         </button>
 
         {/* Tab 2: GRAP */}
         <button
+          type="button"
           onClick={() => switchTab('grap')}
-          className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition active:scale-95 ${
-            activeTab === 'grap' && !isAiOpen ? 'text-cyan-400 font-bold bg-cyan-950/60' : 'text-slate-400'
+          className={`relative group flex flex-col items-center justify-center py-1.5 px-3 rounded-2xl transition-all duration-300 cursor-pointer active:scale-90 ${
+            activeTab === 'grap' && !isAiOpen 
+              ? 'text-cyan-300 font-bold bg-gradient-to-b from-cyan-950/80 to-slate-900/70 border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.35)]' 
+              : 'text-slate-400 hover:text-cyan-300 hover:bg-slate-900/80 border border-transparent hover:border-cyan-800/50 hover:shadow-[0_0_12px_rgba(6,182,212,0.2)]'
           }`}
         >
-          <ShieldAlert className="w-5 h-5 mb-0.5" />
-          <span className="text-[9px] font-medium">{t('tab_grap', language)}</span>
+          <div className="relative">
+            <ShieldAlert className="w-5 h-5 mb-0.5 transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-1 text-cyan-400 group-hover:text-cyan-300" />
+            {activeTab === 'grap' && !isAiOpen && (
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee]"></span>
+            )}
+          </div>
+          <span className="text-[9px] font-semibold tracking-tight transition-all duration-200 group-hover:tracking-normal">{t('tab_grap', language)}</span>
         </button>
 
-        {/* CENTER PROMINENT VAYUAI COPILOT LAUNCHER */}
+        {/* CENTER PROMINENT ANIMATED VAYUAI COPILOT LAUNCHER */}
         <button
+          type="button"
           onClick={() => setIsAiOpen(true)}
-          className="relative -top-3.5 flex flex-col items-center justify-center group active:scale-95 transition-transform"
+          className="relative -top-4 flex flex-col items-center justify-center group active:scale-90 transition-all duration-300 cursor-pointer"
         >
-          <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 via-teal-400 to-emerald-400 text-slate-950 flex items-center justify-center shadow-lg shadow-cyan-500/40 border-2 border-white/90">
-            <Bot className="w-6 h-6 stroke-[2.5]" />
+          {/* Pulsing Ambient Aurora Glow */}
+          <div className="absolute -inset-1.5 bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-400 rounded-3xl blur-md opacity-75 group-hover:opacity-100 group-hover:scale-115 transition-all duration-300 animate-pulse -z-10"></div>
+          
+          <div className="relative w-13 h-13 rounded-2xl bg-gradient-to-tr from-cyan-500 via-teal-400 to-emerald-400 text-slate-950 flex items-center justify-center shadow-2xl shadow-cyan-500/50 border-2 border-white/95 group-hover:rotate-6 group-hover:scale-110 transition-all duration-300">
+            <Bot className="w-6 h-6 stroke-[2.5] transition-transform duration-300 group-hover:scale-115" />
             <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-950 animate-ping"></span>
             <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-950"></span>
           </div>
-          <span className="text-[10px] font-black text-cyan-300 mt-0.5 tracking-tight flex items-center gap-1">
+          <span className="text-[10px] font-black text-cyan-300 mt-1 tracking-wider uppercase group-hover:text-white transition-colors flex items-center gap-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
             VayuAI
           </span>
         </button>
 
         {/* Tab 3: What-If */}
         <button
+          type="button"
           onClick={() => switchTab('whatif')}
-          className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition active:scale-95 ${
-            activeTab === 'whatif' && !isAiOpen ? 'text-cyan-400 font-bold bg-cyan-950/60' : 'text-slate-400'
+          className={`relative group flex flex-col items-center justify-center py-1.5 px-3 rounded-2xl transition-all duration-300 cursor-pointer active:scale-90 ${
+            activeTab === 'whatif' && !isAiOpen 
+              ? 'text-indigo-300 font-bold bg-gradient-to-b from-indigo-950/80 to-slate-900/70 border border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.35)]' 
+              : 'text-slate-400 hover:text-indigo-300 hover:bg-slate-900/80 border border-transparent hover:border-indigo-800/50 hover:shadow-[0_0_12px_rgba(99,102,241,0.2)]'
           }`}
         >
-          <Sliders className="w-5 h-5 mb-0.5" />
-          <span className="text-[9px] font-medium">{t('tab_whatif', language)}</span>
+          <div className="relative">
+            <Sliders className="w-5 h-5 mb-0.5 transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-1 text-indigo-400 group-hover:text-indigo-300" />
+            {activeTab === 'whatif' && !isAiOpen && (
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-indigo-400 rounded-full shadow-[0_0_8px_#818cf8]"></span>
+            )}
+          </div>
+          <span className="text-[9px] font-semibold tracking-tight transition-all duration-200 group-hover:tracking-normal">{t('tab_whatif', language)}</span>
         </button>
 
         {/* Tab 4: Dispatches */}
         <button
+          type="button"
           onClick={() => switchTab('dispatches')}
-          className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition active:scale-95 ${
-            activeTab === 'dispatches' && !isAiOpen ? 'text-cyan-400 font-bold bg-cyan-950/60' : 'text-slate-400'
+          className={`relative group flex flex-col items-center justify-center py-1.5 px-3 rounded-2xl transition-all duration-300 cursor-pointer active:scale-90 ${
+            activeTab === 'dispatches' && !isAiOpen 
+              ? 'text-amber-300 font-bold bg-gradient-to-b from-amber-950/80 to-slate-900/70 border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.35)]' 
+              : 'text-slate-400 hover:text-amber-300 hover:bg-slate-900/80 border border-transparent hover:border-amber-800/50 hover:shadow-[0_0_12px_rgba(245,158,11,0.2)]'
           }`}
         >
-          <Send className="w-5 h-5 mb-0.5" />
-          <span className="text-[9px] font-medium">{t('tab_dispatches', language)}</span>
+          <div className="relative">
+            <Send className="w-5 h-5 mb-0.5 transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-1 text-amber-400 group-hover:text-amber-300" />
+            {activeTab === 'dispatches' && !isAiOpen && (
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-amber-400 rounded-full shadow-[0_0_8px_#fbbf24]"></span>
+            )}
+          </div>
+          <span className="text-[9px] font-semibold tracking-tight transition-all duration-200 group-hover:tracking-normal">{t('tab_dispatches', language)}</span>
         </button>
       </nav>
 
