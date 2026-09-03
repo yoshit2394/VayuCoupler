@@ -15,6 +15,7 @@ import VayuAIChat from './components/VayuAIChat';
 import SettingsModal from './components/SettingsModal';
 import StationForecastCard from './components/StationForecastCard';
 import { t } from './utils/i18n';
+import { sound } from './utils/sound';
 
 export default function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('vayucoupler_theme') || 'dark');
@@ -179,11 +180,27 @@ export default function App() {
   };
 
   const switchTab = (tabId) => {
+    sound.playTap();
     setActiveTab(tabId);
     setIsAiOpen(false);
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
+  };
+
+  const openAi = () => {
+    sound.playChime();
+    setIsAiOpen(true);
+  };
+
+  const changeStep = (step) => {
+    sound.playTap();
+    setCurrentStep(step);
+  };
+
+  const togglePlay = () => {
+    sound.playTap();
+    setIsPlaying(!isPlaying);
   };
 
   return (
@@ -288,7 +305,7 @@ export default function App() {
           {/* Play/Pause & Simple Day Badge */}
           <div className="flex items-center gap-2 shrink-0 self-start md:self-auto">
             <button 
-              onClick={() => setIsPlaying(!isPlaying)}
+              onClick={togglePlay}
               className="w-8 h-8 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white flex items-center justify-center transition active:scale-95 shadow-md shadow-cyan-900/40 cursor-pointer"
               title={isPlaying ? "Pause Timeline" : "Play 7-Day Forecast"}
             >
@@ -296,7 +313,7 @@ export default function App() {
             </button>
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold">
               <span className="text-cyan-400 font-bold">
-                📅 Day {Math.min(7, Math.max(1, Math.floor(currentStep / 24) + 1))}
+                📅 {t('scrubber_day', language)} {Math.min(7, Math.max(1, Math.floor(currentStep / 24) + 1))}
               </span>
               <span className="text-slate-500 text-[10px]">({currentStep}h)</span>
               <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
@@ -305,9 +322,9 @@ export default function App() {
                 currentStep >= 48  ? 'text-amber-300 bg-amber-950/80 border border-amber-700/60' :
                                      'text-cyan-300 bg-cyan-950/80 border border-cyan-700/60'
               }`}>
-                {currentStep >= 144 ? '🍃 Relief' :
-                 currentStep >= 96  ? '🚨 Peak Smog' :
-                 currentStep >= 48  ? '⚡ Alert' : '🟢 Normal'}
+                {currentStep >= 144 ? t('scrubber_badge_relief', language) :
+                 currentStep >= 96  ? t('scrubber_badge_peak', language) :
+                 currentStep >= 48  ? t('scrubber_badge_alert', language) : t('scrubber_badge_normal', language)}
               </span>
             </div>
           </div>
@@ -317,19 +334,19 @@ export default function App() {
             <div className="flex items-center justify-between text-[11px] font-medium text-slate-400 px-0.5">
               <span className="text-slate-300 flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-cyan-400 inline-block"></span>
-                Day 1 (Normal)
+                {t('scrubber_d1', language)}
               </span>
               <span className="text-amber-400 flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
-                Day 3 (Alert)
+                {t('scrubber_d3', language)}
               </span>
               <span className="text-rose-400 font-bold flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-rose-400 inline-block animate-ping"></span>
-                Day 5 (Peak Smog)
+                {t('scrubber_d5', language)}
               </span>
               <span className="text-emerald-400 flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span>
-                Day 7 (Saaf Hawa)
+                {t('scrubber_d7', language)}
               </span>
             </div>
             <input 
@@ -344,47 +361,47 @@ export default function App() {
           <div className="grid grid-cols-4 sm:flex items-center gap-1.5 shrink-0 text-xs w-full md:w-auto">
             <button 
               type="button"
-              onClick={() => setCurrentStep(24)} 
+              onClick={() => changeStep(24)} 
               className={`px-2.5 py-1.5 rounded-xl border text-center transition cursor-pointer active:scale-95 text-[11px] font-semibold ${
                 currentStep <= 36 
                   ? 'bg-cyan-950 text-cyan-300 border-cyan-500 shadow-md shadow-cyan-950' 
                   : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
               }`}
             >
-              🟢 Day 1
+              {t('scrubber_btn_d1', language)}
             </button>
             <button 
               type="button"
-              onClick={() => setCurrentStep(72)} 
+              onClick={() => changeStep(72)} 
               className={`px-2.5 py-1.5 rounded-xl border text-center transition cursor-pointer active:scale-95 text-[11px] font-semibold ${
                 currentStep >= 48 && currentStep <= 84 
                   ? 'bg-amber-950 text-amber-300 border-amber-500 shadow-md shadow-amber-950' 
                   : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
               }`}
             >
-              ⚡ Day 3 Alert
+              {t('scrubber_btn_d3', language)}
             </button>
             <button 
               type="button"
-              onClick={() => setCurrentStep(120)} 
+              onClick={() => changeStep(120)} 
               className={`px-2.5 py-1.5 rounded-xl border text-center transition cursor-pointer active:scale-95 text-[11px] font-bold ${
                 currentStep >= 96 && currentStep <= 132 
                   ? 'bg-rose-950 text-rose-300 border-rose-500 shadow-md shadow-rose-950' 
                   : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
               }`}
             >
-              🚨 Day 5 Peak
+              {t('scrubber_btn_d5', language)}
             </button>
             <button 
               type="button"
-              onClick={() => setCurrentStep(156)} 
+              onClick={() => changeStep(156)} 
               className={`px-2.5 py-1.5 rounded-xl border text-center transition cursor-pointer active:scale-95 text-[11px] font-semibold ${
                 currentStep >= 144 
                   ? 'bg-emerald-950 text-emerald-300 border-emerald-500 shadow-md shadow-emerald-950' 
                   : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
               }`}
             >
-              🍃 Day 7 Relief
+              {t('scrubber_btn_d7', language)}
             </button>
           </div>
 
@@ -405,7 +422,9 @@ export default function App() {
                 <div className="my-1 sm:my-1.5 flex items-baseline gap-2">
                   <span className="text-2xl sm:text-3xl font-black font-mono">{snapshot.delhi_ncr_avg_aqi}</span>
                   <span className="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: snapshot.category_color + '33', color: snapshot.category_color }}>
-                    {snapshot.category}
+                    {language === 'hi' 
+                      ? (snapshot.category === 'Severe' ? 'गंभीर' : snapshot.category === 'Very Poor' ? 'बहुत खराब' : snapshot.category === 'Poor' ? 'खराब' : 'मध्यम')
+                      : snapshot.category}
                   </span>
                 </div>
                 <div className="text-[10px] sm:text-[11px] text-slate-400">PM2.5: {currSt?.pm25} μg/m³</div>
@@ -417,7 +436,7 @@ export default function App() {
                   {met.ventilation_index_m2s} <span className="text-xs text-slate-400">m²/s</span>
                 </div>
                 <div className={`text-[10px] sm:text-[11px] font-medium ${met.ventilation_index_m2s < 2000 ? 'text-rose-400' : 'text-emerald-400'}`}>
-                  {met.ventilation_status}
+                  {language === 'hi' ? 'गंभीर ट्रैपिंग (<1200 m²/s)' : met.ventilation_status}
                 </div>
               </div>
 
@@ -426,7 +445,9 @@ export default function App() {
                 <div className="my-1 sm:my-1.5 text-xl sm:text-2xl font-black font-mono text-indigo-200">
                   {met.boundary_layer_height_m} <span className="text-xs text-slate-400">m</span>
                 </div>
-                <div className="text-[10px] sm:text-[11px] text-slate-400">{met.boundary_layer_height_m < 500 ? "Severe Trapping" : "Normal Dispersion"}</div>
+                <div className="text-[10px] sm:text-[11px] text-slate-400">
+                  {met.boundary_layer_height_m < 500 ? t('severe_trapping', language) : t('normal_dispersion', language)}
+                </div>
               </div>
 
               <div className="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-xl border-l-4 border-amber-500">
@@ -434,11 +455,11 @@ export default function App() {
                 <div className="my-1 sm:my-1.5 text-xl sm:text-2xl font-black font-mono text-amber-300">
                   {met.inversion_strength_c} <span className="text-xs text-slate-400">°C</span>
                 </div>
-                <div className="text-[10px] sm:text-[11px] text-slate-400">Nocturnal Trapping</div>
+                <div className="text-[10px] sm:text-[11px] text-slate-400">{t('nocturnal_trapping', language)}</div>
               </div>
 
               <div className="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-xl border-l-4 border-blue-500">
-                <div className="text-[11px] sm:text-xs text-slate-400 font-semibold">WIND VECTOR</div>
+                <div className="text-[11px] sm:text-xs text-slate-400 font-semibold">{t('wind_vector', language)}</div>
                 <div className="my-1 sm:my-1.5 text-lg sm:text-xl font-bold font-mono text-blue-200">{met.wind_speed_kmh} km/h</div>
                 <div className="text-[10px] sm:text-[11px] text-slate-400">{met.wind_direction_cardinal} ({met.wind_direction_deg}°)</div>
               </div>
@@ -446,9 +467,11 @@ export default function App() {
               <div className="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-xl border-l-4 border-orange-500">
                 <div className="text-[11px] sm:text-xs text-slate-400 font-semibold">{t('active_fires', language)}</div>
                 <div className="my-1 sm:my-1.5 text-xl sm:text-2xl font-black font-mono text-orange-400">
-                  {fires.total_active_fires} <span className="text-xs text-slate-400">fires</span>
+                  {fires.total_active_fires} <span className="text-xs text-slate-400">{language === 'hi' ? 'आग' : 'fires'}</span>
                 </div>
-                <div className="text-[10px] sm:text-[11px] text-orange-400 font-mono">Stubble Share: {snapshot.source_attribution.stubble_burning}%</div>
+                <div className="text-[10px] sm:text-[11px] text-orange-400 font-mono">
+                  {t('stubble_share_label', language)}: {snapshot.source_attribution.stubble_burning}%
+                </div>
               </div>
             </section>
 
@@ -459,9 +482,9 @@ export default function App() {
             <div className="lg:col-span-7 bg-slate-900/80 border border-slate-800 p-5 rounded-2xl flex flex-col">
               <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
                 <h2 className="text-base font-bold text-white flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-cyan-400" /> Delhi NCR Spatial Grid & Stubble Corridor
+                  <MapPin className="w-5 h-5 text-cyan-400" /> {t('spatial_grid_title', language)}
                 </h2>
-                <span className="text-xs font-mono text-slate-400">16 Real-time Monitoring Stations</span>
+                <span className="text-xs font-mono text-slate-400">{t('realtime_stations', language)}</span>
               </div>
 
               {/* Zoom Slider Controls */}
@@ -579,16 +602,16 @@ export default function App() {
               <div className="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl flex flex-col">
                 <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
                   <h2 className="text-base font-bold text-white flex items-center gap-2">
-                    <PieChart className="w-5 h-5 text-orange-400" /> Source Apportionment
+                    <PieChart className="w-5 h-5 text-orange-400" /> {t('source_apportionment', language)}
                   </h2>
                 </div>
                 <div className="flex flex-col gap-2">
                   {[
-                    { name: "Stubble Burning", pct: snapshot.source_attribution.stubble_burning, color: "#F97316" },
-                    { name: "Vehicular Exhaust", pct: snapshot.source_attribution.vehicular_emissions, color: "#EF4444" },
-                    { name: "Road & Construction Dust", pct: snapshot.source_attribution.road_construction_dust, color: "#EAB308" },
-                    { name: "Industrial Clusters", pct: snapshot.source_attribution.industrial_energy, color: "#8B5CF6" },
-                    { name: "Secondary & Domestic", pct: snapshot.source_attribution.secondary_and_domestic, color: "#06B6D4" },
+                    { name: t('source_stubble', language), pct: snapshot.source_attribution.stubble_burning, color: "#F97316" },
+                    { name: t('source_vehicles', language), pct: snapshot.source_attribution.vehicular_emissions, color: "#EF4444" },
+                    { name: t('source_dust', language), pct: snapshot.source_attribution.road_construction_dust, color: "#EAB308" },
+                    { name: t('source_industry', language), pct: snapshot.source_attribution.industrial_energy, color: "#8B5CF6" },
+                    { name: t('source_domestic', language), pct: snapshot.source_attribution.secondary_and_domestic, color: "#06B6D4" },
                   ].map(item => (
                     <div key={item.name} className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs">
                       <div className="flex items-center justify-between mb-1">
@@ -994,102 +1017,107 @@ export default function App() {
       )}
 
       {/* ===== MOBILE & TABLET BOTTOM NAVIGATION DOCK (Animated Floating Dock) ===== */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#07121A]/95 border-t border-cyan-800/40 backdrop-blur-2xl px-2 py-2 flex items-center justify-around shadow-[0_-8px_30px_rgba(0,0,0,0.8)] safe-area-pb">
-        
-        {/* Tab 1: Overview */}
-        <button
-          type="button"
-          onClick={() => switchTab('overview')}
-          className={`relative group flex flex-col items-center justify-center py-1.5 px-3 rounded-2xl transition-all duration-300 cursor-pointer active:scale-90 ${
-            activeTab === 'overview' && !isAiOpen 
-              ? 'text-cyan-300 font-bold bg-gradient-to-b from-cyan-950/80 to-slate-900/70 border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.35)]' 
-              : 'text-slate-400 hover:text-cyan-300 hover:bg-slate-900/80 border border-transparent hover:border-cyan-800/50 hover:shadow-[0_0_12px_rgba(6,182,212,0.2)]'
-          }`}
-        >
-          <div className="relative">
-            <LayoutDashboard className="w-5 h-5 mb-0.5 transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-1 text-cyan-400 group-hover:text-cyan-300" />
-            {activeTab === 'overview' && !isAiOpen && (
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee]"></span>
-            )}
-          </div>
-          <span className="text-[9px] font-semibold tracking-tight transition-all duration-200 group-hover:tracking-normal">{t('tab_overview', language)}</span>
-        </button>
-
-        {/* Tab 2: GRAP */}
-        <button
-          type="button"
-          onClick={() => switchTab('grap')}
-          className={`relative group flex flex-col items-center justify-center py-1.5 px-3 rounded-2xl transition-all duration-300 cursor-pointer active:scale-90 ${
-            activeTab === 'grap' && !isAiOpen 
-              ? 'text-cyan-300 font-bold bg-gradient-to-b from-cyan-950/80 to-slate-900/70 border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.35)]' 
-              : 'text-slate-400 hover:text-cyan-300 hover:bg-slate-900/80 border border-transparent hover:border-cyan-800/50 hover:shadow-[0_0_12px_rgba(6,182,212,0.2)]'
-          }`}
-        >
-          <div className="relative">
-            <ShieldAlert className="w-5 h-5 mb-0.5 transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-1 text-cyan-400 group-hover:text-cyan-300" />
-            {activeTab === 'grap' && !isAiOpen && (
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee]"></span>
-            )}
-          </div>
-          <span className="text-[9px] font-semibold tracking-tight transition-all duration-200 group-hover:tracking-normal">{t('tab_grap', language)}</span>
-        </button>
-
-        {/* CENTER PROMINENT ANIMATED VAYUAI COPILOT LAUNCHER */}
-        <button
-          type="button"
-          onClick={() => setIsAiOpen(true)}
-          className="relative -top-4 flex flex-col items-center justify-center group active:scale-90 transition-all duration-300 cursor-pointer"
-        >
-          {/* Pulsing Ambient Aurora Glow */}
-          <div className="absolute -inset-1.5 bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-400 rounded-3xl blur-md opacity-75 group-hover:opacity-100 group-hover:scale-115 transition-all duration-300 animate-pulse -z-10"></div>
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#07121A]/95 border-t border-cyan-800/40 backdrop-blur-2xl px-1 py-1.5 shadow-[0_-8px_30px_rgba(0,0,0,0.8)] safe-area-pb">
+        <div className="grid grid-cols-5 items-center justify-items-center w-full max-w-md mx-auto">
           
-          <div className="relative w-13 h-13 rounded-2xl bg-gradient-to-tr from-cyan-500 via-teal-400 to-emerald-400 text-slate-950 flex items-center justify-center shadow-2xl shadow-cyan-500/50 border-2 border-white/95 group-hover:rotate-6 group-hover:scale-110 transition-all duration-300">
-            <Bot className="w-6 h-6 stroke-[2.5] transition-transform duration-300 group-hover:scale-115" />
-            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-950 animate-ping"></span>
-            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-950"></span>
-          </div>
-          <span className="text-[10px] font-black text-cyan-300 mt-1 tracking-wider uppercase group-hover:text-white transition-colors flex items-center gap-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-            VayuAI
-          </span>
-        </button>
+          {/* Tab 1: Overview */}
+          <button
+            type="button"
+            onClick={() => switchTab('overview')}
+            className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-2xl transition-all duration-300 cursor-pointer active:scale-90 ${
+              activeTab === 'overview' && !isAiOpen 
+                ? 'text-cyan-300 font-bold bg-gradient-to-b from-cyan-950/80 to-slate-900/70 border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.35)]' 
+                : 'text-slate-400 hover:text-cyan-300 hover:bg-slate-900/80 border border-transparent hover:border-cyan-800/50 hover:shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+            }`}
+          >
+            <div className="relative">
+              <LayoutDashboard className="w-5 h-5 mb-0.5 transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-1 text-cyan-400 group-hover:text-cyan-300" />
+              {activeTab === 'overview' && !isAiOpen && (
+                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee]"></span>
+              )}
+            </div>
+            <span className="text-[9px] font-semibold tracking-tight transition-all duration-200 group-hover:tracking-normal text-center truncate max-w-full px-1">{t('tab_overview', language)}</span>
+          </button>
 
-        {/* Tab 3: What-If */}
-        <button
-          type="button"
-          onClick={() => switchTab('whatif')}
-          className={`relative group flex flex-col items-center justify-center py-1.5 px-3 rounded-2xl transition-all duration-300 cursor-pointer active:scale-90 ${
-            activeTab === 'whatif' && !isAiOpen 
-              ? 'text-indigo-300 font-bold bg-gradient-to-b from-indigo-950/80 to-slate-900/70 border border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.35)]' 
-              : 'text-slate-400 hover:text-indigo-300 hover:bg-slate-900/80 border border-transparent hover:border-indigo-800/50 hover:shadow-[0_0_12px_rgba(99,102,241,0.2)]'
-          }`}
-        >
-          <div className="relative">
-            <Sliders className="w-5 h-5 mb-0.5 transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-1 text-indigo-400 group-hover:text-indigo-300" />
-            {activeTab === 'whatif' && !isAiOpen && (
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-indigo-400 rounded-full shadow-[0_0_8px_#818cf8]"></span>
-            )}
-          </div>
-          <span className="text-[9px] font-semibold tracking-tight transition-all duration-200 group-hover:tracking-normal">{t('tab_whatif', language)}</span>
-        </button>
+          {/* Tab 2: GRAP */}
+          <button
+            type="button"
+            onClick={() => switchTab('grap')}
+            className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-2xl transition-all duration-300 cursor-pointer active:scale-90 ${
+              activeTab === 'grap' && !isAiOpen 
+                ? 'text-cyan-300 font-bold bg-gradient-to-b from-cyan-950/80 to-slate-900/70 border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.35)]' 
+                : 'text-slate-400 hover:text-cyan-300 hover:bg-slate-900/80 border border-transparent hover:border-cyan-800/50 hover:shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+            }`}
+          >
+            <div className="relative">
+              <ShieldAlert className="w-5 h-5 mb-0.5 transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-1 text-cyan-400 group-hover:text-cyan-300" />
+              {activeTab === 'grap' && !isAiOpen && (
+                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee]"></span>
+              )}
+            </div>
+            <span className="text-[9px] font-semibold tracking-tight transition-all duration-200 group-hover:tracking-normal text-center truncate max-w-full px-1">{t('tab_grap', language)}</span>
+          </button>
 
-        {/* Tab 4: Dispatches */}
-        <button
-          type="button"
-          onClick={() => switchTab('dispatches')}
-          className={`relative group flex flex-col items-center justify-center py-1.5 px-3 rounded-2xl transition-all duration-300 cursor-pointer active:scale-90 ${
-            activeTab === 'dispatches' && !isAiOpen 
-              ? 'text-amber-300 font-bold bg-gradient-to-b from-amber-950/80 to-slate-900/70 border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.35)]' 
-              : 'text-slate-400 hover:text-amber-300 hover:bg-slate-900/80 border border-transparent hover:border-amber-800/50 hover:shadow-[0_0_12px_rgba(245,158,11,0.2)]'
-          }`}
-        >
-          <div className="relative">
-            <Send className="w-5 h-5 mb-0.5 transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-1 text-amber-400 group-hover:text-amber-300" />
-            {activeTab === 'dispatches' && !isAiOpen && (
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-amber-400 rounded-full shadow-[0_0_8px_#fbbf24]"></span>
-            )}
+          {/* Tab 3: CENTER PROMINENT VAYUAI COPILOT (MATHEMATICALLY CENTERED AT 50% WIDTH) */}
+          <div className="flex flex-col items-center justify-center w-full">
+            <button
+              type="button"
+              onClick={openAi}
+              className="relative -top-4 flex flex-col items-center justify-center group active:scale-90 transition-all duration-300 cursor-pointer"
+            >
+              {/* Pulsing Ambient Aurora Glow */}
+              <div className="absolute -inset-1.5 bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-400 rounded-3xl blur-md opacity-75 group-hover:opacity-100 group-hover:scale-115 transition-all duration-300 animate-pulse -z-10"></div>
+              
+              <div className="relative w-13 h-13 rounded-2xl bg-gradient-to-tr from-cyan-500 via-teal-400 to-emerald-400 text-slate-950 flex items-center justify-center shadow-2xl shadow-cyan-500/50 border-2 border-white/95 group-hover:rotate-6 group-hover:scale-110 transition-all duration-300">
+                <Bot className="w-6 h-6 stroke-[2.5] transition-transform duration-300 group-hover:scale-115" />
+                <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-950 animate-ping"></span>
+                <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-950"></span>
+              </div>
+              <span className="text-[10px] font-black text-cyan-300 mt-1 tracking-wider uppercase group-hover:text-white transition-colors flex items-center gap-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                VayuAI
+              </span>
+            </button>
           </div>
-          <span className="text-[9px] font-semibold tracking-tight transition-all duration-200 group-hover:tracking-normal">{t('tab_dispatches', language)}</span>
-        </button>
+
+          {/* Tab 4: What-If */}
+          <button
+            type="button"
+            onClick={() => switchTab('whatif')}
+            className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-2xl transition-all duration-300 cursor-pointer active:scale-90 ${
+              activeTab === 'whatif' && !isAiOpen 
+                ? 'text-indigo-300 font-bold bg-gradient-to-b from-indigo-950/80 to-slate-900/70 border border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.35)]' 
+                : 'text-slate-400 hover:text-indigo-300 hover:bg-slate-900/80 border border-transparent hover:border-indigo-800/50 hover:shadow-[0_0_12px_rgba(99,102,241,0.2)]'
+            }`}
+          >
+            <div className="relative">
+              <Sliders className="w-5 h-5 mb-0.5 transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-1 text-indigo-400 group-hover:text-indigo-300" />
+              {activeTab === 'whatif' && !isAiOpen && (
+                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-indigo-400 rounded-full shadow-[0_0_8px_#818cf8]"></span>
+              )}
+            </div>
+            <span className="text-[9px] font-semibold tracking-tight transition-all duration-200 group-hover:tracking-normal text-center truncate max-w-full px-1">{t('tab_whatif', language)}</span>
+          </button>
+
+          {/* Tab 5: Dispatches */}
+          <button
+            type="button"
+            onClick={() => switchTab('dispatches')}
+            className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-2xl transition-all duration-300 cursor-pointer active:scale-90 ${
+              activeTab === 'dispatches' && !isAiOpen 
+                ? 'text-amber-300 font-bold bg-gradient-to-b from-amber-950/80 to-slate-900/70 border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.35)]' 
+                : 'text-slate-400 hover:text-amber-300 hover:bg-slate-900/80 border border-transparent hover:border-amber-800/50 hover:shadow-[0_0_12px_rgba(245,158,11,0.2)]'
+            }`}
+          >
+            <div className="relative">
+              <Send className="w-5 h-5 mb-0.5 transition-all duration-300 group-hover:scale-125 group-hover:-translate-y-1 text-amber-400 group-hover:text-amber-300" />
+              {activeTab === 'dispatches' && !isAiOpen && (
+                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-amber-400 rounded-full shadow-[0_0_8px_#fbbf24]"></span>
+              )}
+            </div>
+            <span className="text-[9px] font-semibold tracking-tight transition-all duration-200 group-hover:tracking-normal text-center truncate max-w-full px-1">{t('tab_dispatches', language)}</span>
+          </button>
+
+        </div>
       </nav>
 
       {/* Floating / Full-Screen VayuAI Copilot Assistant */}

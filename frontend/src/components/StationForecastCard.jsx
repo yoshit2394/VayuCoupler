@@ -108,7 +108,7 @@ export default function StationForecastCard({
                 </span>
               </div>
               <p className="text-[11px] text-slate-400">
-                {region} • CPCB Continuous Ambient Telemetry
+                {region} • {t('fc_cpcb_telemetry', language)}
               </p>
             </div>
           </div>
@@ -117,12 +117,12 @@ export default function StationForecastCard({
         {/* Current vs Projected Delta Badge */}
         <div className="flex items-center gap-2 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs font-mono">
           <div className="px-2 py-0.5 rounded bg-slate-900 text-slate-300">
-            Now: <span className="font-bold" style={{ color: currentCatColor }}>{currentAqi}</span>
+            {t('fc_now', language)}: <span className="font-bold" style={{ color: currentCatColor }}>{currentAqi}</span>
           </div>
           <span className="text-slate-500">➔</span>
           <div className="px-2 py-0.5 rounded bg-rose-950/80 text-rose-300 border border-rose-800/80 font-bold flex items-center gap-1">
-            <span>Peak: 500</span>
-            <span className="text-[9px] text-rose-400 font-normal">(Severe)</span>
+            <span>{t('fc_peak', language)}: 500</span>
+            <span className="text-[9px] text-rose-400 font-normal">({language === 'hi' ? 'गंभीर' : 'Severe'})</span>
           </div>
         </div>
       </div>
@@ -132,17 +132,17 @@ export default function StationForecastCard({
         <div className="flex items-center justify-between text-[11px] font-mono">
           <span className="text-slate-400 flex items-center gap-1.5 font-bold">
             <Activity className="w-3.5 h-3.5 text-cyan-400" />
-            Coupled 72h Continuous Forecast Curve (WRF-Chem Trajectory)
+            {t('fc_curve_title', language)}
           </span>
           <div className="flex items-center gap-3 text-[10px] text-slate-400">
             <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-cyan-400"></span> Mean AQI
+              <span className="w-2 h-2 rounded-full bg-cyan-400"></span> {t('fc_mean_aqi', language)}
             </span>
             <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-sm bg-cyan-500/20 border border-cyan-500/40"></span> 90% CI Band
+              <span className="w-2 h-2 rounded-sm bg-cyan-500/20 border border-cyan-500/40"></span> {t('fc_ci_band', language)}
             </span>
             <span className="flex items-center gap-1 text-rose-400">
-              <span className="w-2 h-0.5 bg-rose-500"></span> Severe (400+)
+              <span className="w-2 h-0.5 bg-rose-500"></span> {t('fc_severe_thresh', language)}
             </span>
           </div>
         </div>
@@ -261,7 +261,7 @@ export default function StationForecastCard({
           <div className="p-2 rounded-xl bg-slate-900 border border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
             <div className="flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="font-bold text-white">Lead T+{activePoint.lead_hours}h</span>
+              <span className="font-bold text-white">{t('fc_lead_label', language)} T+{activePoint.lead_hours}h</span>
               <span className="text-[10px] text-slate-400">({activePoint.target_timestamp?.split(' ')[1] || ''})</span>
             </div>
 
@@ -272,7 +272,9 @@ export default function StationForecastCard({
                   {activePoint.forecast_aqi}
                 </span>
                 <span className="text-[10px] px-1.5 py-0.2 rounded font-bold" style={{ color: activePoint.category_color, backgroundColor: activePoint.category_color + '22' }}>
-                  {activePoint.category}
+                  {language === 'hi' 
+                    ? (activePoint.category === 'Severe' ? 'गंभीर' : activePoint.category === 'Very Poor' ? 'बहुत खराब' : activePoint.category === 'Poor' ? 'खराब' : 'मध्यम')
+                    : activePoint.category}
                 </span>
               </div>
 
@@ -289,7 +291,7 @@ export default function StationForecastCard({
 
               <div className="flex items-center gap-1 text-orange-400">
                 <Flame className="w-3 h-3" />
-                <span>{activePoint.projected_stubble_fires} fires</span>
+                <span>{activePoint.projected_stubble_fires} {language === 'hi' ? 'आग' : 'fires'}</span>
               </div>
             </div>
           </div>
@@ -301,10 +303,10 @@ export default function StationForecastCard({
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-1.5 font-bold text-white">
             <Layers className="w-3.5 h-3.5 text-indigo-400" />
-            <span>Physics Coupling Decomposition (+24h Lead Drivers)</span>
+            <span>{t('fc_decomp_title', language)}</span>
           </div>
           <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800/60">
-            Explainable AI Attribution
+            {t('fc_xai_badge', language)}
           </span>
         </div>
 
@@ -313,42 +315,42 @@ export default function StationForecastCard({
           <div className="p-2.5 rounded-xl bg-slate-900 border border-orange-800/40 flex flex-col gap-1">
             <div className="flex items-center justify-between text-[11px]">
               <span className="text-orange-300 font-semibold flex items-center gap-1">
-                <Flame className="w-3 h-3 text-orange-400" /> Farm Stubble Smoke
+                <Flame className="w-3 h-3 text-orange-400" /> {t('fc_stubble_smoke', language)}
               </span>
               <span className="font-bold font-mono text-orange-400">+{decomp.stubble_transport_impact_aqi} pts</span>
             </div>
             <div className="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden">
               <div className="h-full bg-orange-500 rounded-full" style={{ width: `${(decomp.stubble_transport_impact_aqi / 500) * 100}%` }} />
             </div>
-            <span className="text-[9px] text-slate-400">NW Corridor transport at breathing level</span>
+            <span className="text-[9px] text-slate-400">{t('fc_stubble_desc', language)}</span>
           </div>
 
           {/* Inversion Trapping */}
           <div className="p-2.5 rounded-xl bg-slate-900 border border-indigo-800/40 flex flex-col gap-1">
             <div className="flex items-center justify-between text-[11px]">
               <span className="text-indigo-300 font-semibold flex items-center gap-1">
-                <Thermometer className="w-3 h-3 text-indigo-400" /> Inversion Trapping
+                <Thermometer className="w-3 h-3 text-indigo-400" /> {t('fc_inversion_trap', language)}
               </span>
               <span className="font-bold font-mono text-indigo-400">+{decomp.inversion_and_pblh_trapping_aqi} pts</span>
             </div>
             <div className="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden">
               <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${(decomp.inversion_and_pblh_trapping_aqi / 500) * 100}%` }} />
             </div>
-            <span className="text-[9px] text-slate-400">Thermal lid & compressed boundary layer</span>
+            <span className="text-[9px] text-slate-400">{t('fc_inversion_desc', language)}</span>
           </div>
 
           {/* Local Baseline */}
           <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-700/50 flex flex-col gap-1">
             <div className="flex items-center justify-between text-[11px]">
               <span className="text-cyan-300 font-semibold flex items-center gap-1">
-                <Wind className="w-3 h-3 text-cyan-400" /> Local Urban Baseline
+                <Wind className="w-3 h-3 text-cyan-400" /> {t('fc_urban_base', language)}
               </span>
               <span className="font-bold font-mono text-cyan-400">+{decomp.baseline_local_urban_aqi} pts</span>
             </div>
             <div className="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden">
               <div className="h-full bg-cyan-500 rounded-full" style={{ width: `${(decomp.baseline_local_urban_aqi / 500) * 100}%` }} />
             </div>
-            <span className="text-[9px] text-slate-400">Vehicles, dust & regional background</span>
+            <span className="text-[9px] text-slate-400">{t('fc_urban_desc', language)}</span>
           </div>
         </div>
       </div>
@@ -358,11 +360,11 @@ export default function StationForecastCard({
         <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
         <div className="flex-1">
           <div className="font-bold text-rose-300 flex items-center gap-2">
-            <span>GRAP Stage IV Pre-emptive Alert Triggered (+24h to +72h Lead)</span>
-            <span className="text-[9px] px-1.5 py-0.2 rounded bg-rose-900 border border-rose-700 font-bold">EMERGENCY</span>
+            <span>{t('fc_grap_alert', language)}</span>
+            <span className="text-[9px] px-1.5 py-0.2 rounded bg-rose-900 border border-rose-700 font-bold">{t('fc_emergency', language)}</span>
           </div>
           <p className="text-[11px] text-rose-200/90 mt-0.5 leading-relaxed">
-            Atmospheric ventilation index collapsing below 1200 m²/s. <strong>Mandatory school hybrid mode</strong>, diesel truck peripheral diversion, and continuous mist sweeps active in <strong>{stationName}</strong> quadrant.
+            {t('fc_grap_mandate', language)} (<strong>{stationName}</strong>).
           </p>
         </div>
       </div>
@@ -386,13 +388,15 @@ export default function StationForecastCard({
               <div className={`text-[10px] uppercase font-mono font-bold ${
                 i === 0 ? 'text-cyan-400' : i === 1 ? 'text-amber-400' : 'text-purple-400'
               }`}>
-                {key} Lead {i === 0 ? '⚡' : ''}
+                {key} {t('fc_lead_label', language)} {i === 0 ? '⚡' : ''}
               </div>
               <div className="text-xl font-black font-mono my-0.5" style={{ color: catCol }}>
                 {aqi}
               </div>
               <div className="text-[9px] font-bold px-1.5 py-0.2 rounded-full inline-block" style={{ color: catCol, backgroundColor: catCol + '22' }}>
-                {cat}
+                {language === 'hi' 
+                  ? (cat === 'Severe' ? 'गंभीर' : cat === 'Very Poor' ? 'बहुत खराब' : cat === 'Poor' ? 'खराब' : 'मध्यम')
+                  : cat}
               </div>
               <div className="text-[9px] text-slate-500 font-mono mt-0.5">
                 CI: {ci[0]}–{ci[1]}
