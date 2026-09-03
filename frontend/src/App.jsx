@@ -5,7 +5,7 @@ import {
   Compass, Flame, MapPin, TrendingUp, PieChart, CheckCircle, Radio,
   ZoomIn, ZoomOut, X, AlertTriangle, Building2, Truck, GraduationCap,
   Heart, Users, Leaf, AlertCircle, ArrowRight, ChevronDown, Settings,
-  Bot, Sparkles
+  Bot, Sparkles, Navigation, Crosshair
 } from 'lucide-react';
 import { 
   fetchStations, fetchSnapshot, fetchStationForecast, 
@@ -16,6 +16,7 @@ import SettingsModal from './components/SettingsModal';
 import StationForecastCard from './components/StationForecastCard';
 import { t } from './utils/i18n';
 import { sound } from './utils/sound';
+import { requestUserLocation } from './utils/location';
 
 export default function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('vayucoupler_theme') || 'dark');
@@ -28,6 +29,19 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedStationId, setSelectedStationId] = useState('DEL001');
   const [selectedRoleId, setSelectedRoleId] = useState('ROLE_AGRI');
+
+  // Geolocation & local station auto-detection
+  const [userLocation, setUserLocation] = useState(() => {
+    try {
+      const saved = localStorage.getItem('vayucoupler_user_location');
+      return saved ? JSON.parse(saved) : null;
+    } catch (_) {
+      return null;
+    }
+  });
+  const [locationStatus, setLocationStatus] = useState('detecting'); // 'detecting' | 'detected' | 'denied' | 'idle'
+  const [locationBannerVisible, setLocationBannerVisible] = useState(false);
+  const hasRequestedLocation = useRef(false);
 
   useEffect(() => {
     if (theme === 'light') {
@@ -83,6 +97,49 @@ export default function App() {
     }
     loadData();
   }, [currentStep, selectedStationId]);
+
+  // Auto-detect user's live GPS location on startup & automatically set local station
+  useEffect(() => {
+    if (!snapshot?.stations || snapshot.stations.length === 0 || hasRequestedLocation.current) return;
+    hasRequestedLocation.current = true;
+
+    let isMounted = true;
+    requestUserLocation(snapshot.stations).then((loc) => {
+      if (!isMounted) return;
+      if (loc.success && loc.closestStation) {
+        setUserLocation(loc);
+        setLocationStatus('detected');
+        setSelectedStationId(loc.closestStation.station_id);
+        setLocationBannerVisible(true);
+        sound.playTap();
+        setTimeout(() => {
+          if (isMounted) setLocationBannerVisible(false);
+        }, 7000);
+      } else {
+        setLocationStatus('denied');
+      }
+    });
+
+    return () => { isMounted = false; };
+  }, [snapshot?.stations]);
+
+  const handleDetectLocation = async () => {
+    setLocationStatus('detecting');
+    sound.playTap();
+    const loc = await requestUserLocation(snapshot?.stations || []);
+    if (loc.success && loc.closestStation) {
+      setUserLocation(loc);
+      setLocationStatus('detected');
+      setSelectedStationId(loc.closestStation.station_id);
+      setLocationBannerVisible(true);
+      setTimeout(() => setLocationBannerVisible(false), 6000);
+    } else {
+      setLocationStatus('denied');
+      alert(language === 'hi' 
+        ? 'लोकेशन की अनुमति नहीं मिली। कृपया अपने फोन या ब्राउज़र की सेटिंग्स में जाकर लोकेशन ऑन करें।' 
+        : 'Location permission denied. Please enable location in your device settings.');
+    }
+  };
 
   useEffect(() => {
     let interval = null;
@@ -281,6 +338,28 @@ export default function App() {
               ))}
             </nav>
 
+            {/* Live GPS Location Button */}
+            <button
+              type="button"
+              onClick={handleDetectLocation}
+              className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 text-xs font-semibold transition cursor-pointer active:scale-95 shadow-sm ${
+                userLocation 
+                  ? 'bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 border-cyan-700/80 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+                  : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border-slate-800'
+              }`}
+              title={userLocation ? `Live Station: ${userLocation.closestStation.name} (${userLocation.distanceKm} km)` : "Detect My Location"}
+            >
+              <Navigation className={`w-3.5 h-3.5 text-cyan-400 ${locationStatus === 'detecting' ? 'animate-spin' : ''}`} />
+              {userLocation ? (
+                <span className="flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span>{userLocation.closestStation.name.split(' ')[0]} ({userLocation.distanceKm}km)</span>
+                </span>
+              ) : (
+                <span>{locationStatus === 'detecting' ? 'Detecting...' : (language === 'hi' ? 'मेरी लोकेशन' : 'Detect Location')}</span>
+              )}
+            </button>
+
             {/* Settings Trigger Button */}
             <button
               type="button"
@@ -309,7 +388,30 @@ export default function App() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
+            {/* Live GPS Location Button / Badge */}
+            <button
+              type="button"
+              onClick={handleDetectLocation}
+              className={`flex items-center gap-1 px-2 py-0.5 rounded-full border text-[10px] font-semibold active:scale-95 transition ${
+                userLocation 
+                  ? 'bg-cyan-950/90 text-cyan-300 border-cyan-600/70 shadow-[0_0_10px_rgba(6,182,212,0.25)]'
+                  : 'bg-slate-950 text-slate-300 border-slate-800'
+              }`}
+              title="Detect My Location"
+            >
+              <Navigation className={`w-3 h-3 text-cyan-400 ${locationStatus === 'detecting' ? 'animate-spin' : ''}`} />
+              {userLocation ? (
+                <span className="flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span className="truncate max-w-[85px]">{userLocation.closestStation.name.split(' ')[0]}</span>
+                  <span className="text-[9px] text-cyan-400/80 font-mono">({userLocation.distanceKm}km)</span>
+                </span>
+              ) : (
+                <span className="text-[9px]">{locationStatus === 'detecting' ? 'GPS...' : (language === 'hi' ? 'लोकेशन' : 'GPS')}</span>
+              )}
+            </button>
+
             <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold border ${
               snapshot.delhi_ncr_avg_aqi > 400 ? 'bg-red-950/80 text-red-300 border-red-700/80' :
               snapshot.delhi_ncr_avg_aqi > 300 ? 'bg-orange-950/80 text-orange-300 border-orange-700/80' :
@@ -317,6 +419,7 @@ export default function App() {
             }`}>
               AQI {snapshot.delhi_ncr_avg_aqi}
             </span>
+
             <button 
               onClick={() => setIsSettingsOpen(true)}
               className="p-1.5 rounded-lg bg-slate-950 text-slate-300 border border-slate-800 active:scale-95"
@@ -327,6 +430,31 @@ export default function App() {
           </div>
         </div>
       </header>
+
+      {/* Floating GPS Location Auto-Detection Banner */}
+      {locationBannerVisible && userLocation && (
+        <div className="fixed top-14 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-cyan-950/95 via-slate-900/95 to-emerald-950/95 border border-cyan-500/60 rounded-2xl px-3.5 py-2.5 shadow-2xl flex items-center gap-3 backdrop-blur-2xl max-w-md w-[94%] animate-in fade-in slide-in-from-top-3 duration-300">
+          <div className="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/50 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.4)]">
+            <Navigation className="w-4 h-4 text-cyan-400 animate-pulse" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-xs font-bold text-white flex items-center gap-1.5 truncate">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span>{language === 'hi' ? 'आपकी लाइव लोकेशन सेट हो गई है' : 'Local Air Quality Set to Your Location'}</span>
+            </div>
+            <div className="text-[11px] text-cyan-300 font-medium truncate mt-0.5">
+              {userLocation.closestStation.name} • {userLocation.distanceKm} km away • AQI {userLocation.closestStation.aqi}
+            </div>
+          </div>
+          <button 
+            type="button"
+            onClick={() => setLocationBannerVisible(false)}
+            className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 shrink-0 cursor-pointer active:scale-95"
+            title="Close">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {/* ===== TIME SCRUBBER (Simplified 7-Day Forecast Timeline) ===== */}
       <section className="bg-slate-950/90 border-b border-slate-800 px-4 sm:px-6 py-3">
@@ -448,7 +576,15 @@ export default function App() {
             {/* 6 Key Atmospheric Coupling Telemetry Cards */}
             <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
               <div className="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-xl border-l-4" style={{ borderLeftColor: snapshot.category_color }}>
-                <div className="text-[11px] sm:text-xs text-slate-400 font-semibold">{t('avg_aqi', language)}</div>
+                <div className="text-[11px] sm:text-xs text-slate-400 font-semibold flex items-center justify-between">
+                  <span>{t('avg_aqi', language)}</span>
+                  {userLocation && (
+                    <span className="text-[9px] text-cyan-300 font-medium flex items-center gap-1 bg-cyan-950/80 px-1.5 py-0.5 rounded border border-cyan-800/60">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                      {userLocation.closestStation.name.split(' ')[0]} ({userLocation.distanceKm}km)
+                    </span>
+                  )}
+                </div>
                 <div className="my-1 sm:my-1.5 flex items-baseline gap-2">
                   <span className="text-2xl sm:text-3xl font-black font-mono">{snapshot.delhi_ncr_avg_aqi}</span>
                   <span className="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: snapshot.category_color + '33', color: snapshot.category_color }}>
@@ -457,7 +593,10 @@ export default function App() {
                       : snapshot.category}
                   </span>
                 </div>
-                <div className="text-[10px] sm:text-[11px] text-slate-400">PM2.5: {currSt?.pm25} μg/m³</div>
+                <div className="text-[10px] sm:text-[11px] text-slate-400 flex items-center justify-between">
+                  <span>PM2.5: {currSt?.pm25} μg/m³</span>
+                  <span className="font-mono text-cyan-300 font-bold">{currSt?.name.split(' ')[0]}: {currSt?.aqi} AQI</span>
+                </div>
               </div>
 
               <div className="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-xl border-l-4 border-cyan-500">
@@ -628,6 +767,29 @@ export default function App() {
                         </g>
                       );
                     })}
+
+                    {/* User's Live GPS Pin on Delhi-NCR Spatial Grid */}
+                    {userLocation && typeof userLocation.lat === 'number' && typeof userLocation.lon === 'number' && (
+                      (() => {
+                        const ux = 380 + ((userLocation.lon - 76.8) / 0.7) * 200;
+                        const uy = 180 + ((29.0 - userLocation.lat) / 0.7) * 220;
+                        return (
+                          <g transform={`translate(${ux}, ${uy})`} className="cursor-pointer">
+                            {/* Animated Pulse Rings */}
+                            <circle r="26" fill="#06B6D4" opacity="0.3" className="animate-ping" />
+                            <circle r="15" fill="#06B6D4" opacity="0.45" />
+                            <circle r="7.5" fill="#22D3EE" stroke="#FFFFFF" strokeWidth="2.5" />
+                            {/* Pin Label */}
+                            <g transform="translate(0, -20)">
+                              <rect x="-35" y="-12" width="70" height="17" rx="5" fill="#07121A" stroke="#22D3EE" strokeWidth="1.2" />
+                              <text x="0" y="0" textAnchor="middle" fill="#22D3EE" fontSize="7.5" fontWeight="900" fontFamily="JetBrains Mono">
+                                📍 YOU ({userLocation.distanceKm}km)
+                              </text>
+                            </g>
+                          </g>
+                        );
+                      })()
+                    )}
                   </svg>
                 </div>
 
@@ -1226,6 +1388,7 @@ export default function App() {
       <VayuAIChat 
         currentStep={currentStep} 
         snapshot={snapshot} 
+        userLocation={userLocation}
         onSelectStation={handleSelectAndScrollStation}
         language={language}
         theme={theme}
