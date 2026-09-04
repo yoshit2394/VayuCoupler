@@ -3,7 +3,7 @@
   "appName": "VayuCoupler",
   "webDir": "dist",
   "server": {
-    "url": "https://vayucoupler.netlify.app",
+    "url": "https://vayucoupler.yoshit2394.workers.dev",
     "cleartext": true
   },
   "android": {
