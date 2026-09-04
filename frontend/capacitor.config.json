@@ -3,8 +3,8 @@
   "appName": "VayuCoupler",
   "webDir": "dist",
   "server": {
-    "url": "https://vayu-coupler.vercel.app",
-    "cleartext": false
+    "url": "https://vayucoupler.netlify.app",
+    "cleartext": true
   },
   "android": {
     "allowMixedContent": true
