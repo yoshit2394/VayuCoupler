@@ -1,10 +1,10 @@
 import offlineBundle from '../data/offline_bundle.json';
 
-const isNativeOrLocal = typeof window !== 'undefined' && 
-  (window.location.origin.includes('localhost') || window.location.protocol === 'capacitor:');
+const RAILWAY_BACKEND = 'https://web-production-2c7a4.up.railway.app';
+const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
 
 const BASE_URL = import.meta.env.VITE_API_URL || 
-  (isNativeOrLocal ? 'https://vayu-coupler.vercel.app' : (typeof window !== 'undefined' ? window.location.origin : 'https://vayu-coupler.vercel.app'));
+  (isLocalhost ? 'http://127.0.0.1:8000' : RAILWAY_BACKEND);
 
 function isOffline() {
   return typeof navigator !== 'undefined' && !navigator.onLine;
