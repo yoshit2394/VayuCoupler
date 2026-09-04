@@ -54,27 +54,27 @@ export default function SettingsModal({
         : 'bg-slate-100/90 hover:bg-slate-200 border border-slate-300 text-slate-800 hover:border-slate-400';
     }
     return isSelected
-      ? 'bg-cyan-950/80 border-2 border-cyan-400 text-white shadow-md shadow-cyan-950/50 ring-2 ring-cyan-400/30'
-      : 'bg-slate-950/80 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:border-slate-700';
+      ? 'bg-cyan-500/15 border-2 border-cyan-400 text-white shadow-[0_0_15px_rgba(0,240,255,0.25)] ring-1 ring-cyan-400/40'
+      : 'bg-[#030608]/70 hover:bg-white/5 border border-white/8 text-slate-300 hover:border-cyan-500/30';
   };
 
   return (
-    <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-[fadeIn_0.15s_ease]">
+    <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-[fadeIn_0.15s_ease]">
       {/* Backdrop - Cancel on click outside */}
       <div className="fixed inset-0" onClick={onClose} />
 
-      <div className={`relative w-full max-w-md rounded-3xl shadow-2xl p-6 flex flex-col gap-6 z-10 transition-colors duration-200 border ${
+      <div className={`relative w-full max-w-md rounded-3xl p-6 flex flex-col gap-6 z-10 transition-colors duration-200 border ${
         isLight 
           ? 'bg-white text-slate-900 border-slate-200 shadow-xl shadow-slate-300/40' 
-          : 'bg-slate-900 text-white border-slate-700/80 shadow-cyan-950/60'
+          : 'glass-pod hud-corners bg-[#090d16]/95 text-white border-cyan-500/30 shadow-[0_0_50px_rgba(0,0,0,0.9)]'
       }`}>
         {/* Header */}
-        <div className={`flex items-center justify-between pb-3 border-b ${isLight ? 'border-slate-200' : 'border-slate-800'}`}>
+        <div className={`flex items-center justify-between pb-3 border-b ${isLight ? 'border-slate-200' : 'border-white/8'}`}>
           <div className="flex items-center gap-2.5">
             <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
               isLight 
                 ? 'bg-blue-100 text-blue-600 border border-blue-300' 
-                : 'bg-cyan-950 text-cyan-400 border border-cyan-700/60'
+                : 'bg-cyan-500/10 text-[#00F0FF] border border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.2)]'
             }`}>
               <Settings className="w-5 h-5 animate-[spin-slow_12s_linear_infinite]" />
             </div>
@@ -82,7 +82,7 @@ export default function SettingsModal({
               <h2 className={`text-base font-bold tracking-tight ${isLight ? 'text-slate-900' : 'text-white'}`}>
                 {t('settings_title', language)}
               </h2>
-              <p className={`text-[11px] ${isLight ? 'text-slate-500 font-medium' : 'text-slate-400'}`}>
+              <p className={`text-[11px] ${isLight ? 'text-slate-500 font-medium' : 'text-slate-400 font-mono'}`}>
                 MoES Coupled Forecasting System • Preferences
               </p>
             </div>
@@ -90,10 +90,10 @@ export default function SettingsModal({
           <button
             type="button"
             onClick={onClose}
-            className={`p-1.5 rounded-xl transition cursor-pointer ${
+            className={`p-1.5 rounded-lg transition cursor-pointer active:scale-95 ${
               isLight 
                 ? 'bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900' 
-                : 'bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white'
+                : 'bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10'
             }`}
             title="Close without saving"
           >
@@ -233,14 +233,14 @@ export default function SettingsModal({
         </div>
 
         {/* Footer with Explicit Cancel and Save Buttons */}
-        <div className={`pt-3 border-t flex items-center justify-between ${isLight ? 'border-slate-200' : 'border-slate-800'}`}>
+        <div className={`pt-3 border-t flex items-center justify-between ${isLight ? 'border-slate-200' : 'border-white/8'}`}>
           <button
             type="button"
             onClick={onClose}
-            className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition cursor-pointer active:scale-95 ${
               isLight 
                 ? 'bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900' 
-                : 'bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white'
+                : 'bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white font-mono uppercase tracking-wider'
             }`}
           >
             Cancel
@@ -249,7 +249,7 @@ export default function SettingsModal({
           <div className="flex items-center gap-2">
             {hasChanges && (
               <span className={`text-[10px] font-mono hidden sm:inline ${
-                isLight ? 'text-blue-600 font-bold' : 'text-cyan-400'
+                isLight ? 'text-blue-600 font-bold' : 'text-[#00F0FF] font-bold'
               }`}>
                 ● Unsaved Changes
               </span>
@@ -260,7 +260,7 @@ export default function SettingsModal({
               className={`px-4 py-2 rounded-xl font-bold text-xs shadow-md transition cursor-pointer active:scale-95 flex items-center gap-1.5 ${
                 isLight
                   ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/20'
-                  : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-cyan-500/20'
+                  : 'bg-[#00F0FF]/20 hover:bg-[#00F0FF]/30 border border-[#00F0FF]/50 text-[#00F0FF] font-mono uppercase tracking-wider shadow-[0_0_20px_rgba(0,240,255,0.25)]'
               }`}
             >
               <Check className="w-3.5 h-3.5" />

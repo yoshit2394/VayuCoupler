@@ -1401,26 +1401,26 @@ export default function App() {
         {/* ==================== DISPATCHES TAB ==================== */}
         {activeTab === 'dispatches' && dispatches && (
           <div className="flex flex-col gap-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-800/80">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-cyan-500/15">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono font-bold text-rose-400 bg-rose-950 px-2 py-0.5 rounded border border-rose-800">
-                    LIVE MULTI-AGENCY DISPATCH
+                  <span className="text-[10px] font-mono font-bold text-[#FF2E54] bg-[#FF2E54]/12 px-2.5 py-0.5 rounded border border-[#FF2E54]/40 shadow-[0_0_10px_rgba(255,46,84,0.2)]">
+                    ● LIVE MULTI-AGENCY DISPATCH
                   </span>
-                  <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800/80">
+                  <span className="text-[10px] font-mono font-bold text-[#00F0FF] bg-[#00F0FF]/10 px-2.5 py-0.5 rounded border border-[#00F0FF]/35">
                     6 Coordinated Agencies
                   </span>
                 </div>
-                <h2 className="text-xl font-bold text-white mt-1 flex items-center gap-2">
-                  <Send className="w-5 h-5 text-cyan-400" /> Stakeholder Action Dispatch Center
+                <h2 className="text-xl font-bold text-white mt-1 flex items-center gap-2 tracking-tight">
+                  <Send className="w-5 h-5 text-[#00F0FF] drop-shadow-[0_0_8px_rgba(0,240,255,0.6)]" /> Stakeholder Action Dispatch Center
                 </h2>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-400 mt-0.5 font-mono">
                   Pre-emptive directives dispatched with 72h lead time. Tap any agency card to view the official protocol & evidence.
                 </p>
               </div>
-              <div className="sm:text-right shrink-0">
-                <div className="text-xs text-slate-400 font-mono">T-Hour {currentStep} of 167</div>
-                <div className="text-sm font-bold text-cyan-400 mt-0.5">{snapshot.category} — AQI {snapshot.delhi_ncr_avg_aqi}</div>
+              <div className="sm:text-right shrink-0 font-mono">
+                <div className="text-xs text-slate-400 tracking-wider">T-Hour {currentStep} of 167</div>
+                <div className="text-sm font-bold text-[#00F0FF] mt-0.5 drop-shadow-[0_0_8px_rgba(0,240,255,0.4)]">{snapshot.category} — AQI {snapshot.delhi_ncr_avg_aqi}</div>
               </div>
             </div>
 
@@ -1437,28 +1437,28 @@ export default function App() {
                 };
                 const urgColors = {
                   'EMERGENCY': { 
-                    card: 'bg-slate-900/90 hover:bg-slate-800/90 border-slate-800 hover:border-rose-500/80 border-l-4 border-l-rose-500 shadow-rose-950/20',
-                    badge: 'bg-rose-950 text-rose-300 border border-rose-800 font-bold',
-                    icon: 'text-rose-400 bg-rose-950/60 border border-rose-900/70',
-                    dot: 'bg-rose-400 animate-pulse'
+                    card: 'glass-pod hud-corners border-l-4 border-l-[#FF2E54] hover:border-[#FF2E54]/70 shadow-[0_0_20px_rgba(255,46,84,0.15)]',
+                    badge: 'bg-[#FF2E54]/15 text-[#FF2E54] border border-[#FF2E54]/40 font-bold font-mono',
+                    icon: 'text-[#FF2E54] bg-[#FF2E54]/10 border border-[#FF2E54]/30',
+                    dot: 'bg-[#FF2E54] animate-ping'
                   },
                   'CRITICAL': { 
-                    card: 'bg-slate-900/90 hover:bg-slate-800/90 border-slate-800 hover:border-orange-500/80 border-l-4 border-l-orange-500 shadow-orange-950/20',
-                    badge: 'bg-orange-950 text-orange-300 border border-orange-800 font-bold',
-                    icon: 'text-orange-400 bg-orange-950/60 border border-orange-900/70',
-                    dot: 'bg-orange-400 animate-pulse'
+                    card: 'glass-pod hud-corners border-l-4 border-l-[#F97316] hover:border-[#F97316]/70 shadow-[0_0_20px_rgba(249,115,22,0.15)]',
+                    badge: 'bg-[#F97316]/15 text-[#F97316] border border-[#F97316]/40 font-bold font-mono',
+                    icon: 'text-[#F97316] bg-[#F97316]/10 border border-[#F97316]/30',
+                    dot: 'bg-[#F97316] animate-pulse'
                   },
                   'HIGH': { 
-                    card: 'bg-slate-900/90 hover:bg-slate-800/90 border-slate-800 hover:border-amber-500/80 border-l-4 border-l-amber-500 shadow-amber-950/20',
-                    badge: 'bg-amber-950 text-amber-300 border border-amber-800 font-bold',
-                    icon: 'text-amber-400 bg-amber-950/60 border border-amber-900/70',
-                    dot: 'bg-amber-400'
+                    card: 'glass-pod hud-corners border-l-4 border-l-[#FFB800] hover:border-[#FFB800]/70 shadow-[0_0_20px_rgba(255,184,0,0.12)]',
+                    badge: 'bg-[#FFB800]/15 text-[#FFB800] border border-[#FFB800]/40 font-bold font-mono',
+                    icon: 'text-[#FFB800] bg-[#FFB800]/10 border border-[#FFB800]/30',
+                    dot: 'bg-[#FFB800]'
                   },
                   'MODERATE': { 
-                    card: 'bg-slate-900/90 hover:bg-slate-800/90 border-slate-800 hover:border-cyan-500/80 border-l-4 border-l-cyan-500 shadow-cyan-950/20',
-                    badge: 'bg-cyan-950 text-cyan-300 border border-cyan-800 font-bold',
-                    icon: 'text-cyan-400 bg-cyan-950/60 border border-cyan-900/70',
-                    dot: 'bg-cyan-400'
+                    card: 'glass-pod hud-corners border-l-4 border-l-[#00F0FF] hover:border-[#00F0FF]/70 shadow-[0_0_20px_rgba(0,240,255,0.12)]',
+                    badge: 'bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/40 font-bold font-mono',
+                    icon: 'text-[#00F0FF] bg-[#00F0FF]/10 border border-[#00F0FF]/30',
+                    dot: 'bg-[#00F0FF]'
                   },
                 };
                 const urg = d.urgency || 'HIGH';
@@ -1550,21 +1550,25 @@ export default function App() {
 
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
               {/* Sliders Card */}
-              <div className="lg:col-span-2 bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 rounded-2xl p-5 flex flex-col gap-5 shadow-xl hover:border-slate-700 transition-all duration-300">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
-                  <h3 className="text-sm font-bold text-white tracking-wide">Policy Intervention Controls</h3>
-                  <span className="text-[10px] font-mono text-purple-400 bg-purple-950/70 px-2 py-0.5 rounded border border-purple-800/50">4 Active Levers</span>
+              <div className="lg:col-span-2 glass-pod hud-corners rounded-2xl p-5 flex flex-col gap-5">
+                <div className="flex items-center justify-between pb-3 border-b border-cyan-500/15">
+                  <h3 className="text-sm font-bold text-white tracking-wide font-mono uppercase flex items-center gap-2">
+                    <Sliders className="w-4 h-4 text-[#A855F7]" /> Policy Intervention Controls
+                  </h3>
+                  <span className="text-[10px] font-mono font-bold text-[#A855F7] bg-[#A855F7]/12 px-2.5 py-0.5 rounded border border-[#A855F7]/40 shadow-[0_0_8px_rgba(168,85,247,0.2)]">
+                    4 Active Levers
+                  </span>
                 </div>
                 {[
                   { label: 'Stubble Burning Reduction', val: stubbleVal, set: setStubbleVal, color: '#F97316', hint: 'Punjab/Haryana farm fire suppression via ex-situ baling' },
-                  { label: 'Truck & Heavy Vehicle Bypass', val: truckVal, set: setTruckVal, color: '#EF4444', hint: 'Eastern/Western Peripheral Expressway rerouting' },
-                  { label: 'Dust Suppression (Misting)', val: dustVal, set: setDustVal, color: '#EAB308', hint: 'Anti-smog gun deployment & mechanized road washing' },
-                  { label: 'Industrial Stack Switchover', val: industryVal, set: setIndustryVal, color: '#8B5CF6', hint: 'PNG/cleaner fuel mandate compliance in industrial hubs' },
+                  { label: 'Truck & Heavy Vehicle Bypass', val: truckVal, set: setTruckVal, color: '#FF2E54', hint: 'Eastern/Western Peripheral Expressway rerouting' },
+                  { label: 'Dust Suppression (Misting)', val: dustVal, set: setDustVal, color: '#FFB800', hint: 'Anti-smog gun deployment & mechanized road washing' },
+                  { label: 'Industrial Stack Switchover', val: industryVal, set: setIndustryVal, color: '#A855F7', hint: 'PNG/cleaner fuel mandate compliance in industrial hubs' },
                 ].map(s => (
-                  <div key={s.label} className="flex flex-col gap-2 p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/60 transition hover:border-slate-700">
+                  <div key={s.label} className="flex flex-col gap-2 p-3 rounded-xl bg-[#030608]/70 border border-white/6 transition hover:border-cyan-500/30 group">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-slate-200">{s.label}</span>
-                      <span className="font-mono font-extrabold px-2 py-0.5 rounded-md border text-xs" style={{ color: s.color, backgroundColor: `${s.color}15`, borderColor: `${s.color}40` }}>
+                      <span className="font-bold text-slate-200 group-hover:text-white transition-colors">{s.label}</span>
+                      <span className="font-mono font-extrabold px-2.5 py-0.5 rounded-md border text-xs shadow-sm" style={{ color: s.color, backgroundColor: `${s.color}15`, borderColor: `${s.color}50`, textShadow: `0 0 8px ${s.color}60` }}>
                         {s.val}%
                       </span>
                     </div>
@@ -1574,10 +1578,10 @@ export default function App() {
                         sound.playSlider();
                         s.set(parseInt(e.target.value));
                       }}
-                      className="w-full cursor-pointer h-2 bg-slate-800 rounded-lg appearance-none transition"
+                      className="w-full cursor-pointer h-2 bg-slate-900/90 rounded-lg appearance-none transition"
                       style={{ accentColor: s.color }}
                     />
-                    <div className="text-[10px] text-slate-400 leading-tight">{s.hint}</div>
+                    <div className="text-[10px] text-slate-400 leading-tight font-mono">{s.hint}</div>
                   </div>
                 ))}
               </div>
@@ -1587,43 +1591,51 @@ export default function App() {
                 {whatIfData ? (
                   <>
                     <div className="grid grid-cols-2 gap-3.5">
-                      <div className="bg-rose-500/5 border-2 border-rose-500/30 rounded-2xl p-5 text-center shadow-lg relative overflow-hidden backdrop-blur-md">
-                        <div className="text-xs text-rose-400 font-mono font-bold tracking-wider uppercase">Baseline AQI (No Action)</div>
-                        <div className="text-4xl sm:text-5xl font-black font-mono text-rose-400 my-2.5 tracking-tight">{whatIfData.baseline_peak_aqi}</div>
-                        <div className="text-xs font-bold text-rose-300 bg-rose-500/15 px-3 py-1 rounded-full border border-rose-500/30 inline-block font-mono">
+                      <div className="glass-pod hud-corners rounded-2xl p-5 text-center relative overflow-hidden border-2 border-[#FF2E54]/40 shadow-[0_0_24px_rgba(255,46,84,0.12)]">
+                        <div className="text-xs text-[#FF2E54] font-mono font-bold tracking-wider uppercase flex items-center justify-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#FF2E54] animate-ping"></span> Baseline Peak AQI
+                        </div>
+                        <div className="text-4xl sm:text-5xl font-black font-mono text-[#FF2E54] my-2.5 tracking-tight drop-shadow-[0_0_12px_rgba(255,46,84,0.6)]">
+                          {whatIfData.baseline_peak_aqi}
+                        </div>
+                        <div className="text-xs font-bold text-rose-300 bg-[#FF2E54]/15 px-3 py-1 rounded-full border border-[#FF2E54]/30 inline-block font-mono">
                           {whatIfData.baseline_category}
                         </div>
                       </div>
-                      <div className="bg-emerald-500/5 border-2 border-emerald-500/30 rounded-2xl p-5 text-center shadow-lg relative overflow-hidden backdrop-blur-md">
-                        <div className="text-xs text-emerald-400 font-mono font-bold tracking-wider uppercase">Mitigated AQI (With Policy)</div>
-                        <div className="text-4xl sm:text-5xl font-black font-mono text-emerald-400 my-2.5 tracking-tight">{whatIfData.mitigated_peak_aqi}</div>
-                        <div className="text-xs font-bold text-emerald-300 bg-emerald-500/15 px-3 py-1 rounded-full border border-emerald-500/30 inline-block font-mono">
+                      <div className="glass-pod hud-corners rounded-2xl p-5 text-center relative overflow-hidden border-2 border-[#00FF88]/40 shadow-[0_0_24px_rgba(0,255,136,0.12)]">
+                        <div className="text-xs text-[#00FF88] font-mono font-bold tracking-wider uppercase flex items-center justify-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88]"></span> Mitigated Peak AQI
+                        </div>
+                        <div className="text-4xl sm:text-5xl font-black font-mono text-[#00FF88] my-2.5 tracking-tight drop-shadow-[0_0_12px_rgba(0,255,136,0.6)]">
+                          {whatIfData.mitigated_peak_aqi}
+                        </div>
+                        <div className="text-xs font-bold text-emerald-300 bg-[#00FF88]/15 px-3 py-1 rounded-full border border-[#00FF88]/30 inline-block font-mono">
                           {whatIfData.mitigated_category}
                         </div>
                       </div>
                     </div>
 
-                    <div className="bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 rounded-2xl p-5 shadow-xl">
-                      <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800/80">
-                        <span className="text-sm font-bold text-white tracking-wide">AQI Reduction Breakdown</span>
-                        <span className="text-lg font-black text-cyan-400 font-mono bg-cyan-950/80 px-2.5 py-0.5 rounded-lg border border-cyan-800/60">
-                          -{whatIfData.aqi_reduction} AQI
+                    <div className="glass-pod hud-corners rounded-2xl p-5">
+                      <div className="flex items-center justify-between pb-3 mb-3 border-b border-cyan-500/15">
+                        <span className="text-sm font-bold text-white tracking-wide font-mono uppercase">AQI Reduction Breakdown</span>
+                        <span className="text-lg font-black text-[#00F0FF] font-mono bg-[#00F0FF]/10 px-3 py-0.5 rounded-lg border border-[#00F0FF]/40 drop-shadow-[0_0_8px_rgba(0,240,255,0.4)]">
+                          -{whatIfData.aqi_reduction} AQI Points
                         </span>
                       </div>
                       <div className="flex flex-col gap-3">
                         {[
-                          { label: 'Stubble Reduction Impact', val: whatIfData.stubble_reduction_impact, color: '#F97316' },
-                          { label: 'Truck Bypass Impact', val: whatIfData.truck_reduction_impact, color: '#EF4444' },
-                          { label: 'Dust Suppression Impact', val: whatIfData.dust_reduction_impact, color: '#EAB308' },
-                          { label: 'Industry Switchover Impact', val: whatIfData.industry_reduction_impact, color: '#8B5CF6' },
+                          { label: 'Stubble Fire Reduction Impact', val: whatIfData.stubble_reduction_impact, color: '#F97316' },
+                          { label: 'Commercial Truck Bypass Relief', val: whatIfData.truck_reduction_impact, color: '#FF2E54' },
+                          { label: 'Mechanized Dust Washing Suppression', val: whatIfData.dust_reduction_impact, color: '#FFB800' },
+                          { label: 'Industrial Fuel Switchover Benefit', val: whatIfData.industry_reduction_impact, color: '#A855F7' },
                         ].filter(x => x.val !== undefined).map(item => (
                           <div key={item.label} className="text-xs">
                             <div className="flex justify-between mb-1">
                               <span className="text-slate-300 font-medium">{item.label}</span>
                               <span className="font-mono font-bold" style={{ color: item.color }}>-{item.val} AQI</span>
                             </div>
-                            <div className="w-full bg-slate-950 h-2.5 rounded-full overflow-hidden border border-slate-800/60 p-0.5">
-                              <div className="h-full rounded-full transition-all duration-500 shadow-sm" style={{ width: `${Math.min(item.val * 2, 100)}%`, backgroundColor: item.color }} />
+                            <div className="w-full bg-[#030608] h-2.5 rounded-full overflow-hidden border border-white/8 p-0.5">
+                              <div className="h-full rounded-full transition-all duration-500" style={{ width: `${Math.min(item.val * 2, 100)}%`, backgroundColor: item.color, boxShadow: `0 0 8px ${item.color}80` }} />
                             </div>
                           </div>
                         ))}
@@ -1631,16 +1643,16 @@ export default function App() {
                     </div>
 
                     {whatIfData.policy_verdict && (
-                      <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4.5 shadow-xl backdrop-blur-md">
-                        <div className="text-xs font-mono font-bold text-emerald-400 mb-1 flex items-center gap-1.5">
-                          <CheckCircle className="w-4 h-4 text-emerald-400" /> POLICY VERDICT
+                      <div className="glass-pod hud-corners border-2 border-[#00FF88]/40 rounded-2xl p-4.5 bg-[#00FF88]/05 shadow-[0_0_20px_rgba(0,255,136,0.1)]">
+                        <div className="text-xs font-mono font-bold text-[#00FF88] mb-1 flex items-center gap-1.5 uppercase tracking-wider">
+                          <CheckCircle className="w-4 h-4 text-[#00FF88]" /> Executive Counterfactual Policy Verdict
                         </div>
-                        <p className="text-sm text-slate-100 font-semibold leading-relaxed">{whatIfData.policy_verdict}</p>
+                        <p className="text-sm text-slate-100 font-semibold leading-relaxed font-mono">{whatIfData.policy_verdict}</p>
                       </div>
                     )}
                   </>
                 ) : (
-                  <div className="flex items-center justify-center h-full text-slate-500 text-sm">Loading simulation...</div>
+                  <div className="flex items-center justify-center h-full text-slate-500 text-sm font-mono">Loading simulation...</div>
                 )}
               </div>
             </div>
@@ -1650,32 +1662,36 @@ export default function App() {
         {/* ==================== INTER-STATE GRID TAB ==================== */}
         {activeTab === 'interstate' && interstate && (
           <div className="flex flex-col gap-5">
-            <div>
-              <span className="text-[10px] font-mono font-bold text-sky-400 bg-sky-950 px-2 py-0.5 rounded border border-sky-800">CROSS-STATE COORDINATION</span>
-              <h2 className="text-xl font-bold text-white mt-1 flex items-center gap-2">
-                <GitMerge className="w-5 h-5 text-sky-400" /> Inter-State Early Warning Grid
-              </h2>
-              <div className="flex items-center gap-4 mt-1">
-                <p className="text-xs text-slate-400">Multi-state command matrix: Delhi, Punjab, Haryana, UP, Rajasthan</p>
-                <span className="text-xs font-mono text-slate-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-700">
-                  Wind: {interstate.wind_vector}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-cyan-500/15">
+              <div>
+                <span className="text-[10px] font-mono font-bold text-[#00F0FF] bg-[#00F0FF]/10 px-2.5 py-0.5 rounded border border-[#00F0FF]/35 shadow-[0_0_8px_rgba(0,240,255,0.2)]">
+                  CROSS-STATE COORDINATION
                 </span>
-                <span className="text-xs font-mono text-amber-400 bg-amber-950 px-2 py-0.5 rounded border border-amber-800">
-                  {interstate.inversion_status}
-                </span>
+                <h2 className="text-xl font-bold text-white mt-1 flex items-center gap-2 tracking-tight">
+                  <GitMerge className="w-5 h-5 text-[#00F0FF] drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]" /> Inter-State Early Warning Grid
+                </h2>
+                <div className="flex flex-wrap items-center gap-3 mt-1.5 font-mono text-xs">
+                  <p className="text-slate-400">Multi-state command matrix: Delhi, Punjab, Haryana, UP, Rajasthan</p>
+                  <span className="text-[11px] text-slate-300 bg-[#030608] px-2.5 py-0.5 rounded border border-white/10">
+                    Wind: <b className="text-[#00F0FF]">{interstate.wind_vector}</b>
+                  </span>
+                  <span className="text-[11px] text-[#FFB800] bg-[#FFB800]/10 px-2.5 py-0.5 rounded border border-[#FFB800]/30 font-bold">
+                    {interstate.inversion_status}
+                  </span>
+                </div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {interstate.states && interstate.states.map((state, i) => {
                 const urgClr = {
-                  'EMERGENCY': { ring: 'border-rose-600/80', badge: 'bg-rose-950 text-rose-300 border-rose-700', icon: '🆘' },
-                  'CRITICAL': { ring: 'border-orange-600/80', badge: 'bg-orange-950 text-orange-300 border-orange-700', icon: '🚨' },
-                  'HIGH': { ring: 'border-amber-600/80', badge: 'bg-amber-950 text-amber-300 border-amber-700', icon: '⚠️' },
-                  'ELEVATED': { ring: 'border-cyan-700/80', badge: 'bg-cyan-950 text-cyan-300 border-cyan-800', icon: '📡' },
-                  'MODERATE': { ring: 'border-slate-700/80', badge: 'bg-slate-800 text-slate-300 border-slate-700', icon: '✅' },
-                  'LOW': { ring: 'border-emerald-800/80', badge: 'bg-emerald-950 text-emerald-300 border-emerald-800', icon: '🟢' },
-                }[state.coordination_urgency] || { ring: 'border-slate-700', badge: 'bg-slate-800 text-slate-300 border-slate-700', icon: '📋' };
+                  'EMERGENCY': { ring: 'border-l-4 border-l-[#FF2E54] hover:border-[#FF2E54]/70 shadow-[0_0_20px_rgba(255,46,84,0.15)]', badge: 'bg-[#FF2E54]/15 text-[#FF2E54] border border-[#FF2E54]/40', icon: '🆘' },
+                  'CRITICAL': { ring: 'border-l-4 border-l-[#F97316] hover:border-[#F97316]/70 shadow-[0_0_20px_rgba(249,115,22,0.15)]', badge: 'bg-[#F97316]/15 text-[#F97316] border border-[#F97316]/40', icon: '🚨' },
+                  'HIGH': { ring: 'border-l-4 border-l-[#FFB800] hover:border-[#FFB800]/70 shadow-[0_0_20px_rgba(255,184,0,0.12)]', badge: 'bg-[#FFB800]/15 text-[#FFB800] border border-[#FFB800]/40', icon: '⚠️' },
+                  'ELEVATED': { ring: 'border-l-4 border-l-[#00F0FF] hover:border-[#00F0FF]/70 shadow-[0_0_20px_rgba(0,240,255,0.12)]', badge: 'bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/40', icon: '📡' },
+                  'MODERATE': { ring: 'border-l-4 border-l-slate-600', badge: 'bg-white/5 text-slate-300 border border-white/10', icon: '✅' },
+                  'LOW': { ring: 'border-l-4 border-l-[#00FF88] hover:border-[#00FF88]/70 shadow-[0_0_20px_rgba(0,255,136,0.12)]', badge: 'bg-[#00FF88]/15 text-[#00FF88] border border-[#00FF88]/40', icon: '🟢' },
+                }[state.coordination_urgency] || { ring: 'border-l-4 border-l-slate-700', badge: 'bg-white/5 text-slate-300 border border-white/10', icon: '📋' };
 
                 return (
                   <div 
@@ -1684,7 +1700,7 @@ export default function App() {
                       sound.playModalOpen();
                       setActiveInterstateModal(state);
                     }}
-                    className={`bg-slate-900/90 border-2 ${urgClr.ring} rounded-2xl p-4 flex flex-col justify-between gap-3 cursor-pointer card-interactive hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] animate-subtle-up group`}
+                    className={`glass-pod hud-corners rounded-2xl p-4 flex flex-col justify-between gap-3 cursor-pointer card-interactive hover:shadow-xl active:scale-[0.98] animate-subtle-up group ${urgClr.ring}`}
                     style={{ animationDelay: `${i * 40}ms` }}
                     title="Tap to inspect full interstate coordination protocol and action checklist"
                   >
@@ -1692,7 +1708,7 @@ export default function App() {
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <div className="text-[10px] text-slate-400 font-mono tracking-wider uppercase">{state.role}</div>
-                        <div className="text-base font-bold text-white mt-0.5 group-hover:text-cyan-300 transition-colors">{state.state}</div>
+                        <div className="text-base font-bold text-white mt-0.5 group-hover:text-[#00F0FF] transition-colors">{state.state}</div>
                       </div>
                       <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${urgClr.badge} flex items-center gap-1 shrink-0 font-mono`}>
                         {urgClr.icon} {state.coordination_urgency}
@@ -1701,23 +1717,23 @@ export default function App() {
 
                     {/* Status + Forecast Risk */}
                     <div className="grid grid-cols-2 gap-2 text-xs">
-                      <div className="p-2 rounded-xl bg-slate-950/80 border border-slate-800">
+                      <div className="p-2.5 rounded-xl bg-[#030608]/70 border border-white/6">
                         <span className="text-slate-400 text-[10px] uppercase font-mono font-semibold">Status</span>
-                        <div className="text-slate-200 font-medium mt-0.5 line-clamp-1">{state.current_status}</div>
+                        <div className="text-slate-200 font-medium mt-0.5 line-clamp-1 font-mono">{state.current_status}</div>
                       </div>
-                      <div className="p-2 rounded-xl bg-slate-950/80 border border-amber-900/40">
-                        <span className="text-amber-400 text-[10px] uppercase font-mono font-semibold">Forecast Risk</span>
-                        <div className="text-amber-200 font-medium mt-0.5 line-clamp-1">{state.forecast_risk}</div>
+                      <div className="p-2.5 rounded-xl bg-[#030608]/70 border border-amber-500/20">
+                        <span className="text-[#FFB800] text-[10px] uppercase font-mono font-semibold">Forecast Risk</span>
+                        <div className="text-amber-200 font-medium mt-0.5 line-clamp-1 font-mono">{state.forecast_risk}</div>
                       </div>
                     </div>
 
                     {/* Clean Footer */}
-                    <div className="border-t border-slate-800/80 pt-2.5 flex items-center justify-between text-[11px] font-mono">
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-cyan-950/80 text-cyan-300 border border-cyan-800/60 font-semibold text-[10px]">
-                        <CheckCircle className="w-3 h-3 text-cyan-400" />
+                    <div className="border-t border-white/6 pt-2.5 flex items-center justify-between text-[11px] font-mono">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#00F0FF]/10 text-[#00F0FF] border border-[#00F0FF]/30 font-semibold text-[10px]">
+                        <CheckCircle className="w-3 h-3 text-[#00F0FF]" />
                         {state.active_mandates.length} {language === 'hi' ? 'कार्य' : 'Tasks Active'}
                       </span>
-                      <span className="text-cyan-400 group-hover:text-cyan-300 font-bold text-xs flex items-center gap-1 group-hover:translate-x-1 transition-all">
+                      <span className="text-[#00F0FF] group-hover:text-cyan-300 font-bold text-xs flex items-center gap-1 group-hover:translate-x-1 transition-all">
                         {language === 'hi' ? 'प्रोटोकॉल देखें' : 'View Protocol'}
                         <ChevronRight className="w-3.5 h-3.5" />
                       </span>
@@ -1733,33 +1749,33 @@ export default function App() {
       {/* ==================== STATION DETAIL MODAL ==================== */}
       {stationModal && (
         <div
-          className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4 animate-in fade-in duration-200"
           onClick={(e) => { if (e.target === e.currentTarget) setStationModal(null); }}>
-          <div className="bg-[#0B1320] border border-slate-700 rounded-3xl p-6 w-full max-w-lg shadow-2xl shadow-black/80 flex flex-col gap-4 animate-[fadeIn_0.2s_ease]">
+          <div className="glass-pod hud-corners border border-cyan-500/30 rounded-3xl p-6 w-full max-w-lg shadow-[0_0_50px_rgba(0,0,0,0.8)] flex flex-col gap-4">
             
             {/* Modal Header */}
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center font-black text-lg font-mono text-white"
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center font-black text-lg font-mono text-white shadow-sm"
                   style={{ backgroundColor: stationModal.category_color + '33', border: `2px solid ${stationModal.category_color}` }}>
                   {stationModal.aqi}
                 </div>
                 <div>
-                  <div className="text-xs font-mono text-slate-400">{stationModal.station_id}</div>
+                  <div className="text-xs font-mono text-slate-400 tracking-wider">{stationModal.station_id}</div>
                   <div className="text-lg font-bold text-white">{stationModal.name}</div>
-                  <div className="text-xs text-slate-400">{stationModal.region} • {stationModal.city}</div>
+                  <div className="text-xs text-slate-400 font-mono">{stationModal.region} • {stationModal.city}</div>
                 </div>
               </div>
               <button onClick={() => setStationModal(null)}
-                className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition">
+                className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition cursor-pointer active:scale-95">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* AQI Badge */}
-            <div className="p-3 rounded-2xl text-center" style={{ backgroundColor: stationModal.category_color + '15', border: `1px solid ${stationModal.category_color}55` }}>
-              <div className="text-5xl font-black font-mono my-1" style={{ color: stationModal.category_color }}>{stationModal.aqi}</div>
-              <div className="text-sm font-bold" style={{ color: stationModal.category_color }}>{stationModal.category}</div>
+            <div className="p-3 rounded-2xl text-center font-mono" style={{ backgroundColor: stationModal.category_color + '15', border: `1px solid ${stationModal.category_color}55` }}>
+              <div className="text-5xl font-black font-mono my-1 drop-shadow-[0_0_12px_rgba(0,240,255,0.4)]" style={{ color: stationModal.category_color }}>{stationModal.aqi}</div>
+              <div className="text-sm font-bold uppercase tracking-wider" style={{ color: stationModal.category_color }}>{stationModal.category}</div>
             </div>
 
             {/* Pollutant Grid */}
@@ -1772,17 +1788,17 @@ export default function App() {
                 { label: 'CO', val: stationModal.co, unit: 'ppm', color: '#06B6D4' },
                 { label: 'O₃', val: stationModal.o3, unit: 'ppb', color: '#10B981' },
               ].map(p => (
-                <div key={p.label} className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-center">
-                  <div className="text-[10px] text-slate-500 font-mono">{p.label}</div>
+                <div key={p.label} className="p-2.5 rounded-xl bg-[#030608]/70 border border-white/6 text-center hover:border-cyan-500/30 transition">
+                  <div className="text-[10px] text-slate-400 font-mono font-semibold">{p.label}</div>
                   <div className="text-lg font-black font-mono" style={{ color: p.color }}>{p.val ?? '--'}</div>
-                  <div className="text-[9px] text-slate-500">{p.unit}</div>
+                  <div className="text-[9px] text-slate-500 font-mono">{p.unit}</div>
                 </div>
               ))}
             </div>
 
             {/* Stubble Share */}
-            <div className="p-3 rounded-2xl bg-orange-950/30 border border-orange-800/60">
-              <div className="flex items-center justify-between text-xs">
+            <div className="p-3 rounded-2xl bg-[#F97316]/10 border border-[#F97316]/30">
+              <div className="flex items-center justify-between text-xs font-mono">
                 <div className="flex items-center gap-2">
                   <Flame className="w-4 h-4 text-orange-400" />
                   <span className="font-semibold text-orange-200">Stubble Burning Contribution</span>
@@ -1791,7 +1807,7 @@ export default function App() {
               </div>
               {stationModal.stubble_share_pct !== undefined && (
                 <div className="mt-2">
-                  <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden">
+                  <div className="w-full bg-[#030608] h-2 rounded-full overflow-hidden border border-white/8">
                     <div className="h-full rounded-full bg-orange-500" style={{ width: `${stationModal.stubble_share_pct}%` }} />
                   </div>
                   <div className="text-[10px] text-orange-400 font-mono mt-0.5">{stationModal.stubble_share_pct}% of total PM2.5</div>
@@ -1807,7 +1823,7 @@ export default function App() {
                 setStationModal(null);
                 handleSelectAndScrollStation(sid);
               }}
-              className="w-full py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-lg shadow-cyan-900/40"
+              className="w-full py-2.5 rounded-xl bg-[#00F0FF]/15 hover:bg-[#00F0FF]/25 border border-[#00F0FF]/40 text-[#00F0FF] font-bold text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-[0_0_20px_rgba(0,240,255,0.2)] font-mono"
             >
               <TrendingUp className="w-4 h-4" /> View 72h Forecast for {stationModal.name}
             </button>
@@ -1818,35 +1834,35 @@ export default function App() {
       {/* ==================== OFFICIAL DISPATCH TRANSMISSION MODAL ==================== */}
       {activeDispatchModal && (
         <div
-          className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200"
+          className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200"
           onClick={(e) => { if (e.target === e.currentTarget) setActiveDispatchModal(null); }}
         >
-          <div className="bg-[#0B1320] border border-slate-700 dark:border-cyan-800/80 rounded-3xl p-5 sm:p-6 w-full max-w-xl shadow-2xl shadow-black/90 flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
+          <div className="glass-pod hud-corners border border-cyan-500/30 rounded-3xl p-5 sm:p-6 w-full max-w-xl shadow-[0_0_50px_rgba(0,0,0,0.9)] flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
             
             {/* Header */}
-            <div className="flex items-start justify-between border-b border-slate-800 pb-3">
+            <div className="flex items-start justify-between border-b border-white/8 pb-3">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-cyan-950/80 border border-cyan-700/60 flex items-center justify-center text-cyan-400 shadow-md shrink-0">
+                <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-[#00F0FF] shadow-[0_0_15px_rgba(0,240,255,0.2)] shrink-0">
                   <Send className="w-6 h-6" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono font-black text-cyan-400 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800">
+                    <span className="text-[10px] font-mono font-bold text-[#00F0FF] bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/30 tracking-wider">
                       {activeDispatchModal.role_id}
                     </span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                      activeDispatchModal.urgency === 'EMERGENCY' ? 'bg-rose-900 text-rose-300 border border-rose-700' :
-                      activeDispatchModal.urgency === 'CRITICAL'  ? 'bg-orange-900 text-orange-300 border border-orange-700' :
-                      activeDispatchModal.urgency === 'HIGH'      ? 'bg-amber-900 text-amber-300 border border-amber-700' :
-                                                                   'bg-cyan-900 text-cyan-300 border border-cyan-700'
+                    <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
+                      activeDispatchModal.urgency === 'EMERGENCY' ? 'bg-rose-500/15 text-rose-400 border border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.3)]' :
+                      activeDispatchModal.urgency === 'CRITICAL'  ? 'bg-orange-500/15 text-orange-400 border border-orange-500/40 shadow-[0_0_12px_rgba(249,115,22,0.3)]' :
+                      activeDispatchModal.urgency === 'HIGH'      ? 'bg-amber-500/15 text-amber-400 border border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.3)]' :
+                                                                   'bg-cyan-500/15 text-[#00F0FF] border border-cyan-500/40 shadow-[0_0_12px_rgba(0,240,255,0.3)]'
                     }`}>
                       {activeDispatchModal.urgency} PROTOCOL
                     </span>
                   </div>
-                  <h3 className="text-base sm:text-lg font-bold text-white mt-1">
+                  <h3 className="text-base sm:text-lg font-bold text-white mt-1 tracking-tight">
                     {activeDispatchModal.role_label || activeDispatchModal.agency}
                   </h3>
-                  <div className="text-xs text-slate-400">
+                  <div className="text-xs text-slate-400 font-mono">
                     {activeDispatchModal.role_name || activeDispatchModal.description}
                   </div>
                 </div>
@@ -1854,24 +1870,24 @@ export default function App() {
               <button 
                 type="button"
                 onClick={() => setActiveDispatchModal(null)}
-                className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer active:scale-95"
+                className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition cursor-pointer active:scale-95"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Gov-to-Gov Transmission Channel */}
-            <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 flex flex-col gap-2 text-xs">
+            <div className="p-3.5 rounded-2xl bg-[#030608]/70 border border-white/6 flex flex-col gap-2 text-xs">
               <div className="flex items-center justify-between font-mono">
-                <span className="text-slate-400">TRANSMISSION GATEWAY:</span>
-                <span className="text-cyan-400 font-bold">{activeDispatchModal.mock_payload?.channel || 'National Disaster Alert (Gov-to-Gov Gateway)'}</span>
+                <span className="text-slate-400 text-[11px] uppercase tracking-wider">TRANSMISSION GATEWAY:</span>
+                <span className="text-[#00F0FF] font-bold">{activeDispatchModal.mock_payload?.channel || 'National Disaster Alert (Gov-to-Gov Gateway)'}</span>
               </div>
               <div className="flex items-center justify-between font-mono">
-                <span className="text-slate-400">RECIPIENT AUTHORITY:</span>
+                <span className="text-slate-400 text-[11px] uppercase tracking-wider">RECIPIENT AUTHORITY:</span>
                 <span className="text-slate-200 font-semibold">{activeDispatchModal.mock_payload?.recipient || activeDispatchModal.agency}</span>
               </div>
               {activeDispatchModal.mock_payload?.subject && (
-                <div className="p-2 rounded-xl bg-slate-950 border border-slate-800/80 font-mono text-cyan-300 text-[11px] leading-relaxed">
+                <div className="p-2.5 rounded-xl bg-cyan-500/5 border border-cyan-500/20 font-mono text-cyan-300 text-[11px] leading-relaxed">
                   📌 {activeDispatchModal.mock_payload.subject}
                 </div>
               )}
@@ -1879,26 +1895,26 @@ export default function App() {
 
             {/* Atmospheric Meteorological Evidence */}
             {snapshot?.meteorology && (
-              <div className="p-3.5 rounded-2xl bg-cyan-950/40 border border-cyan-800/50 flex flex-col gap-2">
-                <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-wider">
+              <div className="p-3.5 rounded-2xl bg-cyan-950/20 border border-cyan-500/20 flex flex-col gap-2">
+                <span className="text-[10px] font-mono font-bold text-[#00F0FF] uppercase tracking-wider">
                   Coupled Atmospheric Forecast Evidence (72h Lead Time)
                 </span>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
-                  <div className="p-2 rounded-xl bg-slate-900/90 border border-slate-800">
+                  <div className="p-2.5 rounded-xl bg-[#030608]/80 border border-white/6">
                     <div className="text-[10px] text-slate-400 font-mono">Ventilation</div>
-                    <div className="text-sm font-bold text-cyan-300 font-mono">{snapshot.meteorology.ventilation_index_m2s || 1420} m²/s</div>
+                    <div className="text-sm font-black text-[#00F0FF] font-mono drop-shadow-[0_0_8px_rgba(0,240,255,0.4)]">{snapshot.meteorology.ventilation_index_m2s || 1420} m²/s</div>
                   </div>
-                  <div className="p-2 rounded-xl bg-slate-900/90 border border-slate-800">
+                  <div className="p-2.5 rounded-xl bg-[#030608]/80 border border-white/6">
                     <div className="text-[10px] text-slate-400 font-mono">Inversion</div>
-                    <div className="text-sm font-bold text-amber-300 font-mono">{snapshot.meteorology.inversion_strength_c || 4.2} °C</div>
+                    <div className="text-sm font-black text-amber-400 font-mono drop-shadow-[0_0_8px_rgba(255,184,0,0.4)]">{snapshot.meteorology.inversion_strength_c || 4.2} °C</div>
                   </div>
-                  <div className="p-2 rounded-xl bg-slate-900/90 border border-slate-800">
+                  <div className="p-2.5 rounded-xl bg-[#030608]/80 border border-white/6">
                     <div className="text-[10px] text-slate-400 font-mono">Wind Vector</div>
-                    <div className="text-sm font-bold text-blue-300 font-mono">{snapshot.meteorology.wind_speed_kmh || 8.3} km/h</div>
+                    <div className="text-sm font-black text-sky-400 font-mono drop-shadow-[0_0_8px_rgba(56,189,248,0.4)]">{snapshot.meteorology.wind_speed_kmh || 8.3} km/h</div>
                   </div>
-                  <div className="p-2 rounded-xl bg-slate-900/90 border border-slate-800">
+                  <div className="p-2.5 rounded-xl bg-[#030608]/80 border border-white/6">
                     <div className="text-[10px] text-slate-400 font-mono">Active Fires</div>
-                    <div className="text-sm font-bold text-orange-400 font-mono">{snapshot.nasa_firms?.total_active_fires || 1457}</div>
+                    <div className="text-sm font-black text-orange-400 font-mono drop-shadow-[0_0_8px_rgba(251,146,60,0.4)]">{snapshot.nasa_firms?.total_active_fires || 1457}</div>
                   </div>
                 </div>
               </div>
@@ -1907,10 +1923,10 @@ export default function App() {
             {/* Mandatory Action Items / Orders (Interactive Checklist) */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-200 uppercase font-mono">
+                <span className="text-xs font-bold text-slate-200 uppercase font-mono tracking-wider">
                   Mandatory Directives ({ (activeDispatchModal.action_items || activeDispatchModal.actions || []).length } Tasks)
                 </span>
-                <span className="text-[10px] text-cyan-400 font-mono">
+                <span className="text-[10px] text-[#00F0FF] font-mono">
                   {language === 'hi' ? 'क्लिक करके टास्क पूरा मार्क करें' : 'Tap item to mark completed'}
                 </span>
               </div>
@@ -1925,18 +1941,18 @@ export default function App() {
                         sound.playTap();
                         setCheckedDispatchTasks(prev => ({ ...prev, [taskId]: !prev[taskId] }));
                       }}
-                      className={`p-3 rounded-xl border flex items-start gap-3 text-xs transition-all duration-200 cursor-pointer select-none card-interactive ${
+                      className={`p-3 rounded-xl border flex items-start gap-3 text-xs transition-all duration-200 cursor-pointer select-none ${
                         isDone 
-                          ? 'bg-emerald-950/40 border-emerald-600/70 text-emerald-200 shadow-sm' 
-                          : 'bg-slate-900/90 hover:bg-slate-800 border-slate-800 text-slate-200'
+                          ? 'bg-emerald-950/25 border-emerald-500/40 text-emerald-200 shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
+                          : 'bg-[#030608]/70 hover:bg-[#030608]/95 border-white/6 hover:border-cyan-500/30 text-slate-200'
                       }`}
                     >
                       <div className={`w-4 h-4 rounded mt-0.5 flex items-center justify-center shrink-0 border transition-all ${
-                        isDone ? 'bg-emerald-500 border-emerald-400 text-slate-950' : 'border-slate-600 bg-slate-950'
+                        isDone ? 'bg-emerald-400 border-emerald-300 text-slate-950 shadow-[0_0_8px_rgba(52,211,153,0.6)]' : 'border-slate-600 bg-black/60'
                       }`}>
                         {isDone && <CheckCircle className="w-3.5 h-3.5 text-slate-950 stroke-[3]" />}
                       </div>
-                      <span className={`leading-relaxed ${isDone ? 'line-through opacity-85 text-emerald-300' : ''}`}>
+                      <span className={`leading-relaxed font-mono ${isDone ? 'line-through opacity-85 text-emerald-300' : ''}`}>
                         {act}
                       </span>
                     </div>
@@ -1947,8 +1963,8 @@ export default function App() {
 
             {/* Official Directive Body */}
             {activeDispatchModal.mock_payload?.body && (
-              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 leading-relaxed font-mono">
-                <div className="text-[10px] text-slate-500 font-bold mb-1 uppercase">Official Dispatch Body:</div>
+              <div className="p-3 rounded-xl bg-[#030608]/90 border border-white/8 text-xs text-slate-300 leading-relaxed font-mono">
+                <div className="text-[10px] text-slate-500 font-bold mb-1 uppercase tracking-wider">Official Dispatch Body:</div>
                 {activeDispatchModal.mock_payload.body}
               </div>
             )}
@@ -1962,14 +1978,14 @@ export default function App() {
                   alert(language === 'hi' ? 'आदेश सफलतापूर्वक ट्रांसमिट और अभिस्वीकृत हो गया!' : 'Dispatch Order Acknowledged & Transmitted to Agency Command Center!');
                   setActiveDispatchModal(null);
                 }}
-                className="flex-1 py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-500 hover:to-teal-400 text-slate-950 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-lg shadow-cyan-900/40"
+                className="flex-1 py-3 rounded-xl bg-[#00F0FF]/20 hover:bg-[#00F0FF]/30 border border-[#00F0FF]/50 text-[#00F0FF] font-black text-xs sm:text-sm font-mono tracking-wider uppercase transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-[0_0_25px_rgba(0,240,255,0.25)]"
               >
                 <Send className="w-4 h-4" /> {language === 'hi' ? 'आदेश ट्रांसमिट करें (Acknowledge)' : 'Acknowledge & Transmit Dispatch'}
               </button>
               <button
                 type="button"
                 onClick={() => setActiveDispatchModal(null)}
-                className="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs sm:text-sm transition cursor-pointer active:scale-95"
+                className="px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white font-mono text-xs sm:text-sm tracking-wider uppercase transition cursor-pointer active:scale-95"
               >
                 {language === 'hi' ? 'बंद करें' : 'Close'}
               </button>
@@ -1982,30 +1998,30 @@ export default function App() {
       {/* ==================== INTERSTATE COORDINATION MODAL ==================== */}
       {activeInterstateModal && (
         <div
-          className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200"
+          className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200"
           onClick={(e) => { if (e.target === e.currentTarget) setActiveInterstateModal(null); }}
         >
-          <div className="bg-[#0B1320] border border-slate-700 dark:border-sky-800/80 rounded-3xl p-5 sm:p-6 w-full max-w-xl shadow-2xl shadow-black/90 flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
+          <div className="glass-pod hud-corners border border-sky-500/30 rounded-3xl p-5 sm:p-6 w-full max-w-xl shadow-[0_0_50px_rgba(0,0,0,0.9)] flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
             
             {/* Header */}
-            <div className="flex items-start justify-between border-b border-slate-800 pb-3">
+            <div className="flex items-start justify-between border-b border-white/8 pb-3">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-sky-950/80 border border-sky-700/60 flex items-center justify-center text-sky-400 shadow-md shrink-0">
+                <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.2)] shrink-0">
                   <GitMerge className="w-6 h-6" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono font-black text-sky-400 bg-sky-950 px-2 py-0.5 rounded border border-sky-800">
+                    <span className="text-[10px] font-mono font-bold text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded border border-sky-500/30 tracking-wider">
                       {activeInterstateModal.role}
                     </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-900 text-sky-300 border border-sky-700">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300 border border-sky-500/40 shadow-[0_0_10px_rgba(56,189,248,0.2)]">
                       {activeInterstateModal.coordination_urgency}
                     </span>
                   </div>
-                  <h3 className="text-base sm:text-lg font-bold text-white mt-1">
+                  <h3 className="text-base sm:text-lg font-bold text-white mt-1 tracking-tight">
                     {activeInterstateModal.state} — Cross-Border Action Grid
                   </h3>
-                  <div className="text-xs text-slate-400">
+                  <div className="text-xs text-slate-400 font-mono">
                     Status: {activeInterstateModal.current_status}
                   </div>
                 </div>
@@ -2013,25 +2029,25 @@ export default function App() {
               <button 
                 type="button"
                 onClick={() => setActiveInterstateModal(null)}
-                className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer active:scale-95"
+                className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition cursor-pointer active:scale-95"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Cross-Border Atmospheric Transport Context */}
-            <div className="p-3.5 rounded-2xl bg-sky-950/40 border border-sky-800/50 flex flex-col gap-2">
+            <div className="p-3.5 rounded-2xl bg-sky-950/20 border border-sky-500/20 flex flex-col gap-2">
               <span className="text-[10px] font-mono font-bold text-sky-400 uppercase tracking-wider">
                 Cross-Border Transboundary Transport Context
               </span>
               <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
+                <div className="p-2.5 rounded-xl bg-[#030608]/80 border border-white/6">
                   <div className="text-[10px] text-slate-400 font-mono">Current Status</div>
-                  <div className="text-xs font-semibold text-slate-200 mt-0.5">{activeInterstateModal.current_status}</div>
+                  <div className="text-xs font-semibold text-slate-200 mt-0.5 font-mono">{activeInterstateModal.current_status}</div>
                 </div>
-                <div className="p-2.5 rounded-xl bg-slate-900/90 border border-amber-900/40">
+                <div className="p-2.5 rounded-xl bg-[#030608]/80 border border-amber-500/30">
                   <div className="text-[10px] text-amber-400 font-mono">Forecast Downwind Risk</div>
-                  <div className="text-xs font-semibold text-amber-300 mt-0.5">{activeInterstateModal.forecast_risk}</div>
+                  <div className="text-xs font-bold text-amber-300 mt-0.5 font-mono">{activeInterstateModal.forecast_risk}</div>
                 </div>
               </div>
             </div>
@@ -2039,7 +2055,7 @@ export default function App() {
             {/* Mandatory Cross-State Directives (Interactive Checklist) */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-200 uppercase font-mono">
+                <span className="text-xs font-bold text-slate-200 uppercase font-mono tracking-wider">
                   Cross-State Directives ({activeInterstateModal.active_mandates.length} Mandates)
                 </span>
                 <span className="text-[10px] text-sky-400 font-mono">
@@ -2052,23 +2068,23 @@ export default function App() {
                   const isDone = !!checkedDispatchTasks[stateTaskId];
                   return (
                     <div 
-                      key={idx}
+                      key={idx} 
                       onClick={() => {
                         sound.playTap();
                         setCheckedDispatchTasks(prev => ({ ...prev, [stateTaskId]: !prev[stateTaskId] }));
                       }}
-                      className={`p-3 rounded-xl border flex items-start gap-3 text-xs transition-all duration-200 cursor-pointer select-none card-interactive ${
+                      className={`p-3 rounded-xl border flex items-start gap-3 text-xs transition-all duration-200 cursor-pointer select-none ${
                         isDone 
-                          ? 'bg-emerald-950/40 border-emerald-600/70 text-emerald-200 shadow-sm' 
-                          : 'bg-slate-900/90 hover:bg-slate-800 border-slate-800 text-slate-200'
+                          ? 'bg-emerald-950/25 border-emerald-500/40 text-emerald-200 shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
+                          : 'bg-[#030608]/70 hover:bg-[#030608]/95 border-white/6 hover:border-sky-500/30 text-slate-200'
                       }`}
                     >
                       <div className={`w-4 h-4 rounded mt-0.5 flex items-center justify-center shrink-0 border transition-all ${
-                        isDone ? 'bg-emerald-500 border-emerald-400 text-slate-950' : 'border-slate-600 bg-slate-950'
+                        isDone ? 'bg-emerald-400 border-emerald-300 text-slate-950 shadow-[0_0_8px_rgba(52,211,153,0.6)]' : 'border-slate-600 bg-black/60'
                       }`}>
                         {isDone && <CheckCircle className="w-3.5 h-3.5 text-slate-950 stroke-[3]" />}
                       </div>
-                      <span className={`leading-relaxed ${isDone ? 'line-through opacity-85 text-emerald-300' : ''}`}>
+                      <span className={`leading-relaxed font-mono ${isDone ? 'line-through opacity-85 text-emerald-300' : ''}`}>
                         {mandate}
                       </span>
                     </div>
@@ -2086,14 +2102,14 @@ export default function App() {
                   alert(language === 'hi' ? 'अंतरराज्यीय समन्वय अभिस्वीकृत हो गया!' : 'Interstate Coordination Mandate Acknowledged & Synchronized!');
                   setActiveInterstateModal(null);
                 }}
-                className="flex-1 py-3 rounded-xl bg-gradient-to-r from-sky-600 to-cyan-500 hover:from-sky-500 hover:to-cyan-400 text-slate-950 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-lg shadow-sky-900/40"
+                className="flex-1 py-3 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 border border-sky-500/50 text-sky-300 font-black text-xs sm:text-sm font-mono tracking-wider uppercase transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-[0_0_25px_rgba(56,189,248,0.25)]"
               >
                 <CheckCircle className="w-4 h-4" /> {language === 'hi' ? 'अभिस्वीकृत करें (Acknowledge)' : 'Acknowledge Mandates'}
               </button>
               <button
                 type="button"
                 onClick={() => setActiveInterstateModal(null)}
-                className="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs sm:text-sm transition cursor-pointer active:scale-95"
+                className="px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white font-mono text-xs sm:text-sm tracking-wider uppercase transition cursor-pointer active:scale-95"
               >
                 {language === 'hi' ? 'बंद करें' : 'Close'}
               </button>
