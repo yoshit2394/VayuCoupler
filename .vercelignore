@@ -5,3 +5,6 @@ venv/
 scratch/
 docs/
 *.pdf
+*.apk
+frontend/node_modules/
+frontend/android/

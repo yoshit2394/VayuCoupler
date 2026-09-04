@@ -46,6 +46,7 @@ export default function App() {
   const [locationStatus, setLocationStatus] = useState('detecting'); // 'detecting' | 'detected' | 'denied' | 'idle'
   const [locationBannerVisible, setLocationBannerVisible] = useState(false);
   const hasRequestedLocation = useRef(false);
+  const bannerTimerRef = useRef(null);
 
   useEffect(() => {
     if (theme === 'light') {
@@ -104,41 +105,56 @@ export default function App() {
     loadData();
   }, [currentStep, selectedStationId]);
 
-  // Auto-detect user's live GPS location on startup & automatically set local station
+  // Auto-detect user's live GPS location on startup & automatically set local station (runs once)
   useEffect(() => {
-    if (!snapshot?.stations || snapshot.stations.length === 0 || hasRequestedLocation.current) return;
-    hasRequestedLocation.current = true;
-
     let isMounted = true;
-    requestUserLocation(snapshot.stations).then((loc) => {
-      if (!isMounted) return;
-      if (loc.success && loc.closestStation) {
-        setUserLocation(loc);
-        setLocationStatus('detected');
-        setSelectedStationId(loc.closestStation.station_id);
-        setLocationBannerVisible(true);
-        sound.playTap();
-        setTimeout(() => {
-          if (isMounted) setLocationBannerVisible(false);
-        }, 3500);
-      } else {
-        setLocationStatus('denied');
-      }
-    });
+    // Delay slightly to let snapshot load first
+    const initTimer = setTimeout(() => {
+      if (hasRequestedLocation.current) return;
+      hasRequestedLocation.current = true;
 
-    return () => { isMounted = false; };
-  }, [snapshot?.stations]);
+      const stations = getInterpolatedSnapshot(72)?.stations || [];
+      requestUserLocation(stations).then((loc) => {
+        if (!isMounted) return;
+        if (loc.success && loc.closestStation) {
+          setUserLocation(loc);
+          setLocationStatus('detected');
+          setSelectedStationId(loc.closestStation.station_id);
+          if (bannerTimerRef.current) clearTimeout(bannerTimerRef.current);
+          setLocationBannerVisible(false);
+          requestAnimationFrame(() => {
+            setLocationBannerVisible(true);
+            sound.playTap();
+            bannerTimerRef.current = setTimeout(() => {
+              if (isMounted) setLocationBannerVisible(false);
+            }, 3500);
+          });
+        } else {
+          setLocationStatus('denied');
+        }
+      });
+    }, 800);
+
+    return () => { isMounted = false; clearTimeout(initTimer); };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDetectLocation = async () => {
     setLocationStatus('detecting');
     sound.playTap();
+    // Cancel any existing auto-dismiss timer
+    if (bannerTimerRef.current) clearTimeout(bannerTimerRef.current);
+    // Force-hide banner first so it re-mounts fresh (fixes re-trigger bug)
+    setLocationBannerVisible(false);
     const loc = await requestUserLocation(snapshot?.stations || []);
     if (loc.success && loc.closestStation) {
       setUserLocation(loc);
       setLocationStatus('detected');
       setSelectedStationId(loc.closestStation.station_id);
-      setLocationBannerVisible(true);
-      setTimeout(() => setLocationBannerVisible(false), 3500);
+      // Small delay to ensure React unmounts old banner before showing new one
+      requestAnimationFrame(() => {
+        setLocationBannerVisible(true);
+        bannerTimerRef.current = setTimeout(() => setLocationBannerVisible(false), 3500);
+      });
     } else {
       setLocationStatus('denied');
       alert(language === 'hi' 
