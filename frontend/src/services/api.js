@@ -1,6 +1,6 @@
 import offlineBundle from '../data/offline_bundle.json';
 
-const RAILWAY_BACKEND = 'https://web-production-2c7a4.up.railway.app';
+const RAILWAY_BACKEND = 'https://web-production-20361.up.railway.app';
 const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
 
 const BASE_URL = import.meta.env.VITE_API_URL || 
