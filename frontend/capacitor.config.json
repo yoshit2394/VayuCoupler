@@ -2,10 +2,6 @@
   "appId": "gov.in.moes.vayucoupler",
   "appName": "VayuCoupler",
   "webDir": "dist",
-  "server": {
-    "url": "https://vayucoupler.yoshit2394.workers.dev",
-    "cleartext": true
-  },
   "android": {
     "allowMixedContent": true
   }
