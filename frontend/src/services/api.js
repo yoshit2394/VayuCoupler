@@ -1,12 +1,14 @@
 import offlineBundle from '../data/offline_bundle.json';
 
+const RENDER_BACKEND = 'https://vayucoupler.onrender.com';
+
 const isLocalhost = typeof window !== 'undefined' && (
   window.location.hostname === 'localhost' || 
   window.location.hostname === '127.0.0.1'
 );
 
 const BASE_URL = import.meta.env.VITE_API_URL || 
-  (isLocalhost ? 'http://127.0.0.1:8000' : '');
+  (isLocalhost ? 'http://127.0.0.1:8000' : RENDER_BACKEND);
 
 function isOffline() {
   return typeof navigator !== 'undefined' && !navigator.onLine;
