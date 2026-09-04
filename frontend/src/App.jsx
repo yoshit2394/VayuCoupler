@@ -330,29 +330,29 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0F17] text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#050912] text-slate-100 flex flex-col font-sans">
       
       {/* ===== TOP NAVIGATION ===== */}
-      <header className="sticky top-0 z-50 bg-[#0B0F17]/90 backdrop-blur-xl border-b border-slate-800/80 px-4 md:px-6 py-2.5 md:py-3 safe-area-pt shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+      <header className="sticky top-0 z-50 bg-[#030608]/95 backdrop-blur-2xl border-b border-cyan-500/10 px-4 md:px-6 py-2.5 md:py-3 safe-area-pt shadow-[0_4px_40px_rgba(0,0,0,0.6),0_1px_0_rgba(0,240,255,0.06)]">
         {/* Desktop Navbar */}
         <div className="hidden md:flex max-w-[1720px] mx-auto items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-cyan-600 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/25 border border-cyan-400/30">
-              <Wind className="w-5 h-5 text-white" />
+            <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-[#00F0FF]/80 via-cyan-500 to-blue-600 flex items-center justify-center shadow-[0_0_20px_rgba(0,240,255,0.45)] border border-[#00F0FF]/40 orb-glow">
+              <Wind className="w-5 h-5 text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2 py-0.5 rounded-md bg-gradient-to-r from-cyan-950/90 to-blue-950/90 text-cyan-300 border border-cyan-700/60 font-mono shadow-[0_0_10px_rgba(6,182,212,0.15)]">
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#00F0FF]/10 text-[#00F0FF] border border-[#00F0FF]/30 font-mono shadow-[0_0_10px_rgba(0,240,255,0.2)] tracking-widest">
                   SIH26082 • MoES
                 </span>
                 <span className="text-xs text-slate-400 font-medium tracking-wide">Delhi NCR Coupled Forecasting System</span>
               </div>
-              <h1 className="text-sm md:text-base font-extrabold text-white tracking-tight flex items-center gap-2.5 mt-0.5">
+              <h1 className="text-sm md:text-base font-extrabold tracking-tight flex items-center gap-2.5 mt-0.5" style={{color:'#e2f8ff'}}>
                 Air Pollution–Weather Coupled Early Warning System
-                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-300 bg-emerald-950/70 px-2.5 py-0.5 rounded-full border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.25)] font-mono">
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#00FF88] bg-[#00FF88]/10 px-2.5 py-0.5 rounded-full border border-[#00FF88]/35 shadow-[0_0_16px_rgba(0,255,136,0.3)] font-mono tracking-wider">
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00FF88] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00FF88]"></span>
                   </span>
                   PREDICTIVE GRAP ACTIVE
                 </span>
@@ -361,7 +361,7 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-2.5">
-            <nav className="flex items-center bg-[#0F172A]/90 p-1 rounded-xl border border-slate-800 text-xs font-semibold shadow-inner">
+            <nav className="flex items-center bg-[#050912]/90 p-1 rounded-2xl border border-cyan-500/12 text-xs font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_4px_16px_rgba(0,0,0,0.4)] backdrop-blur-xl">
               {[
                 { id: 'overview', icon: <LayoutDashboard className="w-4 h-4" />, label: t('tab_overview', language) },
                 { id: 'grap',     icon: <ShieldAlert className="w-4 h-4" />,    label: t('tab_grap', language) },
@@ -372,10 +372,10 @@ export default function App() {
                 <button
                   key={tab.id}
                   onClick={() => switchTab(tab.id)}
-                  className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all duration-200 cursor-pointer font-mono tracking-wide ${
                     activeTab === tab.id
-                      ? 'text-cyan-300 bg-cyan-950/90 border border-cyan-500/60 font-bold shadow-[0_0_12px_rgba(6,182,212,0.25)]'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                      ? 'text-[#00F0FF] bg-[#00F0FF]/10 border border-[#00F0FF]/40 font-bold shadow-[0_0_14px_rgba(0,240,255,0.18)] drop-shadow-[0_0_6px_rgba(0,240,255,0.4)]'
+                      : 'text-slate-500 hover:text-slate-200 hover:bg-white/5 border border-transparent'
                   }`}
                 >
                   {tab.icon} {tab.label}
@@ -387,26 +387,26 @@ export default function App() {
             <button
               type="button"
               onClick={handleDetectLocation}
-              className={`px-3 py-1.5 rounded-xl border flex items-center gap-2 text-xs font-semibold transition-all cursor-pointer active:scale-95 shadow-sm backdrop-blur-md ${
+              className={`px-3 py-1.5 rounded-xl border flex items-center gap-2 text-xs font-semibold transition-all cursor-pointer active:scale-95 backdrop-blur-xl font-mono tracking-wide ${
                 userLocation 
-                  ? 'bg-cyan-950/80 hover:bg-cyan-900 text-cyan-200 border-cyan-500/60 shadow-[0_0_14px_rgba(6,182,212,0.25)]'
-                  : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 border-slate-800'
+                  ? 'bg-[#00F0FF]/08 hover:bg-[#00F0FF]/12 text-[#00F0FF] border-[#00F0FF]/40 shadow-[0_0_16px_rgba(0,240,255,0.18)]'
+                  : 'bg-white/4 hover:bg-white/8 text-slate-400 hover:text-slate-200 border-white/8'
               }`}
               title={userLocation ? `Live Station: ${userLocation.closestStation.name} (${userLocation.distanceKm} km)` : "Detect My Location"}
             >
               <div className="relative flex items-center justify-center">
-                <Navigation className={`w-3.5 h-3.5 text-cyan-400 ${locationStatus === 'detecting' ? 'animate-spin' : ''}`} />
+                <Navigation className={`w-3.5 h-3.5 ${userLocation ? 'text-[#00F0FF]' : 'text-slate-400'} ${locationStatus === 'detecting' ? 'animate-spin' : ''}`} />
                 {userLocation && (
                   <span className="absolute -top-1 -right-1 flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00FF88] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#00FF88]"></span>
                   </span>
                 )}
               </div>
               {userLocation ? (
-                <span className="flex items-center gap-1.5 font-mono">
-                  <span className="font-sans font-bold text-white">{userLocation.closestStation.name.split(' ')[0]}</span>
-                  <span className="text-cyan-400/90 text-[11px]">({userLocation.distanceKm}km)</span>
+                <span className="flex items-center gap-1.5">
+                  <span className="font-bold text-white">{userLocation.closestStation.name.split(' ')[0]}</span>
+                  <span className="text-[#00F0FF]/80 text-[11px]">({userLocation.distanceKm}km)</span>
                 </span>
               ) : (
                 <span>{locationStatus === 'detecting' ? 'Detecting...' : (language === 'hi' ? 'मेरी लोकेशन' : 'Detect Location')}</span>
@@ -434,10 +434,10 @@ export default function App() {
             <button
               type="button"
               onClick={() => setIsSettingsOpen(true)}
-              className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-cyan-300 border border-slate-800 flex items-center gap-1.5 text-xs font-semibold transition cursor-pointer active:scale-95 shadow-sm"
+              className="px-3 py-1.5 rounded-xl bg-white/4 hover:bg-white/8 text-slate-400 hover:text-[#00F0FF] border border-white/8 hover:border-[#00F0FF]/30 flex items-center gap-1.5 text-xs font-semibold transition cursor-pointer active:scale-95 font-mono tracking-wide"
               title="System Preferences (Theme & Language)"
             >
-              <Settings className="w-3.5 h-3.5 text-cyan-400" />
+              <Settings className="w-3.5 h-3.5" />
               <span>{t('settings_btn', language)}</span>
             </button>
           </div>
@@ -446,15 +446,15 @@ export default function App() {
         {/* Mobile Native App Bar */}
         <div className="md:hidden flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-md shadow-cyan-500/25 border border-cyan-400/30">
+            <div className="relative w-8 h-8 rounded-lg bg-gradient-to-tr from-[#00F0FF]/70 via-cyan-500 to-blue-600 flex items-center justify-center shadow-[0_0_16px_rgba(0,240,255,0.4)] border border-[#00F0FF]/35">
               <Wind className="w-4 h-4 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-sm font-black text-white tracking-tight">VayuCoupler</span>
-                <span className="text-[8px] font-bold px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 font-mono">MoES</span>
+                <span className="text-sm font-black tracking-tight" style={{color:'#e2f8ff'}}>VayuCoupler</span>
+                <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-[#00F0FF]/10 text-[#00F0FF] border border-[#00F0FF]/30 font-mono tracking-widest">MoES</span>
               </div>
-              <p className="text-[9px] text-slate-400 font-medium">Delhi-NCR Coupled AQI</p>
+              <p className="text-[9px] text-slate-500 font-mono tracking-wider">DELHI-NCR COUPLED AQI</p>
             </div>
           </div>
 
@@ -463,19 +463,19 @@ export default function App() {
             <button
               type="button"
               onClick={handleDetectLocation}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[10px] font-semibold active:scale-95 transition backdrop-blur-md ${
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[10px] font-semibold active:scale-95 transition backdrop-blur-xl font-mono ${
                 userLocation 
-                  ? 'bg-cyan-950/90 text-cyan-200 border-cyan-500/70 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
-                  : 'bg-slate-900/90 text-slate-300 border-slate-800'
+                  ? 'bg-[#00F0FF]/10 text-[#00F0FF] border-[#00F0FF]/40 shadow-[0_0_12px_rgba(0,240,255,0.25)]'
+                  : 'bg-white/5 text-slate-400 border-white/10'
               }`}
               title="Detect My Location"
             >
-              <Navigation className={`w-3 h-3 text-cyan-400 ${locationStatus === 'detecting' ? 'animate-spin' : ''}`} />
+              <Navigation className={`w-3 h-3 ${userLocation ? 'text-[#00F0FF]' : 'text-slate-400'} ${locationStatus === 'detecting' ? 'animate-spin' : ''}`} />
               {userLocation ? (
                 <span className="flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88] animate-pulse"></span>
                   <span className="truncate max-w-[85px] font-bold text-white">{userLocation.closestStation.name.split(' ')[0]}</span>
-                  <span className="text-[9px] text-cyan-300/80 font-mono">({userLocation.distanceKm}km)</span>
+                  <span className="text-[9px] text-[#00F0FF]/80">({userLocation.distanceKm}km)</span>
                 </span>
               ) : (
                 <span className="text-[9px]">{locationStatus === 'detecting' ? 'GPS...' : (language === 'hi' ? 'लोकेशन' : 'GPS')}</span>
@@ -498,10 +498,10 @@ export default function App() {
 
             <button 
               onClick={() => setIsSettingsOpen(true)}
-              className="p-1.5 rounded-lg bg-slate-900/90 text-slate-300 border border-slate-800 active:scale-95"
+              className="p-1.5 rounded-lg bg-white/5 text-slate-400 hover:text-[#00F0FF] border border-white/8 active:scale-95 transition"
               title="Settings"
             >
-              <Settings className="w-4 h-4 text-cyan-400" />
+              <Settings className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -515,19 +515,25 @@ export default function App() {
             handleSelectAndScrollStation(userLocation.closestStation.station_id);
             setLocationBannerVisible(false);
           }}
-          className="fixed top-14 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-cyan-950/95 via-slate-900/95 to-emerald-950/95 border border-cyan-500/60 rounded-2xl p-3 shadow-2xl flex flex-col gap-2 backdrop-blur-2xl max-w-md w-[94%] cursor-pointer active:scale-95 transition-all duration-300 animate-in fade-in slide-in-from-top-3"
+          className="fixed top-14 left-1/2 -translate-x-1/2 z-50 rounded-2xl p-3 flex flex-col gap-2 max-w-md w-[94%] cursor-pointer active:scale-95 transition-all duration-300 animate-in fade-in slide-in-from-top-3 hud-corners"
+          style={{
+            background:'linear-gradient(135deg,rgba(0,240,255,0.08),rgba(0,255,136,0.05))',
+            backdropFilter:'blur(28px)',
+            border:'1px solid rgba(0,240,255,0.35)',
+            boxShadow:'0 8px 40px rgba(0,0,0,0.7),0 0 30px rgba(0,240,255,0.12)'
+          }}
           title="Click to view forecast for your local station"
         >
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/50 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.4)]">
-              <Navigation className="w-4 h-4 text-cyan-400 animate-pulse" />
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{background:'rgba(0,240,255,0.12)',border:'1px solid rgba(0,240,255,0.45)',boxShadow:'0 0 14px rgba(0,240,255,0.3)'}}>
+              <Navigation className="w-4 h-4 text-[#00F0FF] animate-pulse" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-xs font-bold text-white flex items-center gap-1.5 truncate">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <div className="text-xs font-bold text-white flex items-center gap-1.5 truncate font-mono">
+                <span className="w-2 h-2 rounded-full bg-[#00FF88] animate-pulse"></span>
                 <span>{language === 'hi' ? 'आपकी लाइव लोकेशन सेट हो गई है' : 'Local Air Quality Set to Your Location'}</span>
               </div>
-              <div className="text-[11px] text-cyan-300 font-medium truncate mt-0.5">
+              <div className="text-[11px] font-mono truncate mt-0.5" style={{color:'rgba(0,240,255,0.8)'}}>
                 {userLocation.closestStation.name} • {userLocation.distanceKm} km away • AQI {userLocation.closestStation.aqi}
               </div>
             </div>
@@ -537,41 +543,42 @@ export default function App() {
                 e.stopPropagation();
                 setLocationBannerVisible(false);
               }}
-              className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 shrink-0 cursor-pointer active:scale-95"
+              className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-white/10 shrink-0 cursor-pointer active:scale-95 transition"
               title="Close">
               <X className="w-4 h-4" />
             </button>
           </div>
-          {/* Subtle auto-dismiss timer bar */}
-          <div className="w-full bg-cyan-950/60 h-1 rounded-full overflow-hidden border border-cyan-800/40">
-            <div className="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 rounded-full animate-[shrinkWidth_3.5s_linear_forwards]" style={{ width: '100%' }} />
+          {/* Auto-dismiss timer bar */}
+          <div className="w-full h-0.5 rounded-full overflow-hidden" style={{background:'rgba(0,240,255,0.08)'}}>
+            <div className="h-full rounded-full animate-[shrinkWidth_3.5s_linear_forwards]" style={{ width: '100%', background:'linear-gradient(90deg,#00F0FF,#00FF88)' }} />
           </div>
         </div>
       )}
 
       {/* ===== TIME SCRUBBER (Simplified 7-Day Forecast Timeline) ===== */}
-      <section className="bg-slate-950/90 border-b border-slate-800 px-4 sm:px-6 py-3">
+      <section className="border-b border-cyan-500/8 px-4 sm:px-6 py-3" style={{background:'rgba(3,6,8,0.96)',backdropFilter:'blur(20px)'}}>
         <div className="max-w-[1720px] mx-auto flex flex-col md:flex-row items-center gap-3 md:gap-4">
           
           {/* Play/Pause & Simple Day Badge */}
           <div className="flex items-center gap-2 shrink-0 self-start md:self-auto">
             <button 
               onClick={togglePlay}
-              className="w-8 h-8 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white flex items-center justify-center transition active:scale-95 shadow-md shadow-cyan-900/40 cursor-pointer"
+              className="w-8 h-8 rounded-xl flex items-center justify-center transition active:scale-95 cursor-pointer font-mono"
+              style={{background:'rgba(0,240,255,0.15)',border:'1px solid rgba(0,240,255,0.4)',boxShadow:'0 0 14px rgba(0,240,255,0.2)',color:'#00F0FF'}}
               title={isPlaying ? "Pause Timeline" : "Play 7-Day Forecast"}
             >
               {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
             </button>
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold">
-              <span className="text-cyan-400 font-bold">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-mono font-semibold" style={{background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.08)'}}>
+              <span className="font-bold" style={{color:'#00F0FF'}}>
                 📅 {t('scrubber_day', language)} {Math.min(7, Math.max(1, Math.floor(currentStep / 24) + 1))}
               </span>
               <span className="text-slate-500 text-[10px]">({currentStep}h)</span>
-              <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
-                currentStep >= 144 ? 'text-emerald-300 bg-emerald-950/80 border border-emerald-700/60' :
-                currentStep >= 96  ? 'text-rose-300 bg-rose-950/80 border border-rose-700/60' :
-                currentStep >= 48  ? 'text-amber-300 bg-amber-950/80 border border-amber-700/60' :
-                                     'text-cyan-300 bg-cyan-950/80 border border-cyan-700/60'
+              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md font-mono ${
+                currentStep >= 144 ? 'text-[#00FF88] bg-[#00FF88]/10 border border-[#00FF88]/30' :
+                currentStep >= 96  ? 'text-[#FF2E54] bg-[#FF2E54]/10 border border-[#FF2E54]/30' :
+                currentStep >= 48  ? 'text-[#FFB800] bg-[#FFB800]/10 border border-[#FFB800]/30' :
+                                     'text-[#00F0FF] bg-[#00F0FF]/10 border border-[#00F0FF]/30'
               }`}>
                 {currentStep >= 144 ? t('scrubber_badge_relief', language) :
                  currentStep >= 96  ? t('scrubber_badge_peak', language) :
@@ -582,21 +589,21 @@ export default function App() {
 
           {/* Slider & Simple Milestone Labels */}
           <div className="flex-1 w-full flex flex-col gap-1.5">
-            <div className="flex items-center justify-between text-[11px] font-medium text-slate-400 px-0.5">
-              <span className="text-slate-300 flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 inline-block"></span>
+            <div className="flex items-center justify-between text-[11px] font-mono font-medium text-slate-500 px-0.5 tracking-wider uppercase">
+              <span className="text-slate-400 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00F0FF] inline-block"></span>
                 {t('scrubber_d1', language)}
               </span>
-              <span className="text-amber-400 flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
+              <span className="flex items-center gap-1" style={{color:'#FFB800'}}>
+                <span className="w-1.5 h-1.5 rounded-full inline-block" style={{backgroundColor:'#FFB800'}}></span>
                 {t('scrubber_d3', language)}
               </span>
-              <span className="text-rose-400 font-bold flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-rose-400 inline-block animate-pulse"></span>
+              <span className="font-bold flex items-center gap-1" style={{color:'#FF2E54'}}>
+                <span className="w-1.5 h-1.5 rounded-full inline-block animate-pulse" style={{backgroundColor:'#FF2E54'}}></span>
                 {t('scrubber_d5', language)}
               </span>
-              <span className="text-emerald-400 flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span>
+              <span className="flex items-center gap-1" style={{color:'#00FF88'}}>
+                <span className="w-1.5 h-1.5 rounded-full inline-block" style={{backgroundColor:'#00FF88'}}></span>
                 {t('scrubber_d7', language)}
               </span>
             </div>
@@ -606,8 +613,8 @@ export default function App() {
                 sound.playSlider();
                 setCurrentStep(parseInt(e.target.value));
               }}
-              className="w-full accent-cyan-500 cursor-pointer h-2 bg-slate-800 rounded-lg appearance-none"
-              style={{ accentColor: '#06B6D4' }}
+              className="w-full cursor-pointer h-2 rounded-lg appearance-none"
+              style={{ accentColor: '#00F0FF' }}
             />
           </div>
 
@@ -616,44 +623,48 @@ export default function App() {
             <button 
               type="button"
               onClick={() => changeStep(24)} 
-              className={`px-2.5 py-1.5 rounded-xl border text-center transition cursor-pointer active:scale-95 text-[11px] font-semibold ${
+              className={`px-2.5 py-1.5 rounded-xl border text-center transition cursor-pointer active:scale-95 text-[11px] font-mono font-semibold tracking-wide ${
                 currentStep <= 36 
-                  ? 'bg-cyan-950 text-cyan-300 border-cyan-500 shadow-md shadow-cyan-950' 
-                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+                  ? 'text-[#00F0FF] border-[#00F0FF]/50 shadow-[0_0_10px_rgba(0,240,255,0.2)]' 
+                  : 'text-slate-500 border-white/8 hover:text-slate-300 hover:border-white/15'
               }`}
+              style={currentStep <= 36 ? {background:'rgba(0,240,255,0.10)'} : {background:'rgba(255,255,255,0.03)'}}
             >
               {t('scrubber_btn_d1', language)}
             </button>
             <button 
               type="button"
               onClick={() => changeStep(72)} 
-              className={`px-2.5 py-1.5 rounded-xl border text-center transition cursor-pointer active:scale-95 text-[11px] font-semibold ${
+              className={`px-2.5 py-1.5 rounded-xl border text-center transition cursor-pointer active:scale-95 text-[11px] font-mono font-semibold tracking-wide ${
                 currentStep >= 48 && currentStep <= 84 
-                  ? 'bg-amber-950 text-amber-300 border-amber-500 shadow-md shadow-amber-950' 
-                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+                  ? 'border-[#FFB800]/50 shadow-[0_0_10px_rgba(255,184,0,0.2)]' 
+                  : 'text-slate-500 border-white/8 hover:text-slate-300 hover:border-white/15'
               }`}
+              style={currentStep >= 48 && currentStep <= 84 ? {background:'rgba(255,184,0,0.10)',color:'#FFB800'} : {background:'rgba(255,255,255,0.03)'}}
             >
               {t('scrubber_btn_d3', language)}
             </button>
             <button 
               type="button"
               onClick={() => changeStep(120)} 
-              className={`px-2.5 py-1.5 rounded-xl border text-center transition cursor-pointer active:scale-95 text-[11px] font-bold ${
+              className={`px-2.5 py-1.5 rounded-xl border text-center transition cursor-pointer active:scale-95 text-[11px] font-mono font-bold tracking-wide ${
                 currentStep >= 96 && currentStep <= 132 
-                  ? 'bg-rose-950 text-rose-300 border-rose-500 shadow-md shadow-rose-950' 
-                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+                  ? 'border-[#FF2E54]/50 shadow-[0_0_10px_rgba(255,46,84,0.2)]' 
+                  : 'text-slate-500 border-white/8 hover:text-slate-300 hover:border-white/15'
               }`}
+              style={currentStep >= 96 && currentStep <= 132 ? {background:'rgba(255,46,84,0.10)',color:'#FF2E54'} : {background:'rgba(255,255,255,0.03)'}}
             >
               {t('scrubber_btn_d5', language)}
             </button>
             <button 
               type="button"
               onClick={() => changeStep(156)} 
-              className={`px-2.5 py-1.5 rounded-xl border text-center transition cursor-pointer active:scale-95 text-[11px] font-semibold ${
+              className={`px-2.5 py-1.5 rounded-xl border text-center transition cursor-pointer active:scale-95 text-[11px] font-mono font-semibold tracking-wide ${
                 currentStep >= 144 
-                  ? 'bg-emerald-950 text-emerald-300 border-emerald-500 shadow-md shadow-emerald-950' 
-                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+                  ? 'border-[#00FF88]/50 shadow-[0_0_10px_rgba(0,255,136,0.2)]' 
+                  : 'text-slate-500 border-white/8 hover:text-slate-300 hover:border-white/15'
               }`}
+              style={currentStep >= 144 ? {background:'rgba(0,255,136,0.10)',color:'#00FF88'} : {background:'rgba(255,255,255,0.03)'}}
             >
               {t('scrubber_btn_d7', language)}
             </button>
@@ -663,7 +674,7 @@ export default function App() {
       </section>
 
       {/* ===== MAIN CONTENT TABS ===== */}
-      <main className="flex-1 max-w-[1720px] w-full mx-auto p-3.5 md:p-6 pb-28 md:pb-8 flex flex-col gap-6">
+      <main className="flex-1 max-w-[1720px] w-full mx-auto p-3.5 md:p-6 pb-28 md:pb-8 flex flex-col gap-6" style={{background:'transparent'}}>
 
         {/* ==================== OVERVIEW / COMMAND CENTER TAB ==================== */}
         {activeTab === 'overview' && (
@@ -671,36 +682,34 @@ export default function App() {
 
             {/* 6 Key Atmospheric Coupling Telemetry HUD Cards */}
             <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-              {/* Card 1: Local Station Hero AQI (Auto-Synced with GPS / Selected Station) */}
+              {/* Card 1: Local Station Hero AQI */}
               <div 
                 onClick={() => handleSelectAndScrollStation(currSt.station_id)}
-                className="bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 hover:border-cyan-500/60 p-4 rounded-2xl border-l-4 cursor-pointer transition-all duration-300 shadow-lg hover:shadow-[0_8px_25px_rgba(0,0,0,0.5)] group select-none relative overflow-hidden flex flex-col justify-between" 
+                className="glass-pod hud-corners p-4 rounded-2xl cursor-pointer select-none relative overflow-hidden flex flex-col justify-between card-interactive border-l-4" 
                 style={{ borderLeftColor: currSt?.category_color || snapshot.category_color }}
                 title={`Click to view 72h Coupled Forecast for ${currSt?.name}`}
               >
-                <div className="text-xs text-slate-400 font-semibold flex items-center justify-between gap-1">
-                  <span className="flex items-center gap-1.5 text-cyan-300 font-bold truncate max-w-[140px]">
-                    <MapPin className="w-3.5 h-3.5 text-cyan-400 shrink-0 animate-pulse" />
-                    <span className="truncate tracking-wide">{currSt?.name?.toUpperCase()}</span>
+                <div className="text-xs font-semibold flex items-center justify-between gap-1">
+                  <span className="flex items-center gap-1.5 font-bold truncate max-w-[140px] font-mono tracking-wider uppercase text-[10px]" style={{color:'#00F0FF'}}>
+                    <MapPin className="w-3.5 h-3.5 shrink-0 animate-pulse" style={{color:'#00F0FF'}} />
+                    <span className="truncate">{currSt?.name?.toUpperCase()}</span>
                   </span>
                   {userLocation ? (
-                    <span className="text-[10px] text-cyan-300 font-mono font-bold flex items-center gap-1 bg-cyan-950/90 px-2 py-0.5 rounded-full border border-cyan-700/60 shrink-0 shadow-sm">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span className="text-[10px] font-mono font-bold flex items-center gap-1 px-2 py-0.5 rounded-full shrink-0" style={{color:'#00F0FF',background:'rgba(0,240,255,0.10)',border:'1px solid rgba(0,240,255,0.30)'}}>
+                      <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{backgroundColor:'#00FF88'}}></span>
                       <span>{userLocation.distanceKm} km</span>
                     </span>
                   ) : (
-                    <span className="text-[10px] text-slate-400 font-mono font-medium">
-                      {t('local_aqi', language)}
-                    </span>
+                    <span className="text-[10px] text-slate-500 font-mono">{t('local_aqi', language)}</span>
                   )}
                 </div>
 
                 <div className="my-2 flex items-baseline gap-2">
-                  <span className="text-3xl sm:text-4xl font-black font-mono tracking-tight" style={{ color: currSt?.category_color || '#FFFFFF' }}>
+                  <span className="text-3xl sm:text-4xl font-black font-mono tracking-tight drop-shadow-[0_0_10px_currentColor]" style={{ color: currSt?.category_color || '#FFFFFF' }}>
                     {currSt?.aqi}
                   </span>
                   <span 
-                    className="text-[10px] font-bold px-2 py-0.5 rounded-full font-mono tracking-wide uppercase border" 
+                    className="text-[10px] font-bold px-2 py-0.5 rounded-full font-mono tracking-widest uppercase border" 
                     style={{ 
                       backgroundColor: (currSt?.category_color || '#FBBF24') + '22', 
                       color: currSt?.category_color || '#FBBF24',
@@ -713,82 +722,82 @@ export default function App() {
                   </span>
                 </div>
 
-                <div className="text-[11px] text-slate-400 flex items-center justify-between font-mono pt-1.5 border-t border-slate-800/80">
-                  <span>PM2.5: <b className="text-slate-100 font-bold">{currSt?.pm25}</b> <span className="text-[9px] text-slate-500">μg/m³</span></span>
-                  <span className="text-slate-400 text-[10px]">{t('ncr_avg_short', language)}: <b className="text-cyan-300 font-bold">{snapshot.delhi_ncr_avg_aqi}</b></span>
+                <div className="text-[10px] text-slate-500 flex items-center justify-between font-mono pt-1.5" style={{borderTop:'1px solid rgba(255,255,255,0.06)'}}>
+                  <span>PM2.5: <b className="text-slate-300 font-bold">{currSt?.pm25}</b> <span className="text-[9px] text-slate-600">μg/m³</span></span>
+                  <span>NCR: <b style={{color:'#00F0FF'}}>{snapshot.delhi_ncr_avg_aqi}</b></span>
                 </div>
               </div>
 
               {/* Card 2: Ventilation Index */}
-              <div className="bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 hover:border-cyan-500/50 p-4 rounded-2xl border-l-4 border-l-cyan-500 shadow-lg transition-all duration-300 flex flex-col justify-between group">
-                <div className="text-xs text-cyan-400 font-semibold tracking-wide flex items-center justify-between">
+              <div className="glass-pod hud-corners p-4 rounded-2xl flex flex-col justify-between border-l-4 border-l-[#00F0FF] card-interactive">
+                <div className="text-[10px] font-mono tracking-widest uppercase flex items-center justify-between" style={{color:'#00F0FF'}}>
                   <span>{t('ventilation_idx', language)}</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400/80"></span>
+                  <span className="w-1.5 h-1.5 rounded-full" style={{backgroundColor:'#00F0FF',boxShadow:'0 0 6px #00F0FF'}}></span>
                 </div>
-                <div className="my-2 text-2xl sm:text-3xl font-black font-mono text-cyan-300 tracking-tight">
-                  {met.ventilation_index_m2s} <span className="text-xs text-slate-400 font-sans font-medium">m²/s</span>
+                <div className="my-2 text-2xl sm:text-3xl font-black font-mono tracking-tight drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]" style={{color:'#00F0FF'}}>
+                  {met.ventilation_index_m2s} <span className="text-xs text-slate-500 font-sans font-medium">m²/s</span>
                 </div>
-                <div className={`text-[11px] font-semibold font-mono pt-1.5 border-t border-slate-800/80 flex items-center gap-1 ${met.ventilation_index_m2s < 2000 ? 'text-rose-400' : 'text-emerald-400'}`}>
+                <div className={`text-[10px] font-mono pt-1.5 flex items-center gap-1 uppercase tracking-wider font-semibold`} style={{borderTop:'1px solid rgba(255,255,255,0.06)',color: met.ventilation_index_m2s < 2000 ? '#FF2E54' : '#00FF88'}}>
                   <span>{met.ventilation_index_m2s < 2000 ? '⚠' : '✓'}</span>
                   <span className="truncate">{language === 'hi' ? 'गंभीर ट्रैपिंग (<1200 m²/s)' : met.ventilation_status}</span>
                 </div>
               </div>
 
               {/* Card 3: Boundary Layer Height (PBLH) */}
-              <div className="bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 hover:border-indigo-500/50 p-4 rounded-2xl border-l-4 border-l-indigo-500 shadow-lg transition-all duration-300 flex flex-col justify-between group">
-                <div className="text-xs text-slate-400 font-semibold tracking-wide flex items-center justify-between">
+              <div className="glass-pod hud-corners p-4 rounded-2xl flex flex-col justify-between border-l-4 border-l-violet-500 card-interactive">
+                <div className="text-[10px] font-mono tracking-widest uppercase flex items-center justify-between text-slate-400">
                   <span>{t('pblh_height', language)}</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400/80"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-violet-400/80" style={{boxShadow:'0 0 5px rgba(167,139,250,0.6)'}}></span>
                 </div>
-                <div className="my-2 text-2xl sm:text-3xl font-black font-mono text-indigo-200 tracking-tight">
-                  {met.boundary_layer_height_m} <span className="text-xs text-slate-400 font-sans font-medium">m</span>
+                <div className="my-2 text-2xl sm:text-3xl font-black font-mono text-violet-300 tracking-tight drop-shadow-[0_0_8px_rgba(167,139,250,0.4)]">
+                  {met.boundary_layer_height_m} <span className="text-xs text-slate-500 font-sans font-medium">m</span>
                 </div>
-                <div className="text-[11px] text-indigo-300/90 font-mono pt-1.5 border-t border-slate-800/80 truncate">
+                <div className="text-[10px] text-violet-300/80 font-mono pt-1.5 truncate uppercase tracking-wider" style={{borderTop:'1px solid rgba(255,255,255,0.06)'}}>
                   {met.boundary_layer_height_m < 500 ? t('severe_trapping', language) : t('normal_dispersion', language)}
                 </div>
               </div>
 
               {/* Card 4: Temperature Inversion */}
-              <div className="bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 hover:border-amber-500/50 p-4 rounded-2xl border-l-4 border-l-amber-500 shadow-lg transition-all duration-300 flex flex-col justify-between group">
-                <div className="text-xs text-slate-400 font-semibold tracking-wide flex items-center justify-between">
+              <div className="glass-pod hud-corners p-4 rounded-2xl flex flex-col justify-between border-l-4 card-interactive" style={{borderLeftColor:'#FFB800'}}>
+                <div className="text-[10px] font-mono tracking-widest uppercase flex items-center justify-between text-slate-400">
                   <span>{t('inversion_delta', language)}</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400/80"></span>
+                  <span className="w-1.5 h-1.5 rounded-full" style={{backgroundColor:'#FFB800',boxShadow:'0 0 5px #FFB800'}}></span>
                 </div>
-                <div className="my-2 text-2xl sm:text-3xl font-black font-mono text-amber-300 tracking-tight">
-                  {met.inversion_strength_c} <span className="text-xs text-slate-400 font-sans font-medium">°C</span>
+                <div className="my-2 text-2xl sm:text-3xl font-black font-mono tracking-tight drop-shadow-[0_0_8px_rgba(255,184,0,0.5)]" style={{color:'#FFB800'}}>
+                  {met.inversion_strength_c} <span className="text-xs text-slate-500 font-sans font-medium">°C</span>
                 </div>
-                <div className="text-[11px] text-amber-400/90 font-mono pt-1.5 border-t border-slate-800/80 truncate">
+                <div className="text-[10px] font-mono pt-1.5 truncate uppercase tracking-wider" style={{borderTop:'1px solid rgba(255,255,255,0.06)',color:'rgba(255,184,0,0.8)'}}>
                   {t('nocturnal_trapping', language)}
                 </div>
               </div>
 
               {/* Card 5: Wind Vector */}
-              <div className="bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 hover:border-blue-500/50 p-4 rounded-2xl border-l-4 border-l-blue-500 shadow-lg transition-all duration-300 flex flex-col justify-between group">
-                <div className="text-xs text-slate-400 font-semibold tracking-wide flex items-center justify-between">
+              <div className="glass-pod hud-corners p-4 rounded-2xl flex flex-col justify-between border-l-4 border-l-blue-400 card-interactive">
+                <div className="text-[10px] font-mono tracking-widest uppercase flex items-center justify-between text-slate-400">
                   <span>{t('wind_vector', language)}</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400/80"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400" style={{boxShadow:'0 0 5px rgba(96,165,250,0.7)'}}></span>
                 </div>
-                <div className="my-2 text-xl sm:text-2xl font-black font-mono text-blue-200 tracking-tight">
-                  {met.wind_speed_kmh} <span className="text-xs text-slate-400 font-sans font-medium">km/h</span>
+                <div className="my-2 text-xl sm:text-2xl font-black font-mono text-blue-300 tracking-tight drop-shadow-[0_0_8px_rgba(96,165,250,0.4)]">
+                  {met.wind_speed_kmh} <span className="text-xs text-slate-500 font-sans font-medium">km/h</span>
                 </div>
-                <div className="text-[11px] text-blue-300/90 font-mono pt-1.5 border-t border-slate-800/80 truncate">
+                <div className="text-[10px] text-blue-300/80 font-mono pt-1.5 truncate uppercase tracking-wider" style={{borderTop:'1px solid rgba(255,255,255,0.06)'}}>
                   {met.wind_direction_cardinal} ({met.wind_direction_deg}°)
                 </div>
               </div>
 
               {/* Card 6: Stubble Fires */}
-              <div className="bg-[#0F172A]/90 backdrop-blur-md border border-slate-800/90 hover:border-orange-500/50 p-4 rounded-2xl border-l-4 border-l-orange-500 shadow-lg transition-all duration-300 flex flex-col justify-between group">
-                <div className="text-xs text-slate-400 font-semibold tracking-wide flex items-center justify-between">
+              <div className="glass-pod hud-corners p-4 rounded-2xl flex flex-col justify-between border-l-4 card-interactive" style={{borderLeftColor:'#F97316'}}>
+                <div className="text-[10px] font-mono tracking-widest uppercase flex items-center justify-between text-slate-400">
                   <span>{t('active_fires', language)}</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" style={{boxShadow:'0 0 6px rgba(249,115,22,0.8)'}}></span>
                 </div>
-                <div className="my-2 text-2xl sm:text-3xl font-black font-mono text-orange-400 tracking-tight">
-                  {fires.total_active_fires} <span className="text-xs text-slate-400 font-sans font-medium">{language === 'hi' ? 'आग' : 'fires'}</span>
+                <div className="my-2 text-2xl sm:text-3xl font-black font-mono text-orange-400 tracking-tight drop-shadow-[0_0_8px_rgba(249,115,22,0.5)]">
+                  {fires.total_active_fires} <span className="text-xs text-slate-500 font-sans font-medium">{language === 'hi' ? 'आग' : 'fires'}</span>
                 </div>
-                <div className="text-[11px] text-orange-300 font-mono flex items-center justify-between pt-1.5 border-t border-slate-800/80">
+                <div className="text-[10px] text-orange-300/80 font-mono flex items-center justify-between pt-1.5 uppercase tracking-wider" style={{borderTop:'1px solid rgba(255,255,255,0.06)'}}>
                   <span>{t('stubble_share_label', language)}: <b>{snapshot.source_attribution.stubble_burning}%</b></span>
                   {currSt?.stubble_share_ugm3 !== undefined && (
-                    <span className="text-amber-300 text-[10px]">({currSt.name.split(' ')[0]}: {currSt.stubble_share_ugm3}μg)</span>
+                    <span className="text-[9px] text-orange-400/70">({currSt.name.split(' ')[0]}: {currSt.stubble_share_ugm3}μg)</span>
                   )}
                 </div>
               </div>
@@ -798,16 +807,16 @@ export default function App() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
             {/* Map (7 Cols) */}
-            <div className="lg:col-span-7 bg-slate-900/80 border border-slate-800 p-5 rounded-2xl flex flex-col">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
-                <h2 className="text-base font-bold text-white flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-cyan-400" /> {t('spatial_grid_title', language)}
+            <div className="lg:col-span-7 glass-pod hud-corners p-5 rounded-2xl flex flex-col">
+              <div className="flex items-center justify-between pb-3 mb-3" style={{borderBottom:'1px solid rgba(0,240,255,0.1)'}}>
+                <h2 className="text-base font-bold flex items-center gap-2 font-mono tracking-wider" style={{color:'#e2f8ff'}}>
+                  <MapPin className="w-5 h-5" style={{color:'#00F0FF'}} /> {t('spatial_grid_title', language)}
                 </h2>
-                <span className="text-xs font-mono text-slate-400">{t('realtime_stations', language)}</span>
+                <span className="text-[10px] font-mono text-slate-500 tracking-widest uppercase">{t('realtime_stations', language)}</span>
               </div>
 
               {/* Zoom Slider Controls */}
-              <div className="flex items-center gap-2 sm:gap-3 mb-3 p-2.5 bg-slate-950 rounded-xl border border-slate-800">
+              <div className="flex items-center gap-2 sm:gap-3 mb-3 p-2.5 rounded-xl" style={{background:'rgba(0,0,0,0.4)',border:'1px solid rgba(0,240,255,0.10)'}}>
                 <button
                   type="button"
                   onClick={() => {
@@ -815,10 +824,11 @@ export default function App() {
                     setMapZoom(nextZoom);
                     if (nextZoom <= 1) setMapPan({ x: 0, y: 0 });
                   }}
-                  className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 active:scale-95 shrink-0 cursor-pointer"
+                  className="p-1.5 rounded-lg active:scale-95 shrink-0 cursor-pointer transition"
+                  style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.08)',color:'#94a3b8'}}
                   title="Zoom Out (-)"
                 >
-                  <ZoomOut className="w-4 h-4 text-slate-300 shrink-0" />
+                  <ZoomOut className="w-4 h-4 shrink-0" />
                 </button>
 
                 <input
@@ -828,8 +838,8 @@ export default function App() {
                     setMapZoom(z);
                     if (z <= 1) setMapPan({ x: 0, y: 0 });
                   }}
-                  className="flex-1 accent-cyan-500 cursor-pointer h-2 py-1.5"
-                  style={{ accentColor: '#06B6D4' }}
+                  className="flex-1 cursor-pointer h-2 py-1.5 rounded-lg appearance-none"
+                  style={{ accentColor: '#00F0FF' }}
                 />
 
                 <button
@@ -838,13 +848,14 @@ export default function App() {
                     const nextZoom = Math.min(3, +(mapZoom + 0.25).toFixed(2));
                     setMapZoom(nextZoom);
                   }}
-                  className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 active:scale-95 shrink-0 cursor-pointer"
+                  className="p-1.5 rounded-lg active:scale-95 shrink-0 cursor-pointer transition"
+                  style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.08)',color:'#94a3b8'}}
                   title="Zoom In (+)"
                 >
-                  <ZoomIn className="w-4 h-4 text-slate-300 shrink-0" />
+                  <ZoomIn className="w-4 h-4 shrink-0" />
                 </button>
 
-                <span className="text-[11px] font-mono font-bold text-cyan-400 bg-slate-900 px-2 py-1 rounded border border-slate-700 shrink-0">
+                <span className="text-[11px] font-mono font-bold px-2 py-1 rounded shrink-0" style={{color:'#00F0FF',background:'rgba(0,240,255,0.08)',border:'1px solid rgba(0,240,255,0.25)'}}>
                   {Math.round(mapZoom * 100)}%
                 </span>
 
@@ -852,17 +863,18 @@ export default function App() {
                   <button 
                     type="button"
                     onClick={resetZoom} 
-                    className="text-[11px] font-semibold text-cyan-300 bg-cyan-950/90 hover:bg-cyan-900 px-2.5 py-1 rounded-lg border border-cyan-800 active:scale-95 transition shrink-0 cursor-pointer"
+                    className="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-lg active:scale-95 transition shrink-0 cursor-pointer"
+                    style={{color:'#00F0FF',background:'rgba(0,240,255,0.10)',border:'1px solid rgba(0,240,255,0.30)'}}
                   >
                     Reset
                   </button>
                 )}
               </div>
 
-              {/* Quick Station Selection Chips Bar for Instant 1-Tap Access */}
+              {/* Quick Station Selection Chips Bar */}
               <div className="flex items-center gap-1.5 overflow-x-auto pb-2 pt-0.5 no-scrollbar select-none">
-                <span className="text-[10px] font-bold text-slate-400 font-mono shrink-0 uppercase tracking-wider flex items-center gap-1">
-                  <MapPin className="w-3 h-3 text-cyan-400" /> {language === 'hi' ? 'स्टेशन:' : 'Stations:'}
+                <span className="text-[10px] font-bold text-slate-500 font-mono shrink-0 uppercase tracking-widest flex items-center gap-1">
+                  <MapPin className="w-3 h-3" style={{color:'#00F0FF'}} /> {language === 'hi' ? 'स्टेशन:' : 'STN:'}
                 </span>
                 {snapshot.stations.map((st) => {
                   const isSelected = st.station_id === selectedStationId;
@@ -872,19 +884,25 @@ export default function App() {
                       type="button"
                       data-station="true"
                       onClick={() => handleStationClick(st)}
-                      className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-semibold whitespace-nowrap shrink-0 transition active:scale-95 cursor-pointer border ${
-                        isSelected
-                          ? 'bg-cyan-950 text-cyan-300 border-cyan-500 shadow-[0_0_12px_rgba(6,182,212,0.4)] ring-1 ring-cyan-400'
-                          : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 border-slate-800'
-                      }`}
+                      className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-mono font-semibold whitespace-nowrap shrink-0 transition active:scale-95 cursor-pointer border tracking-wide`}
+                      style={isSelected ? {
+                        background:'rgba(0,240,255,0.12)',
+                        color:'#00F0FF',
+                        border:'1px solid rgba(0,240,255,0.45)',
+                        boxShadow:'0 0 12px rgba(0,240,255,0.18)'
+                      } : {
+                        background:'rgba(255,255,255,0.03)',
+                        color:'#94a3b8',
+                        border:'1px solid rgba(255,255,255,0.07)'
+                      }}
                       title={`Select ${st.name} (${st.aqi} AQI)`}
                     >
                       <span 
                         className="w-2 h-2 rounded-full shrink-0" 
-                        style={{ backgroundColor: st.category_color }}
+                        style={{ backgroundColor: st.category_color, boxShadow:`0 0 5px ${st.category_color}` }}
                       />
                       <span>{st.name.split(' ')[0]}</span>
-                      <span className="font-mono text-[10px] opacity-80">({st.aqi})</span>
+                      <span className="text-[9px] opacity-70">({st.aqi})</span>
                     </button>
                   );
                 })}
@@ -892,8 +910,11 @@ export default function App() {
 
               <div
                 ref={mapContainerRef}
-                className="w-full aspect-[16/10] bg-[#070B11] rounded-xl border border-slate-800 relative overflow-hidden flex items-center justify-center select-none"
-                style={{ 
+                className="w-full aspect-[16/10] rounded-xl relative overflow-hidden flex items-center justify-center select-none hud-scanline"
+                style={{
+                  background: '#040810',
+                  border: '1px solid rgba(0,240,255,0.15)',
+                  boxShadow: 'inset 0 0 40px rgba(0,0,0,0.6),0 0 20px rgba(0,240,255,0.05)',
                   cursor: mapZoom > 1 ? (isDragging.current ? 'grabbing' : 'grab') : 'default',
                   touchAction: mapZoom > 1 ? 'none' : 'pan-y'
                 }}
@@ -1206,33 +1227,33 @@ export default function App() {
                   </svg>
                 </div>
 
-                {/* Floating On-Screen D-Pad Pan Buttons for effortless mobile sliding */}
+                {/* Floating On-Screen D-Pad Pan Buttons */}
                 {mapZoom > 1 && (
-                  <div className="absolute top-2 right-2 flex items-center gap-1 bg-slate-950/90 backdrop-blur-md p-1 rounded-xl border border-cyan-800/60 z-20 shadow-xl">
+                  <div className="absolute top-2 right-2 flex items-center gap-1 p-1 rounded-xl z-20 shadow-xl backdrop-blur-xl" style={{background:'rgba(3,6,8,0.92)',border:'1px solid rgba(0,240,255,0.25)'}}>
                     <button 
                       type="button" 
                       onClick={(e) => { e.stopPropagation(); setMapPan(p => ({ ...p, x: p.x + 50 })); }} 
-                      className="w-7 h-7 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-300 flex items-center justify-center text-xs font-bold active:scale-90 border border-slate-800 cursor-pointer"
+                      className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold active:scale-90 cursor-pointer transition" style={{background:'rgba(0,240,255,0.08)',color:'#00F0FF',border:'1px solid rgba(0,240,255,0.20)'}}
                       title="Slide Left">◀</button>
                     <button 
                       type="button" 
                       onClick={(e) => { e.stopPropagation(); setMapPan(p => ({ ...p, y: p.y + 50 })); }} 
-                      className="w-7 h-7 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-300 flex items-center justify-center text-xs font-bold active:scale-90 border border-slate-800 cursor-pointer"
+                      className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold active:scale-90 cursor-pointer transition" style={{background:'rgba(0,240,255,0.08)',color:'#00F0FF',border:'1px solid rgba(0,240,255,0.20)'}}
                       title="Slide Up">▲</button>
                     <button 
                       type="button" 
                       onClick={(e) => { e.stopPropagation(); setMapPan(p => ({ ...p, y: p.y - 50 })); }} 
-                      className="w-7 h-7 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-300 flex items-center justify-center text-xs font-bold active:scale-90 border border-slate-800 cursor-pointer"
+                      className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold active:scale-90 cursor-pointer transition" style={{background:'rgba(0,240,255,0.08)',color:'#00F0FF',border:'1px solid rgba(0,240,255,0.20)'}}
                       title="Slide Down">▼</button>
                     <button 
                       type="button" 
                       onClick={(e) => { e.stopPropagation(); setMapPan(p => ({ ...p, x: p.x - 50 })); }} 
-                      className="w-7 h-7 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-300 flex items-center justify-center text-xs font-bold active:scale-90 border border-slate-800 cursor-pointer"
+                      className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold active:scale-90 cursor-pointer transition" style={{background:'rgba(0,240,255,0.08)',color:'#00F0FF',border:'1px solid rgba(0,240,255,0.20)'}}
                       title="Slide Right">▶</button>
                     <button 
                       type="button" 
                       onClick={(e) => { e.stopPropagation(); resetZoom(); }} 
-                      className="px-2 h-7 rounded-lg bg-cyan-950 text-cyan-300 border border-cyan-700 text-[11px] font-bold active:scale-90 flex items-center justify-center cursor-pointer">
+                      className="px-2 h-7 rounded-lg text-[11px] font-mono font-bold active:scale-90 flex items-center justify-center cursor-pointer transition" style={{background:'rgba(0,240,255,0.12)',color:'#00F0FF',border:'1px solid rgba(0,240,255,0.35)'}}>
                       100%
                     </button>
                   </div>
@@ -1240,26 +1261,27 @@ export default function App() {
 
                 {/* Mobile Touch Pan Hint */}
                 {mapZoom > 1 && (
-                  <div className="absolute bottom-2 right-2 text-[10px] text-cyan-300 bg-slate-950/90 px-2.5 py-1 rounded-lg border border-cyan-800/60 shadow-md font-medium pointer-events-none flex items-center gap-1">
+                  <div className="absolute bottom-2 right-2 text-[10px] font-mono pointer-events-none flex items-center gap-1 px-2.5 py-1 rounded-lg backdrop-blur-xl" style={{color:'#00F0FF',background:'rgba(0,240,255,0.08)',border:'1px solid rgba(0,240,255,0.20)'}}>
                     <span>👆 {language === 'hi' ? 'खिसकाने के लिए स्वाइप करें' : 'Swipe to slide map'}</span>
                   </div>
                 )}
               </div>
 
               {/* Station Flyout */}
-              <div className="mt-4 p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
+              <div className="mt-4 p-3 rounded-xl flex items-center justify-between text-xs font-mono" style={{background:'rgba(0,0,0,0.5)',border:'1px solid rgba(0,240,255,0.12)'}}>
                 <div>
-                  <span className="font-bold text-cyan-400 font-mono">{currSt.station_id}</span> • <span className="font-bold text-white">{currSt.name}</span>
-                  <div className="text-slate-400 mt-0.5">{currSt.region} • {currSt.city}</div>
+                  <span className="font-bold font-mono" style={{color:'#00F0FF'}}>{currSt.station_id}</span> <span className="text-slate-500">•</span> <span className="font-bold" style={{color:'#e2f8ff'}}>{currSt.name}</span>
+                  <div className="text-slate-500 mt-0.5 uppercase tracking-wider text-[10px]">{currSt.region} • {currSt.city}</div>
                 </div>
                 <div className="flex items-center gap-4 font-mono">
-                  <div>AQI: <b style={{ color: currSt.category_color }}>{currSt.aqi}</b></div>
-                  <div>PM2.5: <b className="text-slate-200">{currSt.pm25}</b></div>
-                  <div>Stubble: <b className="text-orange-400">{currSt.stubble_share_ugm3} μg/m³</b></div>
+                  <div className="text-slate-400">AQI: <b style={{ color: currSt.category_color }}>{currSt.aqi}</b></div>
+                  <div className="text-slate-400">PM2.5: <b className="text-slate-200">{currSt.pm25}</b></div>
+                  <div className="text-slate-400">Stubble: <b className="text-orange-400">{currSt.stubble_share_ugm3} μg/m³</b></div>
                 </div>
                 <button
                   onClick={() => setStationModal(currSt)}
-                  className="px-3 py-1.5 rounded-lg bg-cyan-950 hover:bg-cyan-900 text-cyan-400 border border-cyan-800 text-xs font-semibold transition flex items-center gap-1">
+                  className="px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition flex items-center gap-1 active:scale-95"
+                  style={{color:'#00F0FF',background:'rgba(0,240,255,0.10)',border:'1px solid rgba(0,240,255,0.30)'}}>
                   Full Detail <ArrowRight className="w-3 h-3" />
                 </button>
               </div>
@@ -1276,27 +1298,27 @@ export default function App() {
                 theme={theme}
               />
 
-              <div className="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl flex flex-col">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
-                  <h2 className="text-base font-bold text-white flex items-center gap-2">
+              <div className="glass-pod hud-corners p-5 rounded-2xl flex flex-col">
+                <div className="flex items-center justify-between pb-3 mb-3" style={{borderBottom:'1px solid rgba(0,240,255,0.10)'}}>
+                  <h2 className="text-base font-bold flex items-center gap-2 font-mono tracking-wider" style={{color:'#e2f8ff'}}>
                     <PieChart className="w-5 h-5 text-orange-400" /> {t('source_apportionment', language)}
                   </h2>
                 </div>
                 <div className="flex flex-col gap-2">
                   {[
                     { name: t('source_stubble', language), pct: snapshot.source_attribution.stubble_burning, color: "#F97316" },
-                    { name: t('source_vehicles', language), pct: snapshot.source_attribution.vehicular_emissions, color: "#EF4444" },
-                    { name: t('source_dust', language), pct: snapshot.source_attribution.road_construction_dust, color: "#EAB308" },
-                    { name: t('source_industry', language), pct: snapshot.source_attribution.industrial_energy, color: "#8B5CF6" },
-                    { name: t('source_domestic', language), pct: snapshot.source_attribution.secondary_and_domestic, color: "#06B6D4" },
+                    { name: t('source_vehicles', language), pct: snapshot.source_attribution.vehicular_emissions, color: "#FF2E54" },
+                    { name: t('source_dust', language), pct: snapshot.source_attribution.road_construction_dust, color: "#FFB800" },
+                    { name: t('source_industry', language), pct: snapshot.source_attribution.industrial_energy, color: "#A855F7" },
+                    { name: t('source_domestic', language), pct: snapshot.source_attribution.secondary_and_domestic, color: "#00F0FF" },
                   ].map(item => (
-                    <div key={item.name} className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="font-semibold text-slate-200">{item.name}</span>
-                        <span className="font-mono font-bold" style={{ color: item.color }}>{item.pct}%</span>
+                    <div key={item.name} className="p-2.5 rounded-xl text-xs" style={{background:'rgba(0,0,0,0.35)',border:'1px solid rgba(255,255,255,0.06)'}}>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="font-mono font-semibold tracking-wide text-slate-300 text-[10px] uppercase">{item.name}</span>
+                        <span className="font-mono font-black text-sm" style={{ color: item.color, textShadow:`0 0 8px ${item.color}80` }}>{item.pct}%</span>
                       </div>
-                      <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden">
-                        <div className="h-full rounded-full transition-all duration-500" style={{ width: `${item.pct}%`, backgroundColor: item.color }} />
+                      <div className="w-full h-1 rounded-full overflow-hidden" style={{background:'rgba(255,255,255,0.06)'}}>
+                        <div className="h-full rounded-full transition-all duration-700" style={{ width: `${item.pct}%`, backgroundColor: item.color, boxShadow:`0 0 6px ${item.color}` }} />
                       </div>
                     </div>
                   ))}
@@ -1309,22 +1331,22 @@ export default function App() {
 
         {/* ==================== PREDICTIVE GRAP TAB ==================== */}
         {activeTab === 'grap' && grapData && (
-          <div className="bg-slate-900/80 border border-slate-800 p-6 rounded-2xl">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
+          <div className="glass-pod hud-corners p-6 rounded-2xl">
+            <div className="flex items-center justify-between pb-4 mb-4" style={{borderBottom:'1px solid rgba(0,240,255,0.10)'}}>
               <div>
-                <span className="text-xs font-mono font-bold text-cyan-400 bg-cyan-950 px-2.5 py-0.5 rounded border border-cyan-800">THE CORE SIH INNOVATION</span>
-                <h2 className="text-xl font-bold text-white mt-1">Predictive Graded Response Action Plan Engine</h2>
-                <p className="text-xs text-slate-400 mt-0.5">Forecast-triggered interventions giving 24-72 hours of pre-emptive lead time.</p>
+                <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded tracking-widest uppercase" style={{color:'#00F0FF',background:'rgba(0,240,255,0.10)',border:'1px solid rgba(0,240,255,0.30)'}}>THE CORE SIH INNOVATION</span>
+                <h2 className="text-xl font-bold mt-1 font-mono tracking-tight" style={{color:'#e2f8ff'}}>Predictive Graded Response Action Plan Engine</h2>
+                <p className="text-xs text-slate-500 mt-0.5 font-mono">Forecast-triggered interventions giving 24-72 hours of pre-emptive lead time.</p>
               </div>
               <div className="text-right font-mono">
-                <div className="text-xs text-slate-400">MAX LEAD TIME GAINED</div>
-                <div className="text-2xl font-black text-cyan-400">{grapData.max_lead_time_gained_hours} Hours</div>
+                <div className="text-[10px] text-slate-500 tracking-widest uppercase">MAX LEAD TIME GAINED</div>
+                <div className="text-2xl font-black" style={{color:'#00F0FF',textShadow:'0 0 16px rgba(0,240,255,0.5)'}}>{grapData.max_lead_time_gained_hours} Hours</div>
               </div>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-950 text-slate-400 font-mono text-[11px]">
+                <thead className="font-mono text-[10px] uppercase tracking-widest" style={{background:'rgba(0,0,0,0.5)',color:'#475569'}}>
                   <tr>
                     <th className="p-3">Stage & Severity</th>
                     <th className="p-3">Target Sector</th>
@@ -1334,22 +1356,35 @@ export default function App() {
                     <th className="p-3">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800">
+                <tbody style={{divideColor:'rgba(255,255,255,0.05)'}}>
                   {grapData.rules.map(r => (
-                    <tr key={r.id} className={`hover:bg-slate-800/40 ${r.is_triggered ? 'bg-cyan-950/20' : ''}`}>
+                    <tr key={r.id} className={`transition-colors ${
+                      r.is_triggered 
+                        ? 'bg-[#00F0FF]/04' 
+                        : 'hover:bg-white/02'
+                    }`} style={{borderBottom:'1px solid rgba(255,255,255,0.05)'}}>
                       <td className="p-3">
-                        <div className="font-bold text-slate-200">{r.stage}</div>
-                        <div className="text-[10px] text-slate-400 font-mono">AQI {r.aqi_min}-{r.aqi_max}</div>
+                        <div className="font-bold text-slate-200 font-mono">{r.stage}</div>
+                        <div className="text-[10px] text-slate-500 font-mono tracking-wider">AQI {r.aqi_min}-{r.aqi_max}</div>
                       </td>
-                      <td className="p-3 text-slate-300">{r.target_sector}</td>
-                      <td className="p-3 font-mono font-bold text-cyan-400">+{r.forecast_lead_time_hours} Hours Lead</td>
-                      <td className="p-3 text-slate-300 max-w-md">{r.triggered_action}</td>
-                      <td className="p-3 font-semibold text-slate-300">{r.responsible_agency}</td>
+                      <td className="p-3 text-slate-400 font-mono">{r.target_sector}</td>
+                      <td className="p-3 font-mono font-bold" style={{color:'#00F0FF'}}>+{r.forecast_lead_time_hours} Hours Lead</td>
+                      <td className="p-3 text-slate-400 max-w-md font-mono">{r.triggered_action}</td>
+                      <td className="p-3 font-mono font-semibold text-slate-400">{r.responsible_agency}</td>
                       <td className="p-3">
-                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold font-mono ${
-                          r.status_type === 'PRE_EMPTIVE' ? 'bg-cyan-950 text-cyan-400 border border-cyan-800' :
-                          r.status_type === 'ACTIVE' ? 'bg-rose-950 text-rose-400' : 'bg-slate-800 text-slate-400'
-                        }`}>
+                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold font-mono tracking-wider ${
+                          r.status_type === 'PRE_EMPTIVE' 
+                            ? '' 
+                            : r.status_type === 'ACTIVE' 
+                              ? '' 
+                              : ''
+                        }`} style={
+                          r.status_type === 'PRE_EMPTIVE' 
+                            ? {color:'#00F0FF',background:'rgba(0,240,255,0.12)',border:'1px solid rgba(0,240,255,0.35)'} 
+                            : r.status_type === 'ACTIVE' 
+                              ? {color:'#FF2E54',background:'rgba(255,46,84,0.12)',border:'1px solid rgba(255,46,84,0.35)'} 
+                              : {color:'#64748b',background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.10)'}
+                        }>
                           {r.status}
                         </span>
                       </td>
@@ -2066,64 +2101,58 @@ export default function App() {
         </div>
       )}
 
-      {/* ===== MOBILE & TABLET BOTTOM FLOATING AURORA DOCK ===== */}
+      {/* ===== MOBILE & TABLET BOTTOM FLOATING CYBER DOCK ===== */}
       <div className="md:hidden fixed bottom-3 inset-x-3 z-40 safe-area-pb pointer-events-none">
-        <nav className="bg-[#0F172A]/90 backdrop-blur-2xl border border-cyan-900/50 rounded-2xl px-2 py-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.85),0_0_25px_rgba(6,182,212,0.15)] pointer-events-auto max-w-md mx-auto">
+        <nav className="pointer-events-auto max-w-md mx-auto rounded-2xl px-2 py-1.5" style={{background:'rgba(3,6,8,0.96)',backdropFilter:'blur(32px) saturate(180%)',border:'1px solid rgba(0,240,255,0.12)',boxShadow:'0 12px 40px rgba(0,0,0,0.9),0 0 30px rgba(0,240,255,0.06),inset 0 1px 0 rgba(255,255,255,0.04)'}}>
           <div className="grid grid-cols-5 items-center justify-items-center w-full">
             
             {/* Tab 1: Overview */}
             <button
               type="button"
               onClick={() => switchTab('overview')}
-              className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl transition-all duration-200 cursor-pointer active:scale-90 ${
-                activeTab === 'overview' && !isAiOpen 
-                  ? 'text-cyan-300 font-bold bg-cyan-950/70 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.25)]' 
-                  : 'text-slate-400 hover:text-cyan-300 hover:bg-slate-800/50'
-              }`}
+              className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl transition-all duration-200 cursor-pointer active:scale-90`}
+              style={activeTab === 'overview' && !isAiOpen ? {color:'#00F0FF',background:'rgba(0,240,255,0.10)',border:'1px solid rgba(0,240,255,0.30)',boxShadow:'0 0 12px rgba(0,240,255,0.15)'} : {color:'#64748b'}}
             >
               <div className="relative">
-                <LayoutDashboard className="w-5 h-5 mb-0.5 text-cyan-400 transition-transform group-hover:scale-110" />
+                <LayoutDashboard className="w-5 h-5 mb-0.5 transition-transform group-hover:scale-110" />
                 {activeTab === 'overview' && !isAiOpen && (
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee]"></span>
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 rounded-full" style={{background:'#00F0FF',boxShadow:'0 0 8px #00F0FF'}}></span>
                 )}
               </div>
-              <span className="text-[9px] font-semibold tracking-tight truncate max-w-full px-1">{t('tab_overview', language)}</span>
+              <span className="text-[9px] font-mono font-semibold tracking-tight truncate max-w-full px-1 uppercase">{t('tab_overview', language)}</span>
             </button>
 
             {/* Tab 2: GRAP */}
             <button
               type="button"
               onClick={() => switchTab('grap')}
-              className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl transition-all duration-200 cursor-pointer active:scale-90 ${
-                activeTab === 'grap' && !isAiOpen 
-                  ? 'text-cyan-300 font-bold bg-cyan-950/70 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.25)]' 
-                  : 'text-slate-400 hover:text-cyan-300 hover:bg-slate-800/50'
-              }`}
+              className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl transition-all duration-200 cursor-pointer active:scale-90`}
+              style={activeTab === 'grap' && !isAiOpen ? {color:'#00F0FF',background:'rgba(0,240,255,0.10)',border:'1px solid rgba(0,240,255,0.30)',boxShadow:'0 0 12px rgba(0,240,255,0.15)'} : {color:'#64748b'}}
             >
               <div className="relative">
-                <ShieldAlert className="w-5 h-5 mb-0.5 text-cyan-400 transition-transform group-hover:scale-110" />
+                <ShieldAlert className="w-5 h-5 mb-0.5 transition-transform group-hover:scale-110" />
                 {activeTab === 'grap' && !isAiOpen && (
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee]"></span>
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 rounded-full" style={{background:'#00F0FF',boxShadow:'0 0 8px #00F0FF'}}></span>
                 )}
               </div>
-              <span className="text-[9px] font-semibold tracking-tight truncate max-w-full px-1">{t('tab_grap', language)}</span>
+              <span className="text-[9px] font-mono font-semibold tracking-tight truncate max-w-full px-1 uppercase">{t('tab_grap', language)}</span>
             </button>
 
-            {/* Tab 3: CENTER HERO ELEVATED VAYUAI COPILOT */}
+            {/* Tab 3: CENTER HERO ELEVATED VAYUAI COPILOT ORB */}
             <div className="flex flex-col items-center justify-center w-full relative">
               <button
                 type="button"
                 onClick={openAi}
                 className="relative -top-5 flex flex-col items-center justify-center group active:scale-95 transition-all duration-300 cursor-pointer"
               >
-                {/* Pulsing Ambient Aurora Glow */}
-                <div className="absolute -inset-1.5 bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-400 rounded-3xl blur-md opacity-80 group-hover:opacity-100 transition-all duration-300 animate-pulse -z-10"></div>
+                {/* Pulsing conic glow ring */}
+                <div className="absolute -inset-2 rounded-3xl opacity-70 group-hover:opacity-100 transition-all duration-300 -z-10 blur-lg" style={{background:'conic-gradient(from 0deg, rgba(0,240,255,0.6), rgba(0,255,136,0.6), rgba(0,240,255,0.6))',animation:'border-trace 3s linear infinite'}}></div>
                 
-                <div className="relative w-13 h-13 rounded-2xl bg-gradient-to-tr from-cyan-500 via-teal-400 to-emerald-400 text-slate-950 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.6)] border-2 border-white/95 group-hover:scale-105 transition-all duration-300">
+                <div className="relative w-14 h-14 rounded-2xl flex items-center justify-center border-2 transition-all duration-300 group-hover:scale-105" style={{background:'linear-gradient(135deg,#00F0FF,#00FF88)',color:'#030608',borderColor:'rgba(255,255,255,0.9)',boxShadow:'0 0 25px rgba(0,240,255,0.7),0 0 60px rgba(0,255,136,0.3)'}}>
                   <Bot className="w-6 h-6 stroke-[2.5] transition-transform duration-300 group-hover:scale-110" />
-                  <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-950 animate-pulse"></span>
+                  <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full border-2 animate-pulse" style={{background:'#00FF88',borderColor:'#030608'}}></span>
                 </div>
-                <span className="text-[10px] font-black text-cyan-300 mt-1 tracking-wider uppercase group-hover:text-white transition-colors flex items-center gap-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                <span className="text-[10px] font-black mt-1 tracking-wider uppercase group-hover:text-white transition-colors flex items-center gap-1" style={{color:'#00F0FF',textShadow:'0 0 10px rgba(0,240,255,0.6)',filter:'drop-shadow(0 2px 4px rgba(0,0,0,0.8))'}}>
                   VayuAI
                 </span>
               </button>
@@ -2133,38 +2162,32 @@ export default function App() {
             <button
               type="button"
               onClick={() => switchTab('whatif')}
-              className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl transition-all duration-200 cursor-pointer active:scale-90 ${
-                activeTab === 'whatif' && !isAiOpen 
-                  ? 'text-indigo-300 font-bold bg-indigo-950/70 border border-indigo-500/40 shadow-[0_0_12px_rgba(99,102,241,0.25)]' 
-                  : 'text-slate-400 hover:text-indigo-300 hover:bg-slate-800/50'
-              }`}
+              className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl transition-all duration-200 cursor-pointer active:scale-90`}
+              style={activeTab === 'whatif' && !isAiOpen ? {color:'#A855F7',background:'rgba(168,85,247,0.10)',border:'1px solid rgba(168,85,247,0.30)',boxShadow:'0 0 12px rgba(168,85,247,0.15)'} : {color:'#64748b'}}
             >
               <div className="relative">
-                <Sliders className="w-5 h-5 mb-0.5 text-indigo-400 transition-transform group-hover:scale-110" />
+                <Sliders className="w-5 h-5 mb-0.5 transition-transform group-hover:scale-110" />
                 {activeTab === 'whatif' && !isAiOpen && (
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-indigo-400 rounded-full shadow-[0_0_8px_#818cf8]"></span>
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 rounded-full" style={{background:'#A855F7',boxShadow:'0 0 8px #A855F7'}}></span>
                 )}
               </div>
-              <span className="text-[9px] font-semibold tracking-tight truncate max-w-full px-1">{t('tab_whatif', language)}</span>
+              <span className="text-[9px] font-mono font-semibold tracking-tight truncate max-w-full px-1 uppercase">{t('tab_whatif', language)}</span>
             </button>
 
             {/* Tab 5: Dispatches */}
             <button
               type="button"
               onClick={() => switchTab('dispatches')}
-              className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl transition-all duration-200 cursor-pointer active:scale-90 ${
-                activeTab === 'dispatches' && !isAiOpen 
-                  ? 'text-amber-300 font-bold bg-amber-950/70 border border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.25)]' 
-                  : 'text-slate-400 hover:text-amber-300 hover:bg-slate-800/50'
-              }`}
+              className={`w-full relative group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl transition-all duration-200 cursor-pointer active:scale-90`}
+              style={activeTab === 'dispatches' && !isAiOpen ? {color:'#FFB800',background:'rgba(255,184,0,0.10)',border:'1px solid rgba(255,184,0,0.30)',boxShadow:'0 0 12px rgba(255,184,0,0.15)'} : {color:'#64748b'}}
             >
               <div className="relative">
-                <Send className="w-5 h-5 mb-0.5 text-amber-400 transition-transform group-hover:scale-110" />
+                <Send className="w-5 h-5 mb-0.5 transition-transform group-hover:scale-110" />
                 {activeTab === 'dispatches' && !isAiOpen && (
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 bg-amber-400 rounded-full shadow-[0_0_8px_#fbbf24]"></span>
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-0.5 rounded-full" style={{background:'#FFB800',boxShadow:'0 0 8px #FFB800'}}></span>
                 )}
               </div>
-              <span className="text-[9px] font-semibold tracking-tight truncate max-w-full px-1">{t('tab_dispatches', language)}</span>
+              <span className="text-[9px] font-mono font-semibold tracking-tight truncate max-w-full px-1 uppercase">{t('tab_dispatches', language)}</span>
             </button>
 
           </div>
