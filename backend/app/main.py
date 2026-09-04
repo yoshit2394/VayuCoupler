@@ -56,6 +56,23 @@ def serve_dashboard():
         return FileResponse(index_file)
     return {"status": "ONLINE", "message": "MoES Coupled AQI API"}
 
+@app.api_route("/VayuCoupler.apk", methods=["GET", "HEAD"])
+@app.api_route("/vayucoupler.apk", methods=["GET", "HEAD"])
+@app.api_route("/app.apk", methods=["GET", "HEAD"])
+def download_vayu_apk():
+    apk_path = os.path.join(STATIC_DIR, "VayuCoupler.apk")
+    if os.path.exists(apk_path):
+        return FileResponse(
+            apk_path,
+            media_type="application/vnd.android.package-archive",
+            filename="VayuCoupler.apk",
+            headers={
+                "Content-Disposition": 'attachment; filename="VayuCoupler.apk"',
+                "Content-Type": "application/vnd.android.package-archive"
+            }
+        )
+    raise HTTPException(status_code=404, detail="VayuCoupler APK file not found on server")
+
 # Enable CORS for React frontend (Vite default port 5173 / 3000)
 app.add_middleware(
     CORSMiddleware,
@@ -323,6 +340,12 @@ def mobile_download_hub():
       <a href="/" class="block p-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold shadow-lg shadow-emerald-600/30 hover:opacity-95 transition text-center">
         <div class="text-base flex items-center justify-center gap-2">🚀 Open Live App (Web)</div>
         <div class="text-[11px] font-normal text-emerald-100 mt-0.5">Live coupled map, simulation & voice alerts</div>
+      </a>
+
+      <!-- Option 1b: Download Android APK -->
+      <a href="/VayuCoupler.apk" download="VayuCoupler.apk" class="block p-4 rounded-2xl bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold shadow-lg shadow-cyan-600/30 hover:opacity-95 transition text-center">
+        <div class="text-base flex items-center justify-center gap-2">🤖 Download Android App (VayuCoupler.apk)</div>
+        <div class="text-[11px] font-normal text-cyan-100 mt-0.5">Native Android App • Direct APK Package (30 MB)</div>
       </a>
 
       <!-- Option 2: Download Standalone HTML App -->
