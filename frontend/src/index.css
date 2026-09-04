@@ -45,7 +45,7 @@
       radial-gradient(ellipse 80% 50% at 10% 5%,  rgba(0,240,255,0.06) 0%, transparent 55%),
       radial-gradient(ellipse 60% 40% at 90% 80%, rgba(0,255,136,0.05) 0%, transparent 50%),
       radial-gradient(ellipse 100% 100% at 50% 50%, rgba(5,9,18,0.95) 0%, transparent 100%);
-    background-attachment: fixed;
+    /* Removed background-attachment: fixed to fix mobile scroll stutter and enable 60fps GPU scrolling */
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
   }
@@ -125,22 +125,19 @@
    GLASS POD — Core Card Component
    ============================================================ */
 .glass-pod {
-  background: var(--bg-glass);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  background: rgba(8, 12, 22, 0.95);
   border: 1px solid var(--border-dim);
   box-shadow:
-    0 8px 32px rgba(0,0,0,0.45),
-    0 2px  8px rgba(0,0,0,0.30),
+    0 4px 20px rgba(0,0,0,0.40),
     inset 0 1px 0 rgba(255,255,255,0.04);
-  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  transform: translateZ(0);
+  transition: border-color 0.2s ease, transform 0.2s ease;
 }
 .glass-pod:hover {
   border-color: rgba(0,240,255,0.28);
   box-shadow:
-    0 12px 40px rgba(0,0,0,0.55),
-    0  4px 12px rgba(0,0,0,0.35),
-    0  0  20px rgba(0,240,255,0.06),
+    0 8px 30px rgba(0,0,0,0.50),
+    0 0 16px rgba(0,240,255,0.06),
     inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
@@ -199,21 +196,12 @@ html.light .glass-pod {
 .orb-glow::before {
   content: '';
   position: absolute;
-  inset: -6px;
+  inset: -4px;
   border-radius: inherit;
-  background: conic-gradient(
-    from 0deg,
-    rgba(0,240,255,0.0) 0%,
-    rgba(0,240,255,0.5) 25%,
-    rgba(0,255,136,0.5) 50%,
-    rgba(0,240,255,0.5) 75%,
-    rgba(0,240,255,0.0) 100%
-  );
-  filter: blur(8px);
-  animation: border-trace 4s linear infinite;
-  background-size: 200% 200%;
+  background: radial-gradient(circle, rgba(0,240,255,0.4) 0%, rgba(0,255,136,0.15) 60%, transparent 100%);
   opacity: 0.7;
   z-index: -1;
+  pointer-events: none;
 }
 
 /* ============================================================
@@ -356,16 +344,14 @@ html.light .text-slate-300 { color: #334155 !important; }
 html.light .text-slate-400 { color: #475569 !important; }
 html.light .text-slate-500 { color: #64748B !important; }
 
-/* Natural glass (light compat) */
+/* Natural glass (light compat & mobile optimized) */
 .natural-glass {
-  background: var(--bg-glass);
-  backdrop-filter: blur(20px) saturate(150%);
-  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  background: rgba(8, 12, 22, 0.95);
   border: 1px solid var(--border-dim);
+  transform: translateZ(0);
 }
 html.light .natural-glass {
-  background: rgba(255,255,255,0.92) !important;
-  backdrop-filter: blur(18px);
+  background: rgba(255,255,255,0.95) !important;
   border: 1px solid #E2E8F0 !important;
   box-shadow: 0 4px 6px rgba(0,0,0,0.05) !important;
 }
@@ -373,10 +359,10 @@ html.light .natural-glass {
 html.light .natural-glass-hover:hover { background: #F1F5F9 !important; border-color: #CBD5E1 !important; }
 
 .natural-card-glow {
-  background: var(--bg-glass);
-  backdrop-filter: blur(20px);
+  background: rgba(8, 12, 22, 0.95);
   border: 1px solid rgba(0,240,255,0.18);
-  box-shadow: 0 10px 30px -10px rgba(0,240,255,0.12);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  transform: translateZ(0);
 }
 html.light .natural-card-glow {
   background: #FFFFFF !important;
@@ -390,20 +376,7 @@ html.light .natural-card-glow {
 .hud-scanline {
   position: relative;
   overflow: hidden;
-}
-.hud-scanline::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 240, 255, 0.015) 2px,
-    rgba(0, 240, 255, 0.015) 4px
-  );
-  pointer-events: none;
-  z-index: 1;
+  transform: translateZ(0);
 }
 
 /* ============================================================

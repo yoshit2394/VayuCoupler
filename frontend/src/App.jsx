@@ -189,8 +189,10 @@ export default function App() {
   };
 
   useEffect(() => {
-    handleWhatIf();
-  }, [currentStep, stubbleVal, truckVal, dustVal, industryVal]);
+    if (activeTab === 'whatif') {
+      handleWhatIf();
+    }
+  }, [currentStep, stubbleVal, truckVal, dustVal, industryVal, activeTab]);
 
   // Map pan & drag handlers (Supports Mouse, Pointer, and Mobile Touch Events)
   // Map pan & drag handlers (Supports Mouse, Pointer, and Mobile Touch Events)
