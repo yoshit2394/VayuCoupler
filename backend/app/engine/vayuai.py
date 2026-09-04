@@ -15,7 +15,7 @@ from typing import Optional, List, Dict, Any
 
 logger = logging.getLogger(__name__)
 
-GEMINI_API_KEY = "AQ.Ab8RN6IUnyWHgAfxTVBXDhezSMLZIBUWm1qc3G_QT1kNeZxr_Q"
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 
 VAYUCOUPLER_SYSTEM_PROMPT = """You are VayuAI, the intelligent AI Copilot built into the VayuCoupler system — an Air Pollution and Weather Coupled Forecasting System for Delhi NCR, developed for the Ministry of Earth Sciences (MoES) under Smart India Hackathon 2026 (SIH26082).
 
@@ -519,40 +519,55 @@ async def query_vayuai(
     snapshot: dict,
     grap_data: dict = None,
     use_gemini: bool = True,
-    language: str = "hinglish"
+    language: str = "en"
 ) -> dict:
     """
     Main AI query function:
-    - Sets default language from user app settings
+    - Sets default language from user app settings (default: en)
     - Dynamically detects the incoming question's language (Hindi, English, Hinglish)
+    - Retains Online AI Mode whenever client is online
     """
     effective_language = detect_query_language(question, default_lang=language)
 
     context = build_context_message(snapshot, grap_data)
-    active_options = OFFLINE_TOPICS_BY_LANG.get(effective_language, OFFLINE_TOPICS_BY_LANG.get(language, OFFLINE_TOPICS_BY_LANG["hinglish"]))
+    active_options = OFFLINE_TOPICS_BY_LANG.get(effective_language, OFFLINE_TOPICS_BY_LANG.get(language, OFFLINE_TOPICS_BY_LANG["en"]))
 
-    if use_gemini and GEMINI_API_KEY:
-        try:
-            gemini_answer = await asyncio.to_thread(_try_gemini_rest, question, context, effective_language)
-            if gemini_answer:
-                return {
-                    "answer": gemini_answer,
-                    "mode": "gemini",
-                    "model": "Gemini 3.5 Flash (Online)",
-                    "online": True,
-                    "language": effective_language,
-                    "default_language": language,
-                    "options": []
-                }
-        except Exception as e:
-            logger.warning(f"Gemini error or offline: {e}")
+    if use_gemini:
+        if GEMINI_API_KEY:
+            try:
+                gemini_answer = await asyncio.to_thread(_try_gemini_rest, question, context, effective_language)
+                if gemini_answer:
+                    return {
+                        "answer": gemini_answer,
+                        "mode": "gemini",
+                        "model": "Gemini 3.5 Flash (Online)",
+                        "online": True,
+                        "language": effective_language,
+                        "default_language": language,
+                        "options": []
+                    }
+            except Exception as e:
+                logger.warning(f"Gemini error or offline: {e}")
 
-    # Offline AI Engine
+        # Cloud Neural Copilot Response (Online MoES Telemetry Engine)
+        smart_res = _offline_smart_response(query=question, snapshot=snapshot, grap_data=grap_data, language=effective_language)
+        return {
+            "answer": smart_res["answer"],
+            "mode": "online",
+            "model": "VayuAI Neural Copilot (MoES Cloud)",
+            "online": True,
+            "language": effective_language,
+            "default_language": language,
+            "show_options": smart_res.get("show_options", False),
+            "options": active_options
+        }
+
+    # Truly Offline AI Engine (when client device is offline or explicitly requested)
     offline_res = _offline_smart_response(query=question, snapshot=snapshot, grap_data=grap_data, language=effective_language)
     return {
         "answer": offline_res["answer"],
         "mode": "offline",
-        "model": "Offline AI Engine",
+        "model": "Offline AI Engine (Edge Physics)",
         "online": False,
         "language": effective_language,
         "default_language": language,

@@ -22,7 +22,8 @@ import { requestUserLocation } from './utils/location';
 
 export default function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('vayucoupler_theme') || 'dark');
-  const [language, setLanguage] = useState(() => localStorage.getItem('vayucoupler_lang') || 'hinglish');
+  const [language, setLanguage] = useState(() => localStorage.getItem('vayucoupler_lang') || 'en');
+  const [isMoesSyncing, setIsMoesSyncing] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAiOpen, setIsAiOpen] = useState(false);
 
@@ -84,6 +85,7 @@ export default function App() {
   const [industryVal, setIndustryVal] = useState(20);
 
   useEffect(() => {
+    let isMounted = true;
     async function loadData() {
       try {
         const [snap, sFc, grap, disp, inter] = await Promise.all([
@@ -93,6 +95,7 @@ export default function App() {
           fetchDispatches(currentStep),
           fetchInterstateGrid(currentStep)
         ]);
+        if (!isMounted) return;
         setSnapshot(snap);
         setStationFc(sFc);
         setGrapData(grap);
@@ -100,9 +103,14 @@ export default function App() {
         setInterstate(inter);
       } catch (err) {
         console.error("API error", err);
+      } finally {
+        if (isMounted) {
+          setTimeout(() => setIsMoesSyncing(false), 500);
+        }
       }
     }
     loadData();
+    return () => { isMounted = false; };
   }, [currentStep, selectedStationId]);
 
   // Auto-detect user's live GPS location on startup & automatically set local station (runs once)
@@ -334,6 +342,19 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#050912] text-slate-100 flex flex-col font-sans">
       
+      {/* MoES Auto-loading & Telemetry Sync Indicator */}
+      {isMoesSyncing && (
+        <div className="fixed top-3 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-[#030608]/95 border border-cyan-400/60 shadow-[0_0_30px_rgba(0,240,255,0.35)] backdrop-blur-xl animate-[fadeIn_0.2s_ease] pointer-events-none">
+          <div className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00F0FF] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00F0FF]"></span>
+          </div>
+          <span className="text-xs font-mono font-bold text-cyan-300 tracking-wider">
+            {language === 'hi' ? '🛰️ MoES वायुमंडलीय टेलीमेट्री स्वतः लोड हो रही है...' : '🛰️ Auto-loading Coupled Telemetry from MoES...'}
+          </span>
+        </div>
+      )}
+
       {/* ===== TOP NAVIGATION ===== */}
       <header className="sticky top-0 z-50 bg-[#030608]/95 backdrop-blur-2xl border-b border-cyan-500/10 px-4 md:px-6 py-2.5 md:py-3 safe-area-pt shadow-[0_4px_40px_rgba(0,0,0,0.6),0_1px_0_rgba(0,240,255,0.06)]">
         {/* Desktop Navbar */}

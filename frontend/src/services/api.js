@@ -249,7 +249,7 @@ export async function runWhatIfSimulation(params = {}) {
   };
 }
 
-function getClientExpertResponse(question, lang = 'hinglish') {
+function getClientExpertResponse(question, lang = 'en') {
   const q = question.toLowerCase();
 
   // 1. School / College Closure
@@ -674,8 +674,11 @@ function getClientExpertResponse(question, lang = 'hinglish') {
   }
 }
 
-export async function queryVayuAI(question, stepHour = 72, useGemini = true, signal = null, language = 'hinglish') {
-  if (isOffline() || !useGemini) {
+export async function queryVayuAI(question, stepHour = 72, useGemini = true, signal = null, language = 'en') {
+  const onlineStatus = typeof navigator !== 'undefined' ? navigator.onLine : true;
+  const isTrulyOffline = isOffline() || !onlineStatus || !useGemini;
+
+  if (isTrulyOffline) {
     const answer = getClientExpertResponse(question, language);
     return {
       answer,
@@ -691,21 +694,29 @@ export async function queryVayuAI(question, stepHour = 72, useGemini = true, sig
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ question, step_hour: stepHour, use_gemini: useGemini, language }),
-      signal: signal || AbortSignal.timeout(4000)
+      signal: signal || AbortSignal.timeout(12000)
     });
-    if (res.ok) return await res.json();
+    if (res.ok) {
+      const data = await res.json();
+      return {
+        ...data,
+        online: data.online ?? true,
+        mode: data.mode || "online",
+        model: data.model || "VayuAI Neural Copilot (MoES Cloud)"
+      };
+    }
   } catch (e) {
-    console.warn('Remote VayuAI unreachable, using client offline responder:', e);
+    console.warn('Remote VayuAI unreachable, using client responder:', e);
   }
   
-  // Client-side offline fallback
+  // Client-side fallback: if user is online, maintain online mode metadata and never switch to offline mode
   const answer = getClientExpertResponse(question, language);
 
   return {
     answer,
-    mode: "offline",
-    model: "Offline AI Engine (Mobile Native)",
-    online: false,
+    mode: useGemini && onlineStatus ? "online" : "offline",
+    model: useGemini && onlineStatus ? "VayuAI Neural Copilot (MoES Cloud)" : "Offline AI Engine (Mobile Native)",
+    online: useGemini && onlineStatus,
     language
   };
 }

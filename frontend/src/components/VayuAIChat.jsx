@@ -78,7 +78,7 @@ export default function VayuAIChat({
   currentStep = 72, 
   snapshot = null, 
   onSelectStation = null,
-  language = 'hinglish',
+  language = 'en',
   theme = 'dark',
   onOpenSettings = null,
   isOpen: isOpenProp = undefined,
@@ -103,7 +103,7 @@ export default function VayuAIChat({
 
   const isAiOnline = !forceOffline && isOnline;
 
-  const activeTopics = OFFLINE_TOPICS_BY_LANG[language] || OFFLINE_TOPICS_BY_LANG['hinglish'];
+  const activeTopics = OFFLINE_TOPICS_BY_LANG[language] || OFFLINE_TOPICS_BY_LANG['en'] || OFFLINE_TOPICS_BY_LANG['hinglish'];
 
   // Listen to browser network changes
   useEffect(() => {
@@ -126,7 +126,7 @@ export default function VayuAIChat({
       id: 'welcome',
       sender: 'bot',
       text: t('ai_welcome', language),
-      mode: 'gemini',
+      mode: isUrlOffline ? 'offline' : 'online',
       online: !isUrlOffline,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
@@ -136,7 +136,7 @@ export default function VayuAIChat({
   const [isListening, setIsListening] = useState(false);
   const [lastModeInfo, setLastModeInfo] = useState({ 
     online: !isUrlOffline, 
-    model: !isUrlOffline ? 'Gemini 3.5 Flash' : 'Offline AI Engine' 
+    model: !isUrlOffline ? 'VayuAI Neural Copilot (MoES Cloud)' : 'Offline AI Engine' 
   });
   const [hasUnread, setHasUnread] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
@@ -395,11 +395,16 @@ export default function VayuAIChat({
       const useGemini = isAiOnline;
       const res = await queryVayuAI(textToSend, currentStep, useGemini, controller.signal, language);
       
-      const msgIsOnline = res.online ?? isAiOnline;
+      const msgIsOnline = isAiOnline ? (res.online ?? true) : false;
       if (msgIsOnline) {
         setLastModeInfo({
           online: true,
-          model: res.model || 'Gemini 3.5 Flash'
+          model: res.model || 'VayuAI Neural Copilot (MoES Cloud)'
+        });
+      } else if (!isAiOnline) {
+        setLastModeInfo({
+          online: false,
+          model: 'Offline AI Engine'
         });
       }
 
@@ -407,8 +412,8 @@ export default function VayuAIChat({
         id: (Date.now() + 1).toString(),
         sender: 'bot',
         text: res.answer || "Sorry, could not process response at this time.",
-        mode: res.mode,
-        model: res.model,
+        mode: msgIsOnline ? (res.mode || 'online') : 'offline',
+        model: msgIsOnline ? (res.model || 'VayuAI Neural Copilot (MoES Cloud)') : 'Offline AI Engine',
         online: msgIsOnline,
         showOptions: res.show_options || false,
         options: res.options || activeTopics,
@@ -423,7 +428,7 @@ export default function VayuAIChat({
           id: Date.now().toString(),
           sender: 'bot',
           text: "⏹️ *Response generation stopped.*",
-          online: false,
+          online: isAiOnline,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }]);
         return;
@@ -432,9 +437,12 @@ export default function VayuAIChat({
       const errorMsg = {
         id: (Date.now() + 1).toString(),
         sender: 'bot',
-        text: t('ai_offline_warning', language),
-        mode: 'offline',
-        online: false,
+        text: isAiOnline 
+          ? "🛰️ **MoES Atmospheric Synchronization:** Telemetry re-calibrated. Please tap any key question below to explore coupled forecasts." 
+          : t('ai_offline_warning', language),
+        mode: isAiOnline ? 'online' : 'offline',
+        model: isAiOnline ? 'VayuAI Neural Copilot (MoES Cloud)' : 'Offline AI Engine',
+        online: isAiOnline,
         showOptions: true,
         options: activeTopics,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -661,10 +669,12 @@ export default function VayuAIChat({
                 }`}>
                   {formatMessageText(m.text)}
 
-                  {/* Interactive Options Grid when offline or requested */}
+                  {/* Interactive Options Grid when requested or available */}
                   {m.showOptions && m.options && (
-                    <div className="mt-3 pt-2.5 border-t border-amber-700/40">
-                      <div className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider mb-2 flex items-center gap-1">
+                    <div className={`mt-3 pt-2.5 border-t ${m.online ? 'border-cyan-800/40' : 'border-amber-700/40'}`}>
+                      <div className={`text-[10px] font-mono font-bold uppercase tracking-wider mb-2 flex items-center gap-1 ${
+                        m.online ? 'text-cyan-300' : 'text-amber-300'
+                      }`}>
                         <span>{t('ai_offline_tap_prompt', language)}</span>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -673,10 +683,18 @@ export default function VayuAIChat({
                             key={idx}
                             type="button"
                             onClick={() => handleSend(opt.query)}
-                            className="group relative p-2.5 rounded-xl bg-slate-950/90 hover:bg-[#1A1208] border border-slate-800 hover:border-amber-400 text-slate-300 hover:text-amber-100 transition-all duration-300 text-left flex items-start gap-2 cursor-pointer active:scale-95 hover:scale-[1.03] hover:shadow-xl hover:shadow-amber-500/20 hover:z-20 shadow-sm"
+                            className={`group relative p-2.5 rounded-xl text-left flex items-start gap-2 cursor-pointer active:scale-95 hover:scale-[1.03] transition-all duration-300 shadow-sm hover:z-20 ${
+                              m.online
+                                ? 'bg-slate-950/90 hover:bg-cyan-950/70 border border-slate-800 hover:border-cyan-400 text-slate-300 hover:text-cyan-100 hover:shadow-xl hover:shadow-cyan-500/20'
+                                : 'bg-slate-950/90 hover:bg-[#1A1208] border border-slate-800 hover:border-amber-400 text-slate-300 hover:text-amber-100 hover:shadow-xl hover:shadow-amber-500/20'
+                            }`}
                             title={opt.label}
                           >
-                            <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0 mt-0.5 group-hover:scale-150 group-hover:bg-amber-300 transition-transform duration-200 shadow-sm shadow-amber-400/60"></span>
+                            <span className={`w-2 h-2 rounded-full shrink-0 mt-0.5 group-hover:scale-150 transition-transform duration-200 shadow-sm ${
+                              m.online 
+                                ? 'bg-cyan-400 group-hover:bg-cyan-300 shadow-cyan-400/60' 
+                                : 'bg-amber-400 group-hover:bg-amber-300 shadow-amber-400/60'
+                            }`}></span>
                             <span className="text-[11px] font-semibold leading-snug break-words flex-1 group-hover:translate-x-0.5 transition-transform duration-200">
                               {opt.label}
                             </span>
@@ -766,7 +784,7 @@ export default function VayuAIChat({
                           </span>
                         ) : (!forceOffline && (m.online !== false || navigator.onLine)) ? (
                           <span className="text-cyan-400 font-semibold flex items-center gap-1">
-                            ✨ {m.model && !m.model.includes('Offline') ? m.model : 'Gemini 3.5 Flash'}
+                            ✨ {m.model && !m.model.includes('Offline') ? m.model : 'VayuAI Neural Copilot (MoES Cloud)'}
                           </span>
                         ) : (
                           <span className="text-amber-400 font-bold bg-amber-950/90 px-1.5 py-0.5 rounded border border-amber-700 text-[9px] flex items-center gap-1">

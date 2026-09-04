@@ -10,7 +10,7 @@ export default function StationForecastCard({
   selectedStationId, 
   stations = [], 
   onSelectStation,
-  language = 'hinglish',
+  language = 'en',
   theme = 'dark'
 }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);

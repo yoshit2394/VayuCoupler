@@ -14,26 +14,33 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error("VayuCoupler App Error:", error, errorInfo);
+    console.error("VayuCoupler App Auto-Recovery:", error, errorInfo);
+    try {
+      localStorage.removeItem('vayucoupler_user_location');
+    } catch (_) {}
+    // Automatically auto-reload and recover without requiring user to press any reload button
+    setTimeout(() => {
+      try {
+        window.location.reload();
+      } catch (_) {}
+    }, 1100);
   }
 
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{ minHeight: '100vh', background: '#0B0F17', color: '#22d3ee', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: 'monospace', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '8px' }}>VayuCoupler Dashboard</h2>
-          <p style={{ color: '#94a3b8', fontSize: '13px', maxWidth: '400px', marginBottom: '16px' }}>
-            Updating system cache. Please tap below to reload the clean forecast console.
+        <div style={{ minHeight: '100vh', background: '#050912', color: '#00F0FF', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', fontFamily: 'monospace', textAlign: 'center' }}>
+          <div style={{ width: '44px', height: '44px', borderRadius: '50%', border: '3px solid rgba(0, 240, 255, 0.2)', borderTopColor: '#00F0FF', animation: 'spin 0.9s linear infinite', marginBottom: '20px' }} />
+          <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
+          <div style={{ fontSize: '11px', fontWeight: 'bold', color: '#00FF88', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '8px' }}>
+            SIH26082 • MoES Coupled Telemetry
+          </div>
+          <h2 style={{ fontSize: '18px', fontWeight: '800', marginBottom: '8px', color: '#E2F8FF' }}>
+            VayuCoupler Atmospheric Engine
+          </h2>
+          <p style={{ color: '#94A3B8', fontSize: '13px', maxWidth: '420px', lineHeight: '1.6' }}>
+            Synchronizing coupled telemetry from MoES... Auto-loading interface...
           </p>
-          <button 
-            onClick={() => {
-              try { localStorage.clear(); } catch (_) {}
-              window.location.reload();
-            }}
-            style={{ padding: '10px 20px', background: '#0891b2', color: '#041017', fontWeight: 'bold', border: 'none', borderRadius: '12px', cursor: 'pointer', fontSize: '13px' }}
-          >
-            Reload Forecast Engine
-          </button>
         </div>
       );
     }

@@ -410,7 +410,7 @@ export const TRANSLATIONS = {
   }
 };
 
-export function t(key, lang = 'hinglish') {
-  const selectedLang = TRANSLATIONS[lang] || TRANSLATIONS['hinglish'];
+export function t(key, lang = 'en') {
+  const selectedLang = TRANSLATIONS[lang] || TRANSLATIONS['en'] || TRANSLATIONS['hinglish'];
   return selectedLang[key] || TRANSLATIONS['en'][key] || key;
 }
